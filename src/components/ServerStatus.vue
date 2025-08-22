@@ -68,6 +68,11 @@
         </td>
       </template>
     </v-data-table>
+    <v-footer app absolute color="transparent" class="text-center">
+      <v-col class="text-caption">
+        © Powered by <a href="https://www.influxdata.com/" target="_blank">InfluxDB</a>, <a href="https://pages.cloudflare.com/" target="_blank">Cloudflare Pages</a>
+      </v-col>
+    </v-footer>
   </v-container>
 </template>
 

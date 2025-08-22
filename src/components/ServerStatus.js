@@ -66,48 +66,47 @@ export default {
         ipv6: item.info.have_ipv6 === 'yes' ? '✅' : '❌',
         location: getFlagEmoji(item.info.loc),
         cpu: Math.round(parseFloat(item.cpu.usage_user) + parseFloat(item.cpu.usage_system)),
-        memory: Math.round((parseInt(item.mem.used) / parseInt(item.mem.total)) * 100),
-        disk: Math.round((parseInt(item.disk.used) / parseInt(item.disk.total)) * 100),
-        load: parseFloat(item.cpu.load1).toFixed(2),
-        net: `${fileSizePretty(parseInt(item.net.bytes_recv))}|${fileSizePretty(parseInt(item.net.bytes_sent))}`,
-        traffic: `${fileSizePretty(parseInt(item.traffic.bytes_recv))}|${fileSizePretty(parseInt(item.traffic.bytes_sent))}`,
-        load_detail: `${parseFloat(item.cpu.load1).toFixed(2)} / ${parseFloat(item.cpu.load5).toFixed(2)} / ${parseFloat(item.cpu.load15).toFixed(2)}`,
-        cpu_detail: `${parseFloat(item.cpu.usage_system).toFixed(2)} / ${parseFloat(item.cpu.usage_user).toFixed(2)} / ${parseFloat(item.cpu.usage_steal).toFixed(2)}`,
-        memory_detail: `${fileSizePretty(parseInt(item.mem.used))} / ${fileSizePretty(parseInt(item.mem.total))}`,
-        swap_detail: `${fileSizePretty(parseInt(item.mem.swap_cached))} / ${fileSizePretty(parseInt(item.mem.swap_total))}`,
-        disk_detail: `${fileSizePretty(parseInt(item.disk.used))} / ${fileSizePretty(parseInt(item.disk.total))}`,
-        network_detail: `${parseInt(item.info.down_mbps)}M / ${parseInt(item.info.up_mbps)}M`,
-        loss_cm: item.info.have_ipv4 === 'yes' ? parseFloat(item.ping.loss_cmv4).toFixed(0) : parseFloat(item.ping.loss_cmv6).toFixed(0),
-        loss_ct: item.info.have_ipv4 === 'yes' ? parseFloat(item.ping.loss_ctv4).toFixed(0) : parseFloat(item.ping.loss_ctv6).toFixed(0),
-        loss_cu: item.info.have_ipv4 === 'yes' ? parseFloat(item.ping.loss_cuv4).toFixed(0) : parseFloat(item.ping.loss_cuv6).toFixed(0),
-        lossv4_detail: `${parseFloat(item.ping.loss_cmv4).toFixed(0)}% / ${parseFloat(item.ping.loss_ctv4).toFixed(0)}% / ${parseFloat(item.ping.loss_cuv4).toFixed(0)}%`,
-        pingv4_detail: `${parseFloat(item.ping.ping_cmv4).toFixed(0)}ms / ${parseFloat(item.ping.ping_ctv4).toFixed(0)}ms / ${parseFloat(item.ping.ping_cuv4).toFixed(0)}ms`,
-        lossv6_detail: `${parseFloat(item.ping.loss_cmv6).toFixed(0)}% / ${parseFloat(item.ping.loss_ctv6).toFixed(0)}% / ${parseFloat(item.ping.loss_cuv6).toFixed(0)}%`,
-        pingv6_detail: `${parseFloat(item.ping.ping_cmv6).toFixed(0)}ms / ${parseFloat(item.ping.ping_ctv6).toFixed(0)}ms / ${parseFloat(item.ping.ping_cuv6).toFixed(0)}ms`
+        memory: Math.round(((parseInt(item.mem.used) || 0) / (parseInt(item.mem.total)) || 0) * 100),
+        disk: Math.round(((parseInt(item.disk.used) || 0) / (parseInt(item.disk.total)) || 0) * 100),
+        load: (parseFloat(item.cpu.load1) || 0.0).toFixed(2),
+        net: `${fileSizePretty(parseInt(item.net.bytes_recv) || 0)}|${fileSizePretty(parseInt(item.net.bytes_sent) || 0)}`,
+        traffic: `${fileSizePretty(parseInt(item.traffic.bytes_recv) || 0)}|${fileSizePretty(parseInt(item.traffic.bytes_sent) || 0)}`,
+        load_detail: `${(parseFloat(item.cpu.load1) || 0.0).toFixed(2)} / ${(parseFloat(item.cpu.load5) || 0.0).toFixed(2)} / ${(parseFloat(item.cpu.load15) || 0.0).toFixed(2)}`,
+        cpu_detail: `${(parseFloat(item.cpu.usage_system) || 0.0).toFixed(2)} / ${(parseFloat(item.cpu.usage_user) || 0.0).toFixed(2)} / ${(parseFloat(item.cpu.usage_steal) || 0.0).toFixed(2)}`,
+        memory_detail: `${fileSizePretty(parseInt(item.mem.used) || 0)} / ${fileSizePretty(parseInt(item.mem.total) || 0)}`,
+        swap_detail: `${fileSizePretty(parseInt(item.mem.swap_cached) || 0)} / ${fileSizePretty(parseInt(item.mem.swap_total) || 0)}`,
+        disk_detail: `${fileSizePretty(parseInt(item.disk.used) || 0)} / ${fileSizePretty(parseInt(item.disk.total) || 0)}`,
+        network_detail: `${parseInt(item.info.down_mbps) || 0}M / ${parseInt(item.info.up_mbps) || 0}M`,
+        loss_cm: item.info.have_ipv4 === 'yes' ? (parseFloat(item.ping.loss_cmv4) || 0.0).toFixed(0) : (parseFloat(item.ping.loss_cmv6) || 0.0).toFixed(0),
+        loss_ct: item.info.have_ipv4 === 'yes' ? (parseFloat(item.ping.loss_ctv4) || 0.0).toFixed(0) : (parseFloat(item.ping.loss_ctv6) || 0.0).toFixed(0),
+        loss_cu: item.info.have_ipv4 === 'yes' ? (parseFloat(item.ping.loss_cuv4) || 0.0).toFixed(0) : (parseFloat(item.ping.loss_cuv6) || 0.0).toFixed(0),
+        lossv4_detail: `${(parseFloat(item.ping.loss_cmv4) || 0.0).toFixed(0)}% / ${(parseFloat(item.ping.loss_ctv4) || 0.0).toFixed(0)}% / ${(parseFloat(item.ping.loss_cuv4) || 0.0).toFixed(0)}%`,
+        pingv4_detail: `${(parseFloat(item.ping.ping_cmv4) || 0.0).toFixed(0)}ms / ${(parseFloat(item.ping.ping_ctv4) || 0.0).toFixed(0)}ms / ${(parseFloat(item.ping.ping_cuv4) || 0.0).toFixed(0)}ms`,
+        lossv6_detail: `${(parseFloat(item.ping.loss_cmv6) || 0.0).toFixed(0)}% / ${(parseFloat(item.ping.loss_ctv6) || 0.0).toFixed(0)}% / ${(parseFloat(item.ping.loss_cuv6) || 0.0).toFixed(0)}%`,
+        pingv6_detail: `${(parseFloat(item.ping.ping_cmv6) || 0.0).toFixed(0)}ms / ${(parseFloat(item.ping.ping_ctv6) || 0.0).toFixed(0)}ms / ${(parseFloat(item.ping.ping_cuv6) || 0.0).toFixed(0)}ms`
       }));
     },
     async fetchData() {
-      const urls = [
-        "/api/info",
-        "/api/cpu",
-        "/api/mem",
-        "/api/disk",
-        "/api/net",
-        "/api/traffic",
-        "/api/ping",
+      const baseUrl = import.meta.env.VITE_API_BASE_URL || '';
+      console.log("baseUrl:", baseUrl);
+      var urls = [
+        `${baseUrl}/api/cpu`,
+        `${baseUrl}/api/net`,
+        `${baseUrl}/api/ping`,
+
+        `${baseUrl}/api/info`,
+        `${baseUrl}/api/mem`,
+        `${baseUrl}/api/disk`,
+        `${baseUrl}/api/traffic`,
       ];
       this.showFetchCountDown--;
       if (this.showFetchCountDown < 0) {
         this.showFetchCountDown = 40;
       } else {
         urls = [
-          null,
-          "/api/cpu",
-          null,
-          null,
-          "/api/net",
-          null,
-          "/api/ping",
+          `${baseUrl}/api/cpu`,
+          `${baseUrl}/api/net`,
+          `${baseUrl}/api/ping`,
         ];
       }
       try {
@@ -133,25 +132,26 @@ export default {
             const item = dataMap.get(host);
             switch (index) {
               case 0:
-                item.info = row;
-                break;
-              case 1:
                 item.cpu = row;
                 break;
-              case 2:
-                item.mem = row;
-                break;
-              case 3:
-                item.disk = row;
-                break;
-              case 4:
+              case 1:
                 item.net = row;
                 break;
+              case 2:
+                item.ping = row;
+                break;
+
+              case 3:
+                item.info = row;
+                break;
+              case 4:
+                item.mem = row;
+                break;
               case 5:
-                item.traffic = row;
+                item.disk = row;
                 break;
               case 6:
-                item.ping = row;
+                item.traffic = row;
                 break;
             }
           });
