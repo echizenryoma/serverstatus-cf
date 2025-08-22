@@ -3,6 +3,12 @@ export async function onRequest({ request, env }) {
   const influxdb_token = env.INFLUXDB_TOKEN;
   const influxdb_org = env.INFLUXDB_ORG;
 
+  const corsHeaders = {
+    "Access-Control-Allow-Origin": "*",
+    "Access-Control-Allow-Methods": "GET,POST,PUT,DELETE,OPTIONS",
+    "Access-Control-Allow-Headers": "Content-Type, Authorization",
+  };
+
   if (request.method === 'GET') {
     try {
       const query_url = new URL(`https://${influxdb_host}/api/v2/query?org=${influxdb_org}&t=${Date.now()}`);
@@ -49,8 +55,10 @@ join(
       });
       if (!response.ok) throw new Error(`fetch CSV failed: ${res.status} ${res.statusText}`);
       const csvText = await response.text();
+      const headers = corsHeaders;
+      headers['Content-Type'] = 'text/csv';
       return new Response(csvText, {
-        headers: { "content-type": "text/csv" },
+        headers: headers,
       });
     } catch (error) {
       return new Response('Internal Server Error', { status: 500 });
