@@ -9,12 +9,16 @@ export async function onRequest({ request, env }) {
       const influx_ql = `
 from(bucket: "server")
   |> range(start: -1m)
-  |> filter(fn: (r) => r["_measurement"] == "cpu")
-  |> filter(fn: (r) => r["_field"] == "usage_steal" or r["_field"] == "usage_system" or r["_field"] == "usage_user")
-  |> filter(fn: (r) => r["cpu"] == "cpu-total")
+  |> filter(fn: (r) => r["_measurement"] == "mem")
+  |> filter(fn: (r) => 
+    r["_field"] == "swap_cached" or 
+    r["_field"] == "swap_total" or
+    r["_field"] == "used" or 
+    r["_field"] == "total"
+  )
   |> last(column: "host")
   |> pivot(rowKey:["_time", "host"], columnKey: ["_field"], valueColumn: "_value")
-  |> keep(columns: ["_time", "host", "usage_steal", "usage_system", "usage_user"])
+  |> keep(columns: ["_time", "host", "total", "used", "swap_total", "swap_cached"])
 `
       const response = await fetch(query_url, {
         method: 'POST',
