@@ -12,8 +12,7 @@ export default {
       headers: [
         { title: "节点", key: "host", align: 'center', class: 'font-weight-bold' },
         { title: "在线", key: "uptime", align: 'center', class: 'font-weight-bold' },
-        { title: "IPv4", key: "ipv4", align: 'center', class: 'font-weight-bold' },
-        { title: "IPv6", key: "ipv6", align: 'center', class: 'font-weight-bold' },
+        { title: "协议栈", key: "net_proto", align: 'center', class: 'font-weight-bold' },
         { title: "位置", key: "location", align: 'center', class: 'font-weight-bold' },
         { title: "负载", key: "load", align: 'center', class: 'font-weight-bold' },
         { title: "网络↓|↑", key: "net", align: 'center', class: 'font-weight-bold' },
@@ -63,8 +62,7 @@ export default {
       this.viewData = this.db.map(item => ({
         host: item.host,
         uptime: this.formatSeconds(parseInt(item.cpu.uptime)),
-        ipv4: item.info.have_ipv4 === 'yes' ? '✅' : '❌',
-        ipv6: item.info.have_ipv6 === 'yes' ? '✅' : '❌',
+        net_proto: `${(item.info.have_ipv4 === 'yes' ? '✅' : '❌')}|${item.info.have_ipv6 === 'yes' ? '✅' : '❌'}`,
         location: getFlagEmoji(item.info.loc),
         cpu: Math.round(parseFloat(item.cpu.usage_user) + parseFloat(item.cpu.usage_system)),
         memory: Math.round(((parseInt(item.mem.used) || 0) / (parseInt(item.mem.total)) || 0) * 100),
