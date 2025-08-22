@@ -8,7 +8,7 @@ export async function onRequest({ request, env }) {
       const query_url = new URL(`https://${influxdb_host}/api/v2/query?org=${influxdb_org}&t=${Date.now()}`);
       const influx_ql = `
 from(bucket: "server")
-  |> range(start: -1m)
+  |> range(start: -5s)
   |> filter(fn: (r) => r["_measurement"] == "mem")
   |> filter(fn: (r) => 
     r["_field"] == "swap_cached" or 
