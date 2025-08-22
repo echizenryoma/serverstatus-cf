@@ -7,7 +7,8 @@ import fileSizePretty from 'file-size-pretty';
 export default {
   data() {
     return {
-      darkMode: false,
+      darkMode: window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches,
+      themeMediaQuery: null,
       isRefreshEnabled: true,
       expandedRows: [],
       headers: [
@@ -207,8 +208,20 @@ export default {
         this.fetchData();
       }, this.refreshIntervalMs);
     }
+
+    if (window.matchMedia) {
+      this.themeMediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+      const themeChangeHandler = (e) => {
+        this.darkMode = e.matches;
+        this.$vuetify.theme.global.name = this.darkMode ? 'dark' : 'light';
+      };
+      this.themeMediaQuery.addEventListener('change', themeChangeHandler);
+    }
   },
   beforeUnmount() {
     clearInterval(this.refreshInterval);
+    if (this.themeMediaQuery) {
+      this.themeMediaQuery.removeEventListener('change', themeChangeHandler);
+    }
   },
 }
