@@ -83,7 +83,7 @@ export default {
         memory_detail: `${fileSizePretty(parseInt(item.mem.used) || 0)} / ${fileSizePretty(parseInt(item.mem.total) || 0)}`,
         swap_detail: `${fileSizePretty(parseInt(item.mem.swap_cached) || 0)} / ${fileSizePretty(parseInt(item.mem.swap_total) || 0)}`,
         disk_detail: `${fileSizePretty(parseInt(item.disk.used) || 0)} / ${fileSizePretty(parseInt(item.disk.total) || 0)}`,
-        network_detail: `${parseInt(item.info.down_mbps) || 0}M / ${parseInt(item.info.up_mbps) || 0}M`,
+        network_detail: `${parseInt(item.info.down_mbps) || 0} Mbps / ${parseInt(item.info.up_mbps) || 0}Mbps `,
         loss_cm: item.info.have_ipv4 === 'yes' ? (parseFloat(item.ping.loss_cmv4) || 0.0).toFixed(0) : (parseFloat(item.ping.loss_cmv6) || 0.0).toFixed(0),
         loss_ct: item.info.have_ipv4 === 'yes' ? (parseFloat(item.ping.loss_ctv4) || 0.0).toFixed(0) : (parseFloat(item.ping.loss_ctv6) || 0.0).toFixed(0),
         loss_cu: item.info.have_ipv4 === 'yes' ? (parseFloat(item.ping.loss_cuv4) || 0.0).toFixed(0) : (parseFloat(item.ping.loss_cuv6) || 0.0).toFixed(0),
