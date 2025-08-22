@@ -12,7 +12,7 @@ export default {
       headers: [
         { title: "节点", key: "host", align: 'center', class: 'font-weight-bold' },
         { title: "在线", key: "uptime", align: 'center', class: 'font-weight-bold' },
-        { title: "协议栈", key: "net_proto", align: 'center', class: 'font-weight-bold' },
+        { title: "v4|v6", key: "net_proto", align: 'center', class: 'font-weight-bold' },
         { title: "位置", key: "location", align: 'center', class: 'font-weight-bold' },
         { title: "负载", key: "load", align: 'center', class: 'font-weight-bold' },
         { title: "网络↓|↑", key: "net", align: 'center', class: 'font-weight-bold' },
