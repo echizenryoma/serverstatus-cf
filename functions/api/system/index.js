@@ -9,16 +9,17 @@ export async function onRequest({ request, env }) {
       const influx_ql = `
 from(bucket: "server")
   |> range(start: -5s)
-  |> filter(fn: (r) => r["_measurement"] == "mem")
+  |> filter(fn: (r) => r["_measurement"] == "system")
   |> filter(fn: (r) =>
-    r["_field"] == "swap_cached" or
-    r["_field"] == "swap_total" or
-    r["_field"] == "used" or
-    r["_field"] == "total"
+    r["_field"] == "uptime" or
+    r["_field"] == "load1" or
+    r["_field"] == "load5" or
+    r["_field"] == "load15" or
+    r["_field"] == "n_cpus"
   )
   |> last(column: "host")
   |> pivot(rowKey:["_time", "host"], columnKey: ["_field"], valueColumn: "_value")
-  |> keep(columns: ["_time", "host", "total", "used", "swap_total", "swap_cached"])
+  |> keep(columns: ["_time", "host", "uptime", "load1", "load5", "load15", "n_cpus"])
 `
       const response = await fetch(query_url, {
         method: 'POST',

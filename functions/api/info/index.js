@@ -10,12 +10,12 @@ export async function onRequest({ request, env }) {
 from(bucket: "server")
   |> range(start: -5s)
   |> filter(fn: (r) => r["_measurement"] == "info")
-  |> filter(fn: (r) => 
-    r["_field"] == "down_mbps" or
-    r["_field"] == "have_ipv6" or 
-    r["_field"] == "loc" or 
-    r["_field"] == "up_mbps" or 
-    r["_field"] == "have_ipv4"
+  |> filter(fn: (r) =>
+    r["_field"] == "loc" or
+    r["_field"] == "have_ipv4" or
+    r["_field"] == "have_ipv6" or
+    r["_field"] == "up_mbps" or
+    r["_field"] == "down_mbps"
   )
   |> last(column: "host")
   |> pivot(rowKey:["_time", "host"], columnKey: ["_field"], valueColumn: "_value")
