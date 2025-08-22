@@ -29,6 +29,7 @@ export default {
       viewData: [],
       refreshInterval: null,
       showFetchCountDown: 0,
+      showFetchMaxCount: 40,
     }
   },
   methods: {
@@ -72,7 +73,7 @@ export default {
         net: `${fileSizePretty(parseInt(item.net.bytes_recv) || 0)}|${fileSizePretty(parseInt(item.net.bytes_sent) || 0)}`,
         traffic: `${fileSizePretty(parseInt(item.traffic.bytes_recv) || 0)}|${fileSizePretty(parseInt(item.traffic.bytes_sent) || 0)}`,
         load_detail: `${(parseFloat(item.cpu.load1) || 0.0).toFixed(2)} / ${(parseFloat(item.cpu.load5) || 0.0).toFixed(2)} / ${(parseFloat(item.cpu.load15) || 0.0).toFixed(2)}`,
-        cpu_detail: `${(parseFloat(item.cpu.usage_system) || 0.0).toFixed(2)} / ${(parseFloat(item.cpu.usage_user) || 0.0).toFixed(2)} / ${(parseFloat(item.cpu.usage_steal) || 0.0).toFixed(2)}`,
+        cpu_detail: `${(parseFloat(item.cpu.usage_system) || 0.0).toFixed(2)}% / ${(parseFloat(item.cpu.usage_user) || 0.0).toFixed(2)}% / ${(parseFloat(item.cpu.usage_steal) || 0.0).toFixed(2)}%`,
         memory_detail: `${fileSizePretty(parseInt(item.mem.used) || 0)} / ${fileSizePretty(parseInt(item.mem.total) || 0)}`,
         swap_detail: `${fileSizePretty(parseInt(item.mem.swap_cached) || 0)} / ${fileSizePretty(parseInt(item.mem.swap_total) || 0)}`,
         disk_detail: `${fileSizePretty(parseInt(item.disk.used) || 0)} / ${fileSizePretty(parseInt(item.disk.total) || 0)}`,
@@ -100,9 +101,7 @@ export default {
         `${baseUrl}/api/traffic`,
       ];
       this.showFetchCountDown--;
-      if (this.showFetchCountDown < 0) {
-        this.showFetchCountDown = 40;
-      } else {
+      if (this.showFetchCountDown > 0) {
         urls = [
           `${baseUrl}/api/cpu`,
           `${baseUrl}/api/net`,
@@ -125,6 +124,9 @@ export default {
           ).forEach((row) => {
             const host = row.host;
             if (!dataMap.has(host)) {
+              if (this.showFetchCountDown > 0) {
+                throw new Error(`Host ${host} not found in existing data map.`);
+              }
               dataMap.set(host, {
                 host: host,
               });
@@ -158,8 +160,12 @@ export default {
         });
         this.db = Array.from(dataMap.values());
         this.updateViewData();
+        if (this.showFetchCountDown < 0) {
+          this.showFetchCountDown = this.showFetchMaxCount;
+        }
       } catch (e) {
         console.error("get failed: ", e);
+        this.showFetchCountDown = this.showFetchMaxCount;
       }
     },
     startCountdown() {
