@@ -27,6 +27,7 @@ export default {
       db: [],
       viewData: [],
       refreshInterval: null,
+      refreshIntervalMs: 1500,
       showFetchCountDown: 0,
       showFetchMaxCount: 40,
     }
@@ -66,7 +67,13 @@ export default {
       }
       return `${hours}:${minutes}:${secs}`;
     },
+    haveIPv4(value) {
+      return value === 'yes';
+    },
     updateViewData() {
+      if (!this.db || this.db.length === 0) {
+        return;
+      }
       this.viewData = this.db.map(item => ({
         host: item.host,
         uptime: this.formatSeconds(item.cpu.uptime),
@@ -84,18 +91,17 @@ export default {
         swap_detail: `${fileSizePretty(item.mem.swap_cached)} / ${fileSizePretty(item.mem.swap_total)}`,
         disk_detail: `${fileSizePretty(item.disk.used)} / ${fileSizePretty(item.disk.total)}`,
         network_detail: `${item.info.down_mbps} Mbps / ${item.info.up_mbps}Mbps `,
-        loss_cm: item.info.have_ipv4 === 'yes' ? item.ping.loss_cmv4.toFixed(2) : item.ping.loss_cmv6.toFixed(2),
-        loss_ct: item.info.have_ipv4 === 'yes' ? item.ping.loss_ctv4.toFixed(2) : item.ping.loss_ctv6.toFixed(2),
-        loss_cu: item.info.have_ipv4 === 'yes' ? item.ping.loss_cuv4.toFixed(2) : item.ping.loss_cuv6.toFixed(2),
-        lossv4_detail: `${item.ping.loss_cmv4.toFixed(2)}% / ${item.ping.loss_ctv4.toFixed(2)}% / ${item.ping.loss_cuv4.toFixed(2)}%`,
-        pingv4_detail: `${item.ping.ping_cmv4.toFixed(2)}ms / ${item.ping.ping_ctv4.toFixed(2)}ms / ${item.ping.ping_cuv4.toFixed(2)}ms`,
-        lossv6_detail: `${item.ping.loss_cmv6.toFixed(2)}% / ${item.ping.loss_ctv6.toFixed(2)}% / ${item.ping.loss_cuv6.toFixed(2)}%`,
-        pingv6_detail: `${item.ping.ping_cmv6.toFixed(2)}ms / ${item.ping.ping_ctv6.toFixed(2)}ms / ${item.ping.ping_cuv6.toFixed(2)}ms`
+        loss_cm: this.haveIPv4(item.info.have_ipv4) ? Math.round(item.ping.loss_cmv4) : Math.round(item.ping.loss_cmv6),
+        loss_ct: this.haveIPv4(item.info.have_ipv4) ? Math.round(item.ping.loss_ctv4) : Math.round(item.ping.loss_ctv6),
+        loss_cu: this.haveIPv4(item.info.have_ipv4) ? Math.round(item.ping.loss_cuv4) : Math.round(item.ping.loss_cuv6),
+        lossv4_detail: `${Math.round(item.ping.loss_cmv4)}% / ${Math.round(item.ping.loss_ctv4)}% / ${Math.round(item.ping.loss_cuv4)}%`,
+        pingv4_detail: `${Math.round(item.ping.ping_cmv4)}ms / ${Math.round(item.ping.ping_ctv4)}ms / ${Math.round(item.ping.ping_cuv4)}ms`,
+        lossv6_detail: `${Math.round(item.ping.loss_cmv6)}% / ${Math.round(item.ping.loss_ctv6)}% / ${Math.round(item.ping.loss_cuv6)}%`,
+        pingv6_detail: `${Math.round(item.ping.ping_cmv6)}ms / ${Math.round(item.ping.ping_ctv6)}ms / ${Math.round(item.ping.ping_cuv6)}ms`
       }));
     },
     async fetchData() {
       const baseUrl = import.meta.env.VITE_API_BASE_URL || '';
-      console.log("baseUrl:", baseUrl);
       var urls = [
         `${baseUrl}/api/cpu`,
         `${baseUrl}/api/net`,
@@ -174,20 +180,12 @@ export default {
         this.showFetchCountDown = this.showFetchMaxCount;
       }
     },
-    startCountdown() {
-      this.countdownInterval = setInterval(() => {
-        this.countdown -= 100;
-        if (this.countdown <= 0) {
-          this.countdown = 1500;
-        }
-      }, 100);
-    },
     stopRefresh() {
       this.isRefreshEnabled = !this.isRefreshEnabled;
       if (this.isRefreshEnabled) {
         this.refreshInterval = setInterval(() => {
           this.fetchData();
-        }, 1500);
+        }, this.refreshIntervalMs);
       } else {
         clearInterval(this.refreshInterval);
       }
@@ -198,7 +196,7 @@ export default {
     if (this.isRefreshEnabled) {
       this.refreshInterval = setInterval(() => {
         this.fetchData();
-      }, 1500);
+      }, this.refreshIntervalMs);
     }
   },
   beforeUnmount() {
