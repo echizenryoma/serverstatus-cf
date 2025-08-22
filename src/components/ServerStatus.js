@@ -97,7 +97,7 @@ export default {
         memory_detail: `${fileSizePretty(item.mem.used)} / ${fileSizePretty(item.mem.total)}`,
         swap_detail: `${fileSizePretty(item.mem.swap_cached)} / ${fileSizePretty(item.mem.swap_total)}`,
         disk_detail: `${fileSizePretty(item.disk.used)} / ${fileSizePretty(item.disk.total)}`,
-        network_detail: `${item.info.down_mbps} Mbps / ${item.info.up_mbps}Mbps `,
+        network_detail: `${item.info.down_mbps} Mbps / ${item.info.up_mbps}Mbps`,
         loss_cm: have_ipv4 ? Math.round(item.ping.loss_cmv4) : Math.round(item.ping.loss_cmv6),
         loss_ct: have_ipv4 ? Math.round(item.ping.loss_ctv4) : Math.round(item.ping.loss_ctv6),
         loss_cu: have_ipv4 ? Math.round(item.ping.loss_cuv4) : Math.round(item.ping.loss_cuv6),
