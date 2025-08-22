@@ -13,8 +13,9 @@
         </v-btn>
       </v-col>
     </v-row>
-    <v-data-table :headers="headers" :items="viewData" item-value="host" show-expand hide-default-footer
-      class="elevation-1" :items-per-page="-1">
+    <v-data-table :headers="headers" :items="viewData" item-value="host" hide-default-footer
+      class="elevation-1" :items-per-page="-1" @click:row="toggleExpand"
+      :expanded="expandedRows">
       <template v-slot:item.cpu="{ item }">
         <v-progress-linear :model-value="item.cpu" color="red" height="15" rounded>
           <strong>{{ item.cpu }}%</strong>
@@ -52,25 +53,28 @@
       </template>
 
       <template v-slot:expanded-row="{ columns, item }">
-        <td :colspan="columns.length">
-          <v-card flat class="pa-3">
-            <div><strong>系统负载(1/5/15):</strong> {{ item.load_detail }}</div>
-            <div><strong>CPU(系统/用户/窃取):</strong> {{ item.cpu_detail }}</div>
-            <div><strong>内存:</strong> {{ item.memory_detail }}</div>
-            <div><strong>交换空间:</strong> {{ item.swap_detail }}</div>
-            <div><strong>硬盘:</strong> {{ item.disk_detail }}</div>
-            <div><strong>网络限速(↓/↑):</strong> {{ item.network_detail }}</div>
-            <div><strong>IPv4丢包率(移/电/联):</strong> {{ item.lossv4_detail }}</div>
-            <div><strong>IPv4延迟(移/电/联):</strong> {{ item.pingv4_detail }}</div>
-            <div><strong>IPv6丢包率(移/电/联):</strong> {{ item.lossv6_detail }}</div>
-            <div><strong>IPv6延迟(移/电/联):</strong> {{ item.pingv6_detail }}</div>
-          </v-card>
-        </td>
+        <tr>
+          <td :colspan="columns.length">
+            <v-card flat class="pa-3">
+              <div><strong>系统负载(1/5/15):</strong> {{ item.load_detail }}</div>
+              <div><strong>CPU(系统/用户/窃取):</strong> {{ item.cpu_detail }}</div>
+              <div><strong>内存:</strong> {{ item.memory_detail }}</div>
+              <div><strong>交换空间:</strong> {{ item.swap_detail }}</div>
+              <div><strong>硬盘:</strong> {{ item.disk_detail }}</div>
+              <div><strong>网络限速(↓/↑):</strong> {{ item.network_detail }}</div>
+              <div><strong>IPv4丢包率(移/电/联):</strong> {{ item.lossv4_detail }}</div>
+              <div><strong>IPv4延迟(移/电/联):</strong> {{ item.pingv4_detail }}</div>
+              <div><strong>IPv6丢包率(移/电/联):</strong> {{ item.lossv6_detail }}</div>
+              <div><strong>IPv6延迟(移/电/联):</strong> {{ item.pingv6_detail }}</div>
+            </v-card>
+          </td>
+        </tr>
       </template>
     </v-data-table>
     <v-footer app absolute color="transparent" class="text-center">
       <v-col class="text-caption">
-        © Powered by <a href="https://www.influxdata.com/" target="_blank">InfluxDB</a>, <a href="https://pages.cloudflare.com/" target="_blank">Cloudflare Pages</a>
+        © Powered by <a href="https://www.influxdata.com/" target="_blank">InfluxDB</a>, <a
+          href="https://pages.cloudflare.com/" target="_blank">Cloudflare Pages</a>
       </v-col>
     </v-footer>
   </v-container>

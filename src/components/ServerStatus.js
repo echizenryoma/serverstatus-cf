@@ -9,6 +9,7 @@ export default {
     return {
       darkMode: false,
       isRefreshEnabled: true,
+      expandedRows: [],
       headers: [
         { title: "节点", key: "host", align: 'center', headerProps: { style: 'font-weight: 1000' } },
         { title: "在线", key: "uptime", align: 'center', headerProps: { style: 'font-weight: 1000' } },
@@ -33,6 +34,14 @@ export default {
     }
   },
   methods: {
+    toggleExpand(_, { item }) {
+      const index = this.expandedRows.indexOf(item.host);
+      if (index > -1) {
+        this.expandedRows.splice(index, 1);
+      } else {
+        this.expandedRows.push(item.host);
+      }
+    },
     toggleDarkMode() {
       this.darkMode = !this.darkMode
       this.$vuetify.theme.global.name = this.darkMode ? 'dark' : 'light'
