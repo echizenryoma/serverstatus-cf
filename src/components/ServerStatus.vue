@@ -5,10 +5,10 @@
         <v-card-title class="text-h4 text-center">ServerStatus</v-card-title>
       </v-col>
       <v-col cols="auto">
-        <v-btn @click="toggleDarkMode" icon>
+        <v-btn @click="toggleDarkMode" icon rounded>
           <v-icon>mdi-theme-light-dark</v-icon>
         </v-btn>
-        <v-btn @click="stopRefresh" :color="isRefreshEnabled ? 'error' : 'success'" icon>
+        <v-btn class="ml-4" @click="stopRefresh" :color="isRefreshEnabled ? 'error' : 'success'" icon rounded>
           <v-icon>{{ isRefreshEnabled ? 'mdi-pause' : 'mdi-refresh' }}</v-icon>
         </v-btn>
       </v-col>
@@ -16,40 +16,40 @@
     <v-data-table :headers="headers" :items="viewData" item-value="host" hide-default-footer class="elevation-1"
       :items-per-page="-1" @click:row="toggleExpand" :expanded="expandedRows">
       <template v-slot:item.location="{ item }">
-          <v-img :src="`https://flagcdn.com/${item.location.toLowerCase()}.svg`" height="2ch"></v-img>
+        <v-img :src="`https://flagcdn.com/${item.location.toLowerCase()}.svg`" height="2ch" rounded></v-img>
       </template>
       <template v-slot:item.cpu="{ item }">
-        <v-progress-linear :model-value="item.cpu" color="red" height="15" rounded>
+        <v-progress-linear :model-value="item.cpu" color="red" height="15ch" rounded>
           <strong>{{ item.cpu }}%</strong>
         </v-progress-linear>
       </template>
 
       <template v-slot:item.memory="{ item }">
-        <v-progress-linear :model-value="item.memory" color="indigo" height="15" rounded>
+        <v-progress-linear :model-value="item.memory" color="indigo" height="15ch" rounded>
           <strong>{{ item.memory }}%</strong>
         </v-progress-linear>
       </template>
 
       <template v-slot:item.disk="{ item }">
-        <v-progress-linear :model-value="item.disk" color="green" height="15" rounded>
+        <v-progress-linear :model-value="item.disk" color="green" height="15ch" rounded>
           <strong>{{ item.disk }}%</strong>
         </v-progress-linear>
       </template>
 
       <template v-slot:item.loss_cm="{ item }">
-        <v-sheet :class="`pa-1 ${getLossColor(item.loss_cm)}`">
+        <v-sheet :class="`${getLossColor(item.loss_cm)}`" rounded>
           {{ item.loss_cm }}%
         </v-sheet>
       </template>
 
       <template v-slot:item.loss_ct="{ item }">
-        <v-sheet :class="`pa-1 ${getLossColor(item.loss_ct)}`">
+        <v-sheet :class="`${getLossColor(item.loss_ct)}`" rounded>
           {{ item.loss_ct }}%
         </v-sheet>
       </template>
 
       <template v-slot:item.loss_cu="{ item }">
-        <v-sheet :class="`pa-1 ${getLossColor(item.loss_cu)}`">
+        <v-sheet :class="`${getLossColor(item.loss_cu)}`" rounded>
           {{ item.loss_cu }}%
         </v-sheet>
       </template>
