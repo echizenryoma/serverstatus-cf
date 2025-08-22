@@ -9,7 +9,7 @@
           <v-icon>mdi-theme-light-dark</v-icon>
         </v-btn>
         <v-btn @click="stopRefresh" :color="isRefreshEnabled ? 'error' : 'success'" icon>
-          <v-icon>{{ isRefreshEnabled ? 'mdi-refresh-off' : 'mdi-refresh' }}</v-icon>
+          <v-icon>{{ isRefreshEnabled ? 'mdi-pause' : 'mdi-refresh' }}</v-icon>
         </v-btn>
       </v-col>
     </v-row>
