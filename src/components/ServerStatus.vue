@@ -13,9 +13,11 @@
         </v-btn>
       </v-col>
     </v-row>
-    <v-data-table :headers="headers" :items="viewData" item-value="host" hide-default-footer
-      class="elevation-1" :items-per-page="-1" @click:row="toggleExpand"
-      :expanded="expandedRows">
+    <v-data-table :headers="headers" :items="viewData" item-value="host" hide-default-footer class="elevation-1"
+      :items-per-page="-1" @click:row="toggleExpand" :expanded="expandedRows">
+      <template v-slot:item.location="{ item }">
+          <v-img :src="`https://flagcdn.com/48x36/${item.location.toLowerCase()}.png`" height="2ch"></v-img>
+      </template>
       <template v-slot:item.cpu="{ item }">
         <v-progress-linear :model-value="item.cpu" color="red" height="15" rounded>
           <strong>{{ item.cpu }}%</strong>

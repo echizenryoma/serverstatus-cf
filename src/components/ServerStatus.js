@@ -1,7 +1,6 @@
 import axios from "axios";
 import Papa from "papaparse";
 import { Duration } from "luxon";
-import getFlagEmoji from 'country-code-to-flag-emoji';
 import fileSizePretty from 'file-size-pretty';
 
 export default {
@@ -88,7 +87,7 @@ export default {
         host: item.host,
         uptime: this.formatSeconds(item.cpu.uptime),
         net_proto: `${this.getNetProtoFlag(item.info.have_ipv4)}|${this.getNetProtoFlag(item.info.have_ipv6)}`,
-        location: getFlagEmoji(item.info.loc),
+        location: item.info.loc || '',
         cpu: Math.round(item.cpu.usage_user + item.cpu.usage_system),
         memory: Math.round(item.mem.used / item.mem.total * 100),
         disk: Math.round(item.disk.used / item.disk.total * 100),
