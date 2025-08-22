@@ -15,9 +15,9 @@ from(bucket: "server")
     r["_field"] == "total"
   )
   |> filter(fn: (r) => r["path"] == "/")
-  |> last(column: "host")
-  |> pivot(rowKey:["_time", "host"], columnKey: ["_field"], valueColumn: "_value")
-  |> keep(columns: ["_time", "host", "total", "used"])
+  |> last()
+  |> pivot(rowKey:["host"], columnKey: ["_field"], valueColumn: "_value")
+  |> keep(columns: ["host", "total", "used"])
 `
       const response = await fetch(query_url, {
         method: 'POST',

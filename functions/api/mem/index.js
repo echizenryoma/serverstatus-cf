@@ -11,14 +11,14 @@ from(bucket: "server")
   |> range(start: -5s)
   |> filter(fn: (r) => r["_measurement"] == "mem")
   |> filter(fn: (r) =>
-    r["_field"] == "swap_cached" or
-    r["_field"] == "swap_total" or
+    r["_field"] == "total" or
     r["_field"] == "used" or
-    r["_field"] == "total"
+    r["_field"] == "swap_total" or
+    r["_field"] == "swap_cached" 
   )
-  |> last(column: "host")
-  |> pivot(rowKey:["_time", "host"], columnKey: ["_field"], valueColumn: "_value")
-  |> keep(columns: ["_time", "host", "total", "used", "swap_total", "swap_cached"])
+  |> last()
+  |> pivot(rowKey:["host"], columnKey: ["_field"], valueColumn: "_value")
+  |> keep(columns: ["host", "total", "used", "swap_total", "swap_cached"])
 `
       const response = await fetch(query_url, {
         method: 'POST',

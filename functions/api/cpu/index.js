@@ -16,9 +16,9 @@ from(bucket: "server")
     r["_field"] == "usage_user"
   )
   |> filter(fn: (r) => r["cpu"] == "cpu-total")
-  |> last(column: "host")
-  |> pivot(rowKey:["_time", "host"], columnKey: ["_field"], valueColumn: "_value")
-  |> keep(columns: ["_time", "host", "usage_system", "usage_user", "usage_steal"])
+  |> last()
+  |> pivot(rowKey:["host"], columnKey: ["_field"], valueColumn: "_value")
+  |> keep(columns: ["host", "usage_system", "usage_user", "usage_steal"])
 `
       const response = await fetch(query_url, {
         method: 'POST',

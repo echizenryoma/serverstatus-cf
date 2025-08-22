@@ -17,9 +17,9 @@ from(bucket: "server")
     r["_field"] == "load15" or
     r["_field"] == "n_cpus"
   )
-  |> last(column: "host")
-  |> pivot(rowKey:["_time", "host"], columnKey: ["_field"], valueColumn: "_value")
-  |> keep(columns: ["_time", "host", "uptime", "load1", "load5", "load15", "n_cpus"])
+  |> last()
+  |> pivot(rowKey:["host"], columnKey: ["_field"], valueColumn: "_value")
+  |> keep(columns: ["host", "uptime", "load1", "load5", "load15", "n_cpus"])
 `
       const response = await fetch(query_url, {
         method: 'POST',

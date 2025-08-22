@@ -12,11 +12,11 @@ from(bucket: "server")
   |> filter(fn: (r) => r["_measurement"] == "net")
   |> filter(fn: (r) => r["_field"] == "bytes_recv" or r["_field"] == "bytes_sent")
   |> derivative(unit: 1s, nonNegative: true)
-	|> last()
-	|> group(columns: ["_time", "_field", "host"])
+  |> last()
+  |> group(columns: ["_field", "host"])
   |> sum()
-  |> pivot(rowKey:["_time", "host"], columnKey: ["_field"], valueColumn: "_value")
-  |> keep(columns: ["_time", "host", "bytes_recv", "bytes_sent"])
+  |> pivot(rowKey:["host"], columnKey: ["_field"], valueColumn: "_value")
+  |> keep(columns: ["host", "bytes_recv", "bytes_sent"])
 `
       const response = await fetch(query_url, {
         method: 'POST',

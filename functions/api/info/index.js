@@ -18,8 +18,8 @@ from(bucket: "server")
     r["_field"] == "down_mbps"
   )
   |> last(column: "host")
-  |> pivot(rowKey:["_time", "host"], columnKey: ["_field"], valueColumn: "_value")
-  |> keep(columns: ["_time", "host", "loc", "have_ipv4", "have_ipv6", "up_mbps", "down_mbps"])
+  |> pivot(rowKey:["host"], columnKey: ["_field"], valueColumn: "_value")
+  |> keep(columns: ["host", "loc", "have_ipv4", "have_ipv6", "up_mbps", "down_mbps"])
 `
       const response = await fetch(query_url, {
         method: 'POST',
