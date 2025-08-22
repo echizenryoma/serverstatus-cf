@@ -7,7 +7,7 @@ export async function onRequest({ request, env }) {
     try {
       const query_url = new URL(`https://${influxdb_host}/api/v2/query?org=${influxdb_org}&t=${Date.now()}`);
       const influx_ql = `
-from(bucket: "server")
+cpu = from(bucket: "server")
   |> range(start: -5s)
   |> filter(fn: (r) => r["_measurement"] == "cpu")
   |> filter(fn: (r) =>
@@ -19,6 +19,25 @@ from(bucket: "server")
   |> last()
   |> pivot(rowKey:["host"], columnKey: ["_field"], valueColumn: "_value")
   |> keep(columns: ["host", "usage_system", "usage_user", "usage_steal"])
+
+system = from(bucket: "server")
+  |> range(start: -5s)
+  |> filter(fn: (r) => r["_measurement"] == "system")
+  |> filter(fn: (r) =>
+    r["_field"] == "uptime" or
+    r["_field"] == "load1" or
+    r["_field"] == "load5" or
+    r["_field"] == "load15" or
+    r["_field"] == "n_cpus"
+  )
+  |> last()
+  |> pivot(rowKey:["host"], columnKey: ["_field"], valueColumn: "_value")
+  |> keep(columns: ["host", "uptime", "load1", "load5", "load15", "n_cpus"])
+
+join(
+  tables: {cpu: cpu, system: system},
+  on: ["host"]
+)
 `
       const response = await fetch(query_url, {
         method: 'POST',
