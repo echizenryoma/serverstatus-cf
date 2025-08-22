@@ -13,8 +13,6 @@
         </v-btn>
       </v-col>
     </v-row>
-    <v-progress-linear v-model="countdown" color="primary" height="5" :max="1500" :min="0" :reverse="true"
-      class="mb-3"></v-progress-linear>
     <v-data-table :headers="headers" :items="viewData" item-value="host" show-expand hide-default-footer
       class="elevation-1" :items-per-page="-1">
       <template v-slot:item.cpu="{ item }">

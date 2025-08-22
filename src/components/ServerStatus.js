@@ -28,8 +28,7 @@ export default {
       db: [],
       viewData: [],
       refreshInterval: null,
-      countdown: 1500,
-      countdownInterval: null,
+      showFetchCountDown: 0,
     }
   },
   methods: {
@@ -97,11 +96,29 @@ export default {
         "/api/traffic",
         "/api/ping",
       ];
+      this.showFetchCountDown--;
+      if (this.showFetchCountDown < 0) {
+        this.showFetchCountDown = 40;
+      } else {
+        urls = [
+          null,
+          "/api/cpu",
+          null,
+          null,
+          "/api/net",
+          null,
+          "/api/ping",
+        ];
+      }
       try {
         const requests = urls.map((url) => axios.get(url));
         const responses = await Promise.all(requests);
         const dataMap = new Map(this.db.map(row => [row.host, row]));
         responses.forEach((res, index) => {
+          if (!res || !res.data) {
+            console.error(`No data received from ${urls[index]}`);
+            return;
+          }
           const csvText = res.data;
           const parsed = Papa.parse(csvText, { header: true });
           parsed.data.filter(
@@ -159,16 +176,12 @@ export default {
         this.refreshInterval = setInterval(() => {
           this.fetchData();
         }, 1500);
-        this.countdown = 1500;
-        this.startCountdown();
       } else {
         clearInterval(this.refreshInterval);
-        clearInterval(this.countdownInterval);
       }
     },
   },
   mounted() {
-    this.startCountdown();
     this.fetchData();
     if (this.isRefreshEnabled) {
       this.refreshInterval = setInterval(() => {
@@ -178,6 +191,5 @@ export default {
   },
   beforeUnmount() {
     clearInterval(this.refreshInterval);
-    clearInterval(this.countdownInterval);
   },
 }
