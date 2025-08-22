@@ -46,6 +46,14 @@ export default {
           return 'bg-yellow';
       }
     },
+    getNetProtoFlag(value) {
+      switch (value) {
+        case 'yes': return '✅';
+        case 'no': return '❌';
+        case 'nat': return '⚠️';
+        default: return '❔';
+      }
+    },
     formatSeconds(seconds) {
       const d = Duration.fromObject({ seconds }).shiftTo("days", "hours", "minutes", "seconds");
 
@@ -62,7 +70,7 @@ export default {
       this.viewData = this.db.map(item => ({
         host: item.host,
         uptime: this.formatSeconds(parseInt(item.cpu.uptime)),
-        net_proto: `${(item.info.have_ipv4 === 'yes' ? '✅' : '❌')}|${item.info.have_ipv6 === 'yes' ? '✅' : '❌'}`,
+        net_proto: `${this.getNetProtoFlag(item.info.have_ipv4)}|${this.getNetProtoFlag(item.info.have_ipv6)}`,
         location: getFlagEmoji(item.info.loc),
         cpu: Math.round(parseFloat(item.cpu.usage_user) + parseFloat(item.cpu.usage_system)),
         memory: Math.round(((parseInt(item.mem.used) || 0) / (parseInt(item.mem.total)) || 0) * 100),
