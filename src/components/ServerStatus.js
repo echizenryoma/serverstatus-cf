@@ -101,7 +101,7 @@ export default {
         `${baseUrl}/api/traffic`,
       ];
       this.showFetchCountDown--;
-      if (this.showFetchCountDown > 0) {
+      if (this.showFetchCountDown >= 0) {
         urls = [
           `${baseUrl}/api/cpu`,
           `${baseUrl}/api/net`,
@@ -124,7 +124,7 @@ export default {
           ).forEach((row) => {
             const host = row.host;
             if (!dataMap.has(host)) {
-              if (this.showFetchCountDown > 0) {
+              if (this.showFetchCountDown >= 0) {
                 throw new Error(`Host ${host} not found in existing data map.`);
               }
               dataMap.set(host, {
