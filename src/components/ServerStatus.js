@@ -2,7 +2,6 @@ import axios from "axios";
 import Papa from "papaparse";
 import { Duration } from "luxon";
 import prettyBytes from 'pretty-bytes';
-import { fa } from "vuetify/locale";
 
 export default {
   data() {
@@ -12,8 +11,8 @@ export default {
       isRefreshEnabled: true,
       expandedRows: [],
       headers: [
-        { title: "节点", key: "host", align: 'center', headerProps: { style: 'font-weight: bold;' } },
-        { title: "在线", key: "uptime", align: 'center', headerProps: { style: 'font-weight: bold;' } },
+        { title: "节点", key: "host", align: 'center', minWidth: '8em', headerProps: { style: 'font-weight: bold;' } },
+        { title: "在线", key: "uptime", align: 'center', minWidth: '6em', headerProps: { style: 'font-weight: bold;' } },
         {
           title: '协议栈',
           align: 'center',
@@ -30,8 +29,8 @@ export default {
           align: 'center',
           headerProps: { style: 'font-weight: bold;' },
           children: [
-            { title: '🔽', key: "net_recv", align: 'center', headerProps: { style: 'font-weight: bold;' } },
-            { title: '🔼', key: "net_sent", align: 'center', headerProps: { style: 'font-weight: bold;' } },
+            { title: '🔽', key: "net_recv", align: 'center', minWidth: '8em', headerProps: { style: 'font-weight: bold;' } },
+            { title: '🔼', key: "net_sent", align: 'center', minWidth: '8em', headerProps: { style: 'font-weight: bold;' } },
           ],
         },
         {
@@ -39,8 +38,8 @@ export default {
           align: 'center',
           headerProps: { style: 'font-weight: bold;' },
           children: [
-            { title: '🔽', key: "traffic_1d_recv", align: 'center', headerProps: { style: 'font-weight: bold;' } },
-            { title: '🔼', key: "traffic_1d_sent", align: 'center', headerProps: { style: 'font-weight: bold;' } },
+            { title: '🔽', key: "traffic_1d_recv", align: 'center', minWidth: '8em', headerProps: { style: 'font-weight: bold;' } },
+            { title: '🔼', key: "traffic_1d_sent", align: 'center', minWidth: '8em', headerProps: { style: 'font-weight: bold;' } },
           ],
         },
         {
@@ -48,8 +47,8 @@ export default {
           align: 'center',
           headerProps: { style: 'font-weight: bold;' },
           children: [
-            { title: '🔽', key: "traffic_recv", align: 'center', headerProps: { style: 'font-weight: bold;' } },
-            { title: '🔼', key: "traffic_sent", align: 'center', headerProps: { style: 'font-weight: bold;' } },
+            { title: '🔽', key: "traffic_recv", align: 'center', minWidth: '8em', headerProps: { style: 'font-weight: bold;' } },
+            { title: '🔼', key: "traffic_sent", align: 'center', minWidth: '8em', headerProps: { style: 'font-weight: bold;' } },
           ],
         },
         { title: "CPU", key: "cpu", align: 'center', headerProps: { style: 'font-weight: bold;' } },
