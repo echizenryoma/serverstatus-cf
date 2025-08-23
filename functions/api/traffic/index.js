@@ -13,7 +13,7 @@ export async function onRequest({ request, env }) {
     const start = url.searchParams.get('start');
     var range = 'range(start: -5s)';
     if (start && start.length > 0) {
-      if (start.startsWith('-')) {
+      if (!start.startsWith('-')) {
         return new Response('Invalid start parameter', { status: 400 });
       }
       range = `range(start: ${start}5s, stop: ${start})`;
