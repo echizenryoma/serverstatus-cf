@@ -22,10 +22,10 @@
         <v-img :src="`https://flagcdn.com/${item.location.toLowerCase()}.svg`" height="2ch" rounded></v-img>
       </template>
       <template v-slot:item.net_recv="{ item }">
-        {{ this.formatSize(item.net_recv, { bits: true }) }}
+        {{ this.formatSize(item.net_recv, { bits: true, minimumFractionDigits: 1, maximumFractionDigits: 1 }) }}
       </template>
       <template v-slot:item.net_sent="{ item }">
-        {{ this.formatSize(item.net_sent, { bits: true }) }}
+        {{ this.formatSize(item.net_sent, { bits: true, minimumFractionDigits: 1, maximumFractionDigits: 1 }) }}
       </template>
       <template v-slot:item.traffic_recv="{ item }">
         {{ this.formatSize(item.traffic_recv) }}
