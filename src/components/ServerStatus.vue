@@ -15,9 +15,31 @@
     </v-row>
     <v-data-table :headers="headers" :items="viewData" item-value="host" class="elevation-1" :items-per-page="-1"
       :expanded="expandedRows" hide-default-footer @click:row="toggleExpand">
+      <template v-slot:item.uptime="{ item }">
+        {{ this.formatSeconds(item.uptime) }}
+      </template>
       <template v-slot:item.location="{ item }">
         <v-img :src="`https://flagcdn.com/${item.location.toLowerCase()}.svg`" height="2ch" rounded></v-img>
       </template>
+      <template v-slot:item.net_recv="{ item }">
+        {{ this.formatSize(item.net_recv, { bits: true }) }}
+      </template>
+      <template v-slot:item.net_sent="{ item }">
+        {{ this.formatSize(item.net_sent, { bits: true }) }}
+      </template>
+      <template v-slot:item.traffic_recv="{ item }">
+        {{ this.formatSize(item.traffic_recv) }}
+      </template>
+      <template v-slot:item.traffic_sent="{ item }">
+        {{ this.formatSize(item.traffic_sent) }}
+      </template>
+      <template v-slot:item.traffic_1d_recv="{ item }">
+        {{ this.formatSize(item.traffic_1d_recv) }}
+      </template>
+      <template v-slot:item.traffic_1d_sent="{ item }">
+        {{ this.formatSize(item.traffic_1d_sent) }}
+      </template>
+
       <template v-slot:item.cpu="{ item }">
         <v-progress-linear :model-value="item.cpu" color="red" height="15ch" rounded>
           <strong>{{ item.cpu }}%</strong>

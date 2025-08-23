@@ -106,6 +106,9 @@ export default {
       }
     },
     formatSeconds(seconds) {
+      if (!seconds || seconds <= 0) {
+        return '-';
+      }
       const d = Duration.fromObject({ seconds }).shiftTo("days", "hours", "minutes", "seconds");
 
       const days = d.days;
@@ -137,7 +140,7 @@ export default {
       let have_ipv6 = false;
       const data = {
         host: item.host,
-        uptime: '-',
+        uptime: 0,
         ipv4: '-',
         ipv6: '-',
         location: 'UN',
@@ -145,12 +148,12 @@ export default {
         memory: 0,
         disk: 0,
         load: 0.0,
-        net_recv: '-',
-        net_sent: '-',
-        traffic_recv: '-',
-        traffic_sent: '-',
-        traffic_1d_recv: '-',
-        traffic_1d_sent: '-',
+        net_recv: 0,
+        net_sent: 0,
+        traffic_recv: 0,
+        traffic_sent: 0,
+        traffic_1d_recv: 0,
+        traffic_1d_sent: 0,
         load_detail: '-',
         cpu_detail: '-',
         memory_detail: '-',
@@ -174,7 +177,7 @@ export default {
         have_ipv6 = this.haveIPv6(item.info.have_ipv6);
       }
       if (item.cpu) {
-        data.uptime = this.formatSeconds(item.cpu.uptime) || '-';
+        data.uptime = item.cpu.uptime;
         data.load = item.cpu.load1.toFixed(2) || 0.0;
         data.cpu = Math.round(item.cpu.usage_user + item.cpu.usage_system) || 0;
         data.load_detail = `${item.cpu.load1.toFixed(2)} / ${item.cpu.load5.toFixed(2)} / ${item.cpu.load15.toFixed(2)}`;
@@ -190,12 +193,12 @@ export default {
         data.disk_detail = `${this.formatSize(item.disk.used)} / ${this.formatSize(item.disk.total)}`;
       }
       if (item.net) {
-        data.net_recv = this.formatSize(item.net.bytes_recv, { bits: true });
-        data.net_sent = this.formatSize(item.net.bytes_sent, { bits: true });
+        data.net_recv = item.net.bytes_recv;
+        data.net_sent = item.net.bytes_sent;
       }
       if (item.traffic) {
-        data.traffic_recv = this.formatSize(item.traffic.bytes_recv);
-        data.traffic_sent = this.formatSize(item.traffic.bytes_sent);
+        data.traffic_recv = item.traffic.bytes_recv;
+        data.traffic_sent = item.traffic.bytes_sent;
 
         let bytes_recv_1d = item.traffic.bytes_recv;
         let bytes_sent_1d = item.traffic.bytes_sent;
@@ -203,8 +206,8 @@ export default {
           bytes_recv_1d = Math.max(0, item.traffic.bytes_recv - (item.traffic_1d.bytes_recv || 0));
           bytes_sent_1d = Math.max(0, item.traffic.bytes_sent - (item.traffic_1d.bytes_sent || 0));
         }
-        data.traffic_1d_recv = this.formatSize(bytes_recv_1d);
-        data.traffic_1d_sent = this.formatSize(bytes_sent_1d);
+        data.traffic_1d_recv = bytes_recv_1d;
+        data.traffic_1d_sent = bytes_sent_1d;
       }
 
       if (item.ping) {
