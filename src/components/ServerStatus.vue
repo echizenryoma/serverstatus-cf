@@ -13,8 +13,8 @@
         </v-btn>
       </v-col>
     </v-row>
-    <v-data-table :headers="headers" :items="viewData" item-value="host" hide-default-footer class="elevation-1"
-      :items-per-page="-1" @click:row="toggleExpand" :expanded="expandedRows">
+    <v-data-table :headers="headers" :items="viewData" item-value="host" class="elevation-1" :items-per-page="-1"
+      :expanded="expandedRows" hide-default-footer @click:row="toggleExpand">
       <template v-slot:item.location="{ item }">
         <v-img :src="`https://flagcdn.com/${item.location.toLowerCase()}.svg`" height="2ch" rounded></v-img>
       </template>

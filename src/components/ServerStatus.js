@@ -45,16 +45,23 @@ export default {
         { title: "CPU", key: "cpu", align: 'center', headerProps: { style: 'font-weight: bold;' } },
         { title: "内存", key: "memory", align: 'center', headerProps: { style: 'font-weight: bold;' } },
         { title: "硬盘", key: "disk", align: 'center', headerProps: { style: 'font-weight: bold;' } },
-        { title: "移动", key: "loss_cm", align: 'center', headerProps: { style: 'font-weight: bold;' } },
-        { title: "电信", key: "loss_ct", align: 'center', headerProps: { style: 'font-weight: bold;' } },
-        { title: "联通", key: "loss_cu", align: 'center', headerProps: { style: 'font-weight: bold;' } },
+        {
+          title: '丢包率',
+          align: 'center',
+          headerProps: { style: 'font-weight: bold;' },
+          children: [
+            { title: "移动", key: "loss_cm", align: 'center', headerProps: { style: 'font-weight: bold;' } },
+            { title: "电信", key: "loss_ct", align: 'center', headerProps: { style: 'font-weight: bold;' } },
+            { title: "联通", key: "loss_cu", align: 'center', headerProps: { style: 'font-weight: bold;' } },
+          ],
+        },
       ],
       db: [],
       viewData: [],
       refreshInterval: null,
       refreshIntervalMs: 1500,
-      showFetchCountDown: 0,
-      showFetchMaxCount: 40,
+      fastFetchCountDown: 0,
+      fastFetchMaxCount: 40,
     }
   },
   methods: {
@@ -104,7 +111,7 @@ export default {
       return value === 'yes';
     },
     formatViewDataItem(item) {
-      const have_ipv4 = this.haveIPv4(item.info.have_ipv4);
+      const have_ipv4 = this.haveIPv4(item.info.have_ipv4 || '');
       return {
         host: item.host,
         uptime: this.formatSeconds(item.cpu.uptime),
@@ -152,13 +159,9 @@ export default {
         `${baseUrl}/api/disk`,
         `${baseUrl}/api/traffic`,
       ];
-      this.showFetchCountDown--;
-      if (this.showFetchCountDown >= 0) {
-        urls = [
-          `${baseUrl}/api/cpu`,
-          `${baseUrl}/api/net`,
-          `${baseUrl}/api/ping`,
-        ];
+      this.fastFetchCountDown--;
+      if (this.fastFetchCountDown >= 0) {
+        urls.splice(3);
       }
       try {
         const requests = urls.map((url) => axios.get(url));
@@ -176,7 +179,7 @@ export default {
           ).forEach((row) => {
             const host = row.host;
             if (!dataMap.has(host)) {
-              if (this.showFetchCountDown >= 0) {
+              if (this.fastFetchCountDown >= 0) {
                 throw new Error(`Host ${host} not found in existing data map.`);
               }
               dataMap.set(host, {
@@ -212,12 +215,12 @@ export default {
         });
         this.db = Array.from(dataMap.values());
         this.updateViewData();
-        if (this.showFetchCountDown < 0) {
-          this.showFetchCountDown = this.showFetchMaxCount;
+        if (this.fastFetchCountDown < 0) {
+          this.fastFetchCountDown = this.fastFetchMaxCount;
         }
       } catch (e) {
         console.error("get failed: ", e);
-        this.showFetchCountDown = this.showFetchMaxCount;
+        this.fastFetchCountDown = this.fastFetchMaxCount;
       }
     },
     stopRefresh() {
