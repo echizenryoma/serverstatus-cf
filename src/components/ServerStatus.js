@@ -124,7 +124,7 @@ export default {
         case value > 80:
           return 'warning';
         default:
-          return 'indigo';
+          return 'green';
       }
     },
     getNetProtoFlag(value) {
