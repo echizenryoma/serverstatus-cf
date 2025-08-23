@@ -237,7 +237,7 @@ export default {
       if (!this.db || this.db.length === 0) {
         return;
       }
-      this.viewData = this.db.map(item => this.formatViewDataItem(item));
+      this.viewData = this.db.map(item => this.formatViewDataItem(item)).filter(item => item !== null);
     },
     async fetchData() {
       const baseUrl = import.meta.env.VITE_API_BASE_URL || '';
