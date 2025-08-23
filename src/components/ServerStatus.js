@@ -200,8 +200,8 @@ export default {
         let bytes_recv_1d = item.traffic.bytes_recv;
         let bytes_sent_1d = item.traffic.bytes_sent;
         if (item.traffic_1d) {
-          bytes_recv_1d = Math.max(item.traffic.bytes_recv, item.traffic.bytes_recv - (item.traffic_1d.bytes_recv || 0));
-          bytes_sent_1d = Math.max(item.traffic.bytes_sent, item.traffic.bytes_sent - (item.traffic_1d.bytes_sent || 0));
+          bytes_recv_1d = Math.max(0, item.traffic.bytes_recv - (item.traffic_1d.bytes_recv || 0));
+          bytes_sent_1d = Math.max(0, item.traffic.bytes_sent - (item.traffic_1d.bytes_sent || 0));
         }
         data.traffic_1d_recv = this.formatSize(bytes_recv_1d);
         data.traffic_1d_sent = this.formatSize(bytes_sent_1d);
