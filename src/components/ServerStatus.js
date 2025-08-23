@@ -109,9 +109,9 @@ export default {
     },
     getMemoryColor(value) {
       switch (true) {
-        case value > 75:
+        case value > 80:
           return 'error';
-        case value > 50:
+        case value > 60:
           return 'warning';
         default:
           return 'indigo';
