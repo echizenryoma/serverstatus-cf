@@ -14,7 +14,7 @@
       </v-col>
     </v-row>
     <v-data-table :headers="headers" :items="viewData" item-value="host" class="elevation-1" :items-per-page="-1"
-      :expanded="expandedRows" hide-default-footer @click:row="toggleExpand">
+      :expanded="expandedRows" hide-default-footer @click:row="toggleExpand" rounded>
       <template v-slot:item.uptime="{ item }">
         {{ this.formatSeconds(item.uptime) }}
       </template>
