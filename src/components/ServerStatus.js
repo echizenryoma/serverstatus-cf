@@ -1,7 +1,8 @@
 import axios from "axios";
 import Papa from "papaparse";
 import { Duration } from "luxon";
-import fileSizePretty from 'file-size-pretty';
+import prettyBytes from 'pretty-bytes';
+import { fa } from "vuetify/locale";
 
 export default {
   data() {
@@ -31,6 +32,15 @@ export default {
           children: [
             { title: '🔽', key: "net_recv", align: 'center', headerProps: { style: 'font-weight: bold;' } },
             { title: '🔼', key: "net_sent", align: 'center', headerProps: { style: 'font-weight: bold;' } },
+          ],
+        },
+        {
+          title: '天流量',
+          align: 'center',
+          headerProps: { style: 'font-weight: bold;' },
+          children: [
+            { title: '🔽', key: "traffic_1d_recv", align: 'center', headerProps: { style: 'font-weight: bold;' } },
+            { title: '🔼', key: "traffic_1d_sent", align: 'center', headerProps: { style: 'font-weight: bold;' } },
           ],
         },
         {
@@ -110,36 +120,112 @@ export default {
     haveIPv4(value) {
       return value === 'yes';
     },
+    haveIPv6(value) {
+      return value === 'yes';
+    },
+    formatSize(size, options = {}) {
+      if (!size) {
+        return '-';
+      }
+      return prettyBytes(size, options);
+    },
     formatViewDataItem(item) {
-      const have_ipv4 = this.haveIPv4(item.info.have_ipv4 || '');
-      return {
+      if (!item || !item.host) {
+        return null;
+      }
+      let have_ipv4 = false;
+      let have_ipv6 = false;
+      const data = {
         host: item.host,
-        uptime: this.formatSeconds(item.cpu.uptime),
-        ipv4: `${this.getNetProtoFlag(item.info.have_ipv4)}`,
-        ipv6: `${this.getNetProtoFlag(item.info.have_ipv6)}`,
-        location: item.info.loc || '',
-        cpu: Math.round(item.cpu.usage_user + item.cpu.usage_system),
-        memory: Math.round(item.mem.used / item.mem.total * 100),
-        disk: Math.round(item.disk.used / item.disk.total * 100),
-        load: item.cpu.load1.toFixed(2),
-        net_recv: `${fileSizePretty(item.net.bytes_recv) || '-'}`,
-        net_sent: `${fileSizePretty(item.net.bytes_sent) || '-'}`,
-        traffic_recv: `${fileSizePretty(item.traffic.bytes_recv) || '-'}`,
-        traffic_sent: `${fileSizePretty(item.traffic.bytes_sent) || '-'}`,
-        load_detail: `${item.cpu.load1.toFixed(2)} / ${item.cpu.load5.toFixed(2)} / ${item.cpu.load15.toFixed(2)}`,
-        cpu_detail: `${item.cpu.usage_system.toFixed(2)}% / ${item.cpu.usage_user.toFixed(2)}% / ${item.cpu.usage_steal.toFixed(2)}%`,
-        memory_detail: `${fileSizePretty(item.mem.used) || '-'} / ${fileSizePretty(item.mem.total) || '-'}`,
-        swap_detail: `${fileSizePretty(item.mem.swap_cached) || '-'} / ${fileSizePretty(item.mem.swap_total) || '-'}`,
-        disk_detail: `${fileSizePretty(item.disk.used) || '-'} / ${fileSizePretty(item.disk.total) || '-'}`,
-        network_detail: `${item.info.down_mbps} Mbps / ${item.info.up_mbps}Mbps`,
-        loss_cm: have_ipv4 ? Math.round(item.ping.loss_cmv4) : Math.round(item.ping.loss_cmv6),
-        loss_ct: have_ipv4 ? Math.round(item.ping.loss_ctv4) : Math.round(item.ping.loss_ctv6),
-        loss_cu: have_ipv4 ? Math.round(item.ping.loss_cuv4) : Math.round(item.ping.loss_cuv6),
-        lossv4_detail: `${Math.round(item.ping.loss_cmv4)}% / ${Math.round(item.ping.loss_ctv4)}% / ${Math.round(item.ping.loss_cuv4)}%`,
-        pingv4_detail: `${Math.round(item.ping.ping_cmv4)}ms / ${Math.round(item.ping.ping_ctv4)}ms / ${Math.round(item.ping.ping_cuv4)}ms`,
-        lossv6_detail: `${Math.round(item.ping.loss_cmv6)}% / ${Math.round(item.ping.loss_ctv6)}% / ${Math.round(item.ping.loss_cuv6)}%`,
-        pingv6_detail: `${Math.round(item.ping.ping_cmv6)}ms / ${Math.round(item.ping.ping_ctv6)}ms / ${Math.round(item.ping.ping_cuv6)}ms`
+        uptime: '-',
+        ipv4: '-',
+        ipv6: '-',
+        location: 'UN',
+        cpu: 0,
+        memory: 0,
+        disk: 0,
+        load: 0.0,
+        net_recv: '-',
+        net_sent: '-',
+        traffic_recv: '-',
+        traffic_sent: '-',
+        traffic_1d_recv: '-',
+        traffic_1d_sent: '-',
+        load_detail: '-',
+        cpu_detail: '-',
+        memory_detail: '-',
+        swap_detail: '-',
+        disk_detail: '-',
+        network_detail: '-',
+        loss_cm: 100,
+        loss_ct: 100,
+        loss_cu: 100,
+        lossv4_detail: '-',
+        pingv4_detail: '-',
+        lossv6_detail: '-',
+        pingv6_detail: '-'
       };
+      if (item.info) {
+        data.ipv4 = this.getNetProtoFlag(item.info.have_ipv4);
+        data.ipv6 = this.getNetProtoFlag(item.info.have_ipv6);
+        data.location = item.info.loc || 'UN';
+        data.network_detail = `${item.info.down_mbps} Mbit / ${item.info.up_mbps} Mbit`;
+        have_ipv4 = this.haveIPv4(item.info.have_ipv4);
+        have_ipv6 = this.haveIPv6(item.info.have_ipv6);
+      }
+      if (item.cpu) {
+        data.uptime = this.formatSeconds(item.cpu.uptime) || '-';
+        data.load = item.cpu.load1.toFixed(2) || 0.0;
+        data.cpu = Math.round(item.cpu.usage_user + item.cpu.usage_system) || 0;
+        data.load_detail = `${item.cpu.load1.toFixed(2)} / ${item.cpu.load5.toFixed(2)} / ${item.cpu.load15.toFixed(2)}`;
+        data.cpu_detail = `${item.cpu.usage_system.toFixed(2)}% / ${item.cpu.usage_user.toFixed(2)}% / ${item.cpu.usage_steal.toFixed(2)}%`;
+      }
+      if (item.mem) {
+        data.memory = Math.round(item.mem.used / item.mem.total * 100) || 0;
+        data.memory_detail = `${this.formatSize(item.mem.used)} / ${this.formatSize(item.mem.total)}`;
+        data.swap_detail = `${this.formatSize(item.mem.swap_cached)} / ${this.formatSize(item.mem.swap_total)}`;
+      }
+      if (item.disk) {
+        data.disk = Math.round(item.disk.used / item.disk.total * 100) || 0;
+        data.disk_detail = `${this.formatSize(item.disk.used)} / ${this.formatSize(item.disk.total)}`;
+      }
+      if (item.net) {
+        data.net_recv = this.formatSize(item.net.bytes_recv, { bits: true });
+        data.net_sent = this.formatSize(item.net.bytes_sent, { bits: true });
+      }
+      if (item.traffic) {
+        data.traffic_recv = this.formatSize(item.traffic.bytes_recv);
+        data.traffic_sent = this.formatSize(item.traffic.bytes_sent);
+
+        let bytes_recv_1d = item.traffic.bytes_recv;
+        let bytes_sent_1d = item.traffic.bytes_sent;
+        if (item.traffic_1d) {
+          bytes_recv_1d = Math.max(item.traffic.bytes_recv, item.traffic.bytes_recv - (item.traffic_1d.bytes_recv || 0));
+          bytes_sent_1d = Math.max(item.traffic.bytes_sent, item.traffic.bytes_sent - (item.traffic_1d.bytes_sent || 0));
+        }
+        data.traffic_1d_recv = this.formatSize(bytes_recv_1d);
+        data.traffic_1d_sent = this.formatSize(bytes_sent_1d);
+      }
+
+      if (item.ping) {
+        if (have_ipv4) {
+          data.loss_cm = Math.round(item.ping.loss_cmv4);
+          data.loss_ct = Math.round(item.ping.loss_ctv4);
+          data.loss_cu = Math.round(item.ping.loss_cuv4);
+
+          data.lossv4_detail = `${Math.round(item.ping.loss_cmv4)}% / ${Math.round(item.ping.loss_ctv4)}% / ${Math.round(item.ping.loss_cuv4)}%`;
+          data.pingv4_detail = `${Math.round(item.ping.ping_cmv4)}ms / ${Math.round(item.ping.ping_ctv4)}ms / ${Math.round(item.ping.ping_cuv4)}ms`;
+        } else {
+          data.loss_cm = Math.round(item.ping.loss_cmv6);
+          data.loss_ct = Math.round(item.ping.loss_ctv6);
+          data.loss_cu = Math.round(item.ping.loss_cuv6);
+        }
+        if (have_ipv6) {
+          data.lossv6_detail = `${Math.round(item.ping.loss_cmv6)}% / ${Math.round(item.ping.loss_ctv6)}% / ${Math.round(item.ping.loss_cuv6)}%`;
+          data.pingv6_detail = `${Math.round(item.ping.ping_cmv6)}ms / ${Math.round(item.ping.ping_ctv6)}ms / ${Math.round(item.ping.ping_cuv6)}ms`;
+        }
+      }
+      return data;
     },
     updateViewData() {
       if (!this.db || this.db.length === 0) {
@@ -149,7 +235,7 @@ export default {
     },
     async fetchData() {
       const baseUrl = import.meta.env.VITE_API_BASE_URL || '';
-      var urls = [
+      let urls = [
         `${baseUrl}/api/cpu`,
         `${baseUrl}/api/net`,
         `${baseUrl}/api/ping`,
@@ -158,6 +244,7 @@ export default {
         `${baseUrl}/api/mem`,
         `${baseUrl}/api/disk`,
         `${baseUrl}/api/traffic`,
+        `${baseUrl}/api/traffic?start=-1d`,
       ];
       this.fastFetchCountDown--;
       if (this.fastFetchCountDown >= 0) {
@@ -209,6 +296,9 @@ export default {
                 break;
               case 6:
                 item.traffic = row;
+                break;
+              case 7:
+                item.traffic_1d = row;
                 break;
             }
           });
