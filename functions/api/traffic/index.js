@@ -11,12 +11,12 @@ export async function onRequest({ request, env }) {
   if (request.method === 'GET') {
     const url = new URL(request.url);
     const start = url.searchParams.get('start');
-    var range = 'range(start: -5s)';
+    var range = 'range(start: -20s)';
     if (start && start.length > 0) {
       if (!start.startsWith('-')) {
         return new Response('Invalid start parameter', { status: 400 });
       }
-      range = `range(start: ${start}5s, stop: ${start})`;
+      range = `range(start: ${start}20s, stop: ${start})`;
     }
     try {
       const query_url = new URL(`https://${influxdb_host}/api/v2/query?org=${influxdb_org}&t=${Date.now()}`);
