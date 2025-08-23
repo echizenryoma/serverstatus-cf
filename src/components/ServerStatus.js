@@ -228,6 +228,9 @@ export default {
           data.pingv6_detail = `${Math.round(item.ping.ping_cmv6)}ms / ${Math.round(item.ping.ping_ctv6)}ms / ${Math.round(item.ping.ping_cuv6)}ms`;
         }
       }
+      if (data.uptime <= 0) {
+        return null;
+      }
       return data;
     },
     updateViewData() {
