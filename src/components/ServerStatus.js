@@ -90,11 +90,41 @@ export default {
     getLossColor(value) {
       switch (true) {
         case value < 20:
-          return 'bg-green';
+          return 'green';
         case value > 50:
-          return 'bg-red';
+          return 'error';
         default:
-          return 'bg-yellow';
+          return 'warning';
+      }
+    },
+    getCPUColor(value) {
+      switch (true) {
+        case value > 75:
+          return 'error';
+        case value > 50:
+          return 'warning';
+        default:
+          return 'pink';
+      }
+    },
+    getMemoryColor(value) {
+      switch (true) {
+        case value > 75:
+          return 'error';
+        case value > 50:
+          return 'warning';
+        default:
+          return 'indigo';
+      }
+    },
+    getDiskColor(value) {
+      switch (true) {
+        case value > 90:
+          return 'error';
+        case value > 80:
+          return 'warning';
+        default:
+          return 'indigo';
       }
     },
     getNetProtoFlag(value) {

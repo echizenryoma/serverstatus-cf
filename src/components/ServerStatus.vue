@@ -41,37 +41,36 @@
       </template>
 
       <template v-slot:item.cpu="{ item }">
-        <v-progress-linear :model-value="item.cpu" color="red" height="15ch" rounded>
-          <strong>{{ item.cpu }}%</strong>
+        <v-progress-linear :model-value="item.cpu" :color="`${this.getCPUColor(item.cpu)}`" height="15" rounded>
+          {{ item.cpu }}%
         </v-progress-linear>
       </template>
-
       <template v-slot:item.memory="{ item }">
-        <v-progress-linear :model-value="item.memory" color="indigo" height="15ch" rounded>
-          <strong>{{ item.memory }}%</strong>
+        <v-progress-linear :model-value="item.memory" :color="`${this.getMemoryColor(item.memory)}`" height="15"
+          rounded>
+          {{ item.memory }}%
         </v-progress-linear>
       </template>
-
       <template v-slot:item.disk="{ item }">
-        <v-progress-linear :model-value="item.disk" color="green" height="15ch" rounded>
-          <strong>{{ item.disk }}%</strong>
+        <v-progress-linear :model-value="item.disk" :color="`${this.getDiskColor(item.disk)}`" height="15" rounded>
+          {{ item.disk }}%
         </v-progress-linear>
       </template>
 
       <template v-slot:item.loss_cm="{ item }">
-        <v-sheet :class="`${getLossColor(item.loss_cm)}`" rounded>
+        <v-sheet :color="`${getLossColor(item.loss_cm)}`" rounded>
           {{ item.loss_cm }}%
         </v-sheet>
       </template>
 
       <template v-slot:item.loss_ct="{ item }">
-        <v-sheet :class="`${getLossColor(item.loss_ct)}`" rounded>
+        <v-sheet :color="`${getLossColor(item.loss_ct)}`" rounded>
           {{ item.loss_ct }}%
         </v-sheet>
       </template>
 
       <template v-slot:item.loss_cu="{ item }">
-        <v-sheet :class="`${getLossColor(item.loss_cu)}`" rounded>
+        <v-sheet :color="`${getLossColor(item.loss_cu)}`" rounded>
           {{ item.loss_cu }}%
         </v-sheet>
       </template>
