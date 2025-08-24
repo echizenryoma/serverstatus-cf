@@ -21,23 +21,54 @@
       <template v-slot:item.location="{ item }">
         <v-img :src="`https://flagcdn.com/${item.location.toLowerCase()}.svg`" height="2ch" rounded></v-img>
       </template>
+      <template v-slot:item.ipv4="{ item }">
+        <v-icon :color="this.getNetProtoColor(item.ipv4)" class="mr-1">
+          {{ this.getNetProtoIcon(item.ipv4) }}
+        </v-icon>
+      </template>
+      <template v-slot:item.ipv6="{ item }">
+        <v-icon :color="this.getNetProtoColor(item.ipv6)" class="mr-1">
+          {{ this.getNetProtoIcon(item.ipv6) }}
+        </v-icon>
+      </template>
+
+      <template v-slot:header.net_recv="{ header }">
+        <v-icon small class="mr-1">mdi-upload</v-icon>
+      </template>
+      <template v-slot:header.net_sent="{ header }">
+        <v-icon small class="mr-1">mdi-download</v-icon>
+      </template>
       <template v-slot:item.net_recv="{ item }">
         {{ this.formatSize(item.net_recv, { bits: true }) }}
       </template>
       <template v-slot:item.net_sent="{ item }">
         {{ this.formatSize(item.net_sent, { bits: true }) }}
       </template>
-      <template v-slot:item.traffic_recv="{ item }">
-        {{ this.formatSize(item.traffic_recv) }}
+
+      <template v-slot:header.traffic_1d_recv="{ header }">
+        <v-icon small class="mr-1">mdi-upload</v-icon>
       </template>
-      <template v-slot:item.traffic_sent="{ item }">
-        {{ this.formatSize(item.traffic_sent) }}
+      <template v-slot:header.traffic_1d_sent="{ header }">
+        <v-icon small class="mr-1">mdi-download</v-icon>
       </template>
       <template v-slot:item.traffic_1d_recv="{ item }">
         {{ this.formatSize(item.traffic_1d_recv) }}
       </template>
       <template v-slot:item.traffic_1d_sent="{ item }">
         {{ this.formatSize(item.traffic_1d_sent) }}
+      </template>
+
+      <template v-slot:header.traffic_recv="{ header }">
+        <v-icon small class="mr-1">mdi-upload</v-icon>
+      </template>
+      <template v-slot:header.traffic_sent="{ header }">
+        <v-icon small class="mr-1">mdi-download</v-icon>
+      </template>
+      <template v-slot:item.traffic_recv="{ item }">
+        {{ this.formatSize(item.traffic_recv) }}
+      </template>
+      <template v-slot:item.traffic_sent="{ item }">
+        {{ this.formatSize(item.traffic_sent) }}
       </template>
 
       <template v-slot:item.cpu="{ item }">

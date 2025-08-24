@@ -2,6 +2,7 @@ import axios from "axios";
 import Papa from "papaparse";
 import { Duration } from "luxon";
 import prettyBytes from 'pretty-bytes';
+import { ca } from "vuetify/locale";
 
 export default {
   data() {
@@ -86,6 +87,30 @@ export default {
       this.darkMode = !this.darkMode
       this.$vuetify.theme.global.name = this.darkMode ? 'dark' : 'light'
     },
+    getNetProtoColor(value) {
+      switch (value) {
+        case 'yes':
+          return 'success';
+        case 'nat':
+          return 'warning';
+        case 'no':
+          return 'error';
+        default:
+          return 'info';
+      }
+    },
+    getNetProtoIcon(value) {
+      switch (value) {
+        case 'yes':
+          return 'mdi-checkbox-marked-outline';
+        case 'nat':
+          return 'mdi-alert-box-outline';
+        case 'no':
+          return 'mdi-close-box-outline';
+        default:
+          return 'mdi-help-box-outline';
+      }
+    },
     getLossColor(value) {
       switch (true) {
         case value < 20:
@@ -98,7 +123,7 @@ export default {
     },
     getCPUColor(value) {
       switch (true) {
-        case value > 75:
+        case value > 80:
           return 'error';
         case value > 50:
           return 'warning';
@@ -113,17 +138,17 @@ export default {
         case value > 60:
           return 'warning';
         default:
-          return 'indigo';
+          return 'primary';
       }
     },
     getDiskColor(value) {
       switch (true) {
         case value > 90:
           return 'error';
-        case value > 80:
+        case value > 75:
           return 'warning';
         default:
-          return 'green';
+          return 'secondary';
       }
     },
     getNetProtoFlag(value) {
@@ -198,8 +223,8 @@ export default {
         pingv6_detail: '-'
       };
       if (item.info) {
-        data.ipv4 = this.getNetProtoFlag(item.info.have_ipv4);
-        data.ipv6 = this.getNetProtoFlag(item.info.have_ipv6);
+        data.ipv4 = item.info.have_ipv4;
+        data.ipv6 = item.info.have_ipv6;
         data.location = item.info.loc || 'UN';
         data.network_detail = `${item.info.down_mbps} Mbit / ${item.info.up_mbps} Mbit`;
         have_ipv4 = this.haveIPv4(item.info.have_ipv4);
