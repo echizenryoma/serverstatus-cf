@@ -2,13 +2,25 @@
   <v-container fluid>
     <v-row align="center" justify="space-between" class="mb-3">
       <v-col cols="auto">
-        <v-card-title class="text-h4 text-center">ServerStatus</v-card-title>
+        <v-card-title class="text-h4 text-center">{{ $t('app.title') }}</v-card-title>
       </v-col>
-      <v-col cols="auto">
-        <v-btn @click="toggleDarkMode" icon rounded>
+
+      <v-col cols="auto" class="d-flex align-center">
+        <v-select
+          v-model="$i18n.locale"
+          :items="languageOptions"
+          item-title="text"
+          item-value="value"
+          density="compact"
+          style="max-width: 10em"
+          class="mr-2"
+          hide-details
+          single-line
+        ></v-select>
+        <v-btn @click="toggleDarkMode" icon rounded class="mr-2">
           <v-icon>mdi-theme-light-dark</v-icon>
         </v-btn>
-        <v-btn class="ml-4" @click="stopRefresh" :color="isRefreshEnabled ? 'error' : 'success'" icon rounded>
+        <v-btn @click="stopRefresh" :color="isRefreshEnabled ? 'error' : 'success'" icon rounded>
           <v-icon>{{ isRefreshEnabled ? 'mdi-pause' : 'mdi-refresh' }}</v-icon>
         </v-btn>
       </v-col>
@@ -92,16 +104,16 @@
         <tr>
           <td :colspan="columns.length">
             <v-card flat class="pa-3">
-              <div><strong>系统负载(1/5/15):</strong> {{ item.load_detail }}</div>
-              <div><strong>CPU(系统/用户/窃取):</strong> {{ item.cpu_detail }}</div>
-              <div><strong>内存:</strong> {{ item.memory_detail }}</div>
-              <div><strong>交换空间:</strong> {{ item.swap_detail }}</div>
-              <div><strong>硬盘:</strong> {{ item.disk_detail }}</div>
-              <div><strong>限速(↓/↑):</strong> {{ item.network_detail }}</div>
-              <div><strong>IPv4丢包率(移/电/联):</strong> {{ item.lossv4_detail }}</div>
-              <div><strong>IPv4延迟(移/电/联):</strong> {{ item.pingv4_detail }}</div>
-              <div><strong>IPv6丢包率(移/电/联):</strong> {{ item.lossv6_detail }}</div>
-              <div><strong>IPv6延迟(移/电/联):</strong> {{ item.pingv6_detail }}</div>
+              <div><strong>{{ $t('server.details.load') }}:</strong> {{ item.load_detail }}</div>
+              <div><strong>{{ $t('server.details.cpu') }}:</strong> {{ item.cpu_detail }}</div>
+              <div><strong>{{ $t('server.details.memory') }}:</strong> {{ item.memory_detail }}</div>
+              <div><strong>{{ $t('server.details.swap') }}:</strong> {{ item.swap_detail }}</div>
+              <div><strong>{{ $t('server.details.disk') }}:</strong> {{ item.disk_detail }}</div>
+              <div><strong>{{ $t('server.details.network') }}:</strong> {{ item.network_detail }}</div>
+              <div><strong>{{ $t('server.details.ipv4Loss') }}:</strong> {{ item.lossv4_detail }}</div>
+              <div><strong>{{ $t('server.details.ipv4Ping') }}:</strong> {{ item.pingv4_detail }}</div>
+              <div><strong>{{ $t('server.details.ipv6Loss') }}:</strong> {{ item.lossv6_detail }}</div>
+              <div><strong>{{ $t('server.details.ipv6Ping') }}:</strong> {{ item.pingv6_detail }}</div>
             </v-card>
           </td>
         </tr>

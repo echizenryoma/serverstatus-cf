@@ -3,69 +3,28 @@ import Papa from "papaparse";
 import { filesize } from "filesize";
 import { ms, parseDuration } from 'enhanced-ms';
 import 'flag-icons/css/flag-icons.min.css';
+import { useHead } from '@vueuse/head';
+import { computed } from 'vue';
+import { useI18n } from 'vue-i18n';
 
 export default {
+  setup() {
+    const { t } = useI18n()
+    const title = computed(() => t('app.title'))
+    useHead({
+      title,
+    })
+  },
   data() {
     return {
+      languageOptions: [
+        { text: '简体中文', value: 'zh-CN' },
+        { text: 'English', value: 'en' }
+      ],
       darkMode: window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches,
       themeMediaQuery: null,
       isRefreshEnabled: true,
       expandedRows: [],
-      headers: [
-        { title: "节点", key: "host", align: 'center', minWidth: '8em', headerProps: { style: 'font-weight: bold;' } },
-        { title: "在线", key: "uptime", align: 'center', minWidth: '6em', headerProps: { style: 'font-weight: bold;' } },
-        {
-          title: '协议栈',
-          align: 'center',
-          headerProps: { style: 'font-weight: bold;' },
-          children: [
-            { title: 'IPv4', key: "ipv4", align: 'center', headerProps: { style: 'font-weight: bold;' } },
-            { title: 'IPv6', key: "ipv6", align: 'center', headerProps: { style: 'font-weight: bold;' } },
-          ],
-        },
-        { title: "位置", key: "location", align: 'center', headerProps: { style: 'font-weight: bold;' } },
-        { title: "负载", key: "load", align: 'center', headerProps: { style: 'font-weight: bold;' } },
-        {
-          title: '网速',
-          align: 'center',
-          headerProps: { style: 'font-weight: bold;' },
-          children: [
-            { title: '接收', key: "net_recv", align: 'center', minWidth: '8em', headerProps: { style: 'font-weight: bold;' }, prependIcon: 'mdi-download' },
-            { title: '发送', key: "net_sent", align: 'center', minWidth: '8em', headerProps: { style: 'font-weight: bold;' }, prependIcon: 'mdi-upload' },
-          ],
-        },
-        {
-          title: '每日流量',
-          align: 'center',
-          headerProps: { style: 'font-weight: bold;' },
-          children: [
-            { title: '接收', key: "traffic_1d_recv", align: 'center', minWidth: '8em', headerProps: { style: 'font-weight: bold;' }, prependIcon: 'mdi-download' },
-            { title: '发送', key: "traffic_1d_sent", align: 'center', minWidth: '8em', headerProps: { style: 'font-weight: bold;' }, prependIcon: 'mdi-upload' },
-          ],
-        },
-        {
-          title: '流量',
-          align: 'center',
-          headerProps: { style: 'font-weight: bold;' },
-          children: [
-            { title: '接收', key: "traffic_recv", align: 'center', minWidth: '8em', headerProps: { style: 'font-weight: bold;' }, prependIcon: 'mdi-download' },
-            { title: '发送', key: "traffic_sent", align: 'center', minWidth: '8em', headerProps: { style: 'font-weight: bold;' }, prependIcon: 'mdi-upload' },
-          ],
-        },
-        { title: "CPU", key: "cpu", align: 'center', headerProps: { style: 'font-weight: bold;' } },
-        { title: "内存", key: "memory", align: 'center', headerProps: { style: 'font-weight: bold;' } },
-        { title: "硬盘", key: "disk", align: 'center', headerProps: { style: 'font-weight: bold;' } },
-        {
-          title: '丢包率',
-          align: 'center',
-          headerProps: { style: 'font-weight: bold;' },
-          children: [
-            { title: "移动", key: "loss_cm", align: 'center', headerProps: { style: 'font-weight: bold;' } },
-            { title: "电信", key: "loss_ct", align: 'center', headerProps: { style: 'font-weight: bold;' } },
-            { title: "联通", key: "loss_cu", align: 'center', headerProps: { style: 'font-weight: bold;' } },
-          ],
-        },
-      ],
       db: [],
       viewData: [],
       refreshInterval: null,
@@ -73,6 +32,68 @@ export default {
       fastFetchCountDown: 0,
       fastFetchMaxCount: 40,
     }
+  },
+  computed: {
+    title() {
+      return this.$t('app.title');
+    },
+    headers() {
+      return [
+        { title: this.$t('server.node'), key: "host", align: 'center', minWidth: '8em', headerProps: { style: 'font-weight: bold;' } },
+        { title: this.$t('server.uptime'), key: "uptime", align: 'center', minWidth: '6em', headerProps: { style: 'font-weight: bold;' } },
+        {
+          title: this.$t('server.network.title'),
+          align: 'center',
+          headerProps: { style: 'font-weight: bold;' },
+          children: [
+            { title: this.$t('server.network.ipv4'), key: "ipv4", align: 'center', headerProps: { style: 'font-weight: bold;' } },
+            { title: this.$t('server.network.ipv6'), key: "ipv6", align: 'center', headerProps: { style: 'font-weight: bold;' } },
+          ],
+        },
+        { title: this.$t('server.location'), key: "location", align: 'center', headerProps: { style: 'font-weight: bold;' } },
+        { title: this.$t('server.load'), key: "load", align: 'center', headerProps: { style: 'font-weight: bold;' } },
+        {
+          title: this.$t('server.network.speed'),
+          align: 'center',
+          headerProps: { style: 'font-weight: bold;' },
+          children: [
+            { title: this.$t('server.network.receive'), key: "net_recv", align: 'center', minWidth: '8em', headerProps: { style: 'font-weight: bold;' }, prependIcon: 'mdi-download' },
+            { title: this.$t('server.network.send'), key: "net_sent", align: 'center', minWidth: '8em', headerProps: { style: 'font-weight: bold;' }, prependIcon: 'mdi-upload' },
+          ],
+        },
+        {
+          title: this.$t('server.network.dailyTraffic'),
+          align: 'center',
+          headerProps: { style: 'font-weight: bold;' },
+          children: [
+            { title: this.$t('server.network.receive'), key: "traffic_1d_recv", align: 'center', minWidth: '8em', headerProps: { style: 'font-weight: bold;' }, prependIcon: 'mdi-download' },
+            { title: this.$t('server.network.send'), key: "traffic_1d_sent", align: 'center', minWidth: '8em', headerProps: { style: 'font-weight: bold;' }, prependIcon: 'mdi-upload' },
+          ],
+        },
+        {
+          title: this.$t('server.network.traffic'),
+          align: 'center',
+          headerProps: { style: 'font-weight: bold;' },
+          children: [
+            { title: this.$t('server.network.receive'), key: "traffic_recv", align: 'center', minWidth: '8em', headerProps: { style: 'font-weight: bold;' }, prependIcon: 'mdi-download' },
+            { title: this.$t('server.network.send'), key: "traffic_sent", align: 'center', minWidth: '8em', headerProps: { style: 'font-weight: bold;' }, prependIcon: 'mdi-upload' },
+          ],
+        },
+        { title: this.$t('server.cpu'), key: "cpu", align: 'center', headerProps: { style: 'font-weight: bold;' } },
+        { title: this.$t('server.memory'), key: "memory", align: 'center', headerProps: { style: 'font-weight: bold;' } },
+        { title: this.$t('server.disk'), key: "disk", align: 'center', headerProps: { style: 'font-weight: bold;' } },
+        {
+          title: this.$t('server.packetLoss.title'),
+          align: 'center',
+          headerProps: { style: 'font-weight: bold;' },
+          children: [
+            { title: this.$t('server.packetLoss.cm'), key: "loss_cm", align: 'center', headerProps: { style: 'font-weight: bold;' } },
+            { title: this.$t('server.packetLoss.ct'), key: "loss_ct", align: 'center', headerProps: { style: 'font-weight: bold;' } },
+            { title: this.$t('server.packetLoss.cu'), key: "loss_cu", align: 'center', headerProps: { style: 'font-weight: bold;' } },
+          ],
+        },
+      ]
+    },
   },
   methods: {
     toggleExpand(_, { item }) {
@@ -156,14 +177,18 @@ export default {
         return '-';
       }
       const d = seconds * 1000;
+      var formatDuration = "-";
       if (d < parseDuration('1d')) {
         options.includeZero = options.includeZero || true;
         options.colonNotation = options.colonNotation || true;
+        formatDuration = ms(d, options);
       } else {
         options.includedUnits = options.includedUnits || ['day'];
         options.useAbbreviations = options.useAbbreviations || true;
+        options.hideUnitNames = options.hideUnitNames || true;
+        formatDuration = ms(d, options) + this.$t('units.day');
       }
-      return ms(d, options);
+      return formatDuration;
     },
     haveIPv4(value) {
       return value === 'yes';
@@ -375,8 +400,24 @@ export default {
         clearInterval(this.refreshInterval);
       }
     },
+    getCookie(name) {
+      const value = `; ${document.cookie}`;
+      const parts = value.split(`; ${name}=`);
+      if (parts.length === 2) return parts.pop().split(';').shift();
+    },
+    setCookie(name, value, days = 30) {
+      const date = new Date();
+      date.setTime(date.getTime() + parseDuration(days + 'd'));
+      document.cookie = `${name}=${value};expires=${date.toUTCString()};path=/`;
+    },
   },
   mounted() {
+    // 从cookie读取语言设置
+    const savedLang = this.getCookie('lang');
+    if (savedLang && (savedLang === 'zh-CN' || savedLang === 'en')) {
+      this.$i18n.locale = savedLang;
+    }
+
     this.fetchData();
     if (this.isRefreshEnabled) {
       this.refreshInterval = setInterval(() => {

@@ -1,0 +1,50 @@
+{
+  "app": {
+    "title": "Server Status"
+  },
+  "server": {
+    "node": "Node",
+    "uptime": "Uptime",
+    "location": "Location",
+    "load": "Load",
+    "network": {
+      "title": "Network Stack",
+      "ipv4": "IPv4",
+      "ipv6": "IPv6",
+      "speed": "Speed",
+      "receive": "Rx",
+      "send": "Tx",
+      "dailyTraffic": "Daily Traffic",
+      "traffic": "Traffic",
+      "rateLimit": "Rate Limit"
+    },
+    "cpu": "CPU",
+    "memory": "Memory",
+    "disk": "Disk",
+    "packetLoss": {
+      "title": "Loss",
+      "cm": "CM",
+      "ct": "CT",
+      "cu": "CU"
+    },
+    "details": {
+      "load": "System Load(1/5/15)",
+      "cpu": "CPU(System/User/Steal)",
+      "memory": "Memory",
+      "swap": "Swap",
+      "disk": "Disk",
+      "network": "Network",
+      "ipv4Loss": "IPv4 Loss(CM/CT/CU)",
+      "ipv4Ping": "IPv4 Latency(CM/CT/CU)",
+      "ipv6Loss": "IPv6 Loss(CM/CT/CU)",
+      "ipv6Ping": "IPv6 Latency(CM/CT/CU)"
+    }
+  },
+  "actions": {
+    "refresh": "Refresh",
+    "pause": "Pause"
+  },
+  "units": {
+    "day": "d"
+  }
+}
