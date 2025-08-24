@@ -19,7 +19,7 @@
         {{ this.formatSeconds(item.uptime) }}
       </template>
       <template v-slot:item.location="{ item }">
-        <v-img :src="`https://flagcdn.com/${item.location.toLowerCase()}.svg`" height="2ch" rounded></v-img>
+        <span :class="`fi fi-${item.location}`"></span>
       </template>
       <template v-slot:item.ipv4="{ item }">
         <v-icon :color="this.getNetProtoColor(item.ipv4)" class="mr-1">

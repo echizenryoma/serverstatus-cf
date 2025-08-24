@@ -2,7 +2,7 @@ import axios from "axios";
 import Papa from "papaparse";
 import { Duration } from "luxon";
 import prettyBytes from 'pretty-bytes';
-import { ca } from "vuetify/locale";
+import 'flag-icons/css/flag-icons.min.css';
 
 export default {
   data() {
@@ -189,7 +189,7 @@ export default {
         uptime: 0,
         ipv4: '-',
         ipv6: '-',
-        location: 'UN',
+        location: 'un',
         cpu: 0,
         memory: 0,
         disk: 0,
@@ -217,7 +217,7 @@ export default {
       if (item.info) {
         data.ipv4 = item.info.have_ipv4;
         data.ipv6 = item.info.have_ipv6;
-        data.location = item.info.loc || 'UN';
+        data.location = (item.info.loc || 'un').toLowerCase();
         data.network_detail = `${item.info.down_mbps} Mbit / ${item.info.up_mbps} Mbit`;
         have_ipv4 = this.haveIPv4(item.info.have_ipv4);
         have_ipv6 = this.haveIPv6(item.info.have_ipv6);
