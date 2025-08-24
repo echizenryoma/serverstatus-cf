@@ -6,17 +6,8 @@
       </v-col>
 
       <v-col cols="auto" class="d-flex align-center">
-        <v-select
-          v-model="$i18n.locale"
-          :items="languageOptions"
-          item-title="text"
-          item-value="value"
-          density="compact"
-          style="max-width: 10em"
-          class="mr-2"
-          hide-details
-          single-line
-        ></v-select>
+        <v-select v-model="$i18n.locale" :items="languageOptions" item-title="text" item-value="value" density="compact"
+          style="max-width: 10em" class="mr-2" hide-details single-line></v-select>
         <v-btn @click="toggleDarkMode" icon rounded class="mr-2">
           <v-icon>mdi-theme-light-dark</v-icon>
         </v-btn>
@@ -119,10 +110,25 @@
         </tr>
       </template>
     </v-data-table>
-    <v-footer app absolute color="transparent" class="text-center">
+    <v-footer app absolute color="transparent" class="text-center d-flex flex-column">
       <v-col class="text-caption">
-        © Powered by <a href="https://www.influxdata.com/" target="_blank">InfluxDB</a>, <a
-          href="https://pages.cloudflare.com/" target="_blank">Cloudflare Pages</a>
+        <i18n-t keypath="app.footer.poweredBy">
+          <template #influxDb>
+            <a href="https://www.influxdata.com/" target="_blank">{{ this.$t('app.footer.influxDb') }}</a>
+          </template>
+          <template #cloudflarePage>
+            <a href="https://pages.cloudflare.com/" target="_blank">{{ this.$t('app.footer.cloudflarePage') }}</a>
+          </template>
+          <template #vuetify>
+            <a href="https://vuetifyjs.com/" target="_blank">{{ this.$t('app.footer.vuetify') }}</a>
+          </template>
+        </i18n-t>
+      </v-col>
+      <v-col class="text-caption">
+        <i18n-t keypath="app.footer.copyright">
+          <template #year>{{ new Date().getFullYear() }}</template>
+          <template #author>Ryoma Dev</template>
+        </i18n-t>
       </v-col>
     </v-footer>
   </v-container>

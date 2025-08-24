@@ -1,6 +1,13 @@
 {
   "app": {
-    "title": "Server Status"
+    "title": "Server Status",
+    "footer": {
+      "poweredBy": "℗ Powered by {influxDb}, {cloudflarePage}, {vuetify}",
+      "copyright": "Copyright © {year} Designed by {author}",
+      "influxDb": "InfluxDB",
+      "cloudflarePage": "Cloudflare Pages",
+      "vuetify": "Vuetify"
+    }
   },
   "server": {
     "node": "Node",
@@ -11,7 +18,7 @@
       "title": "Network Stack",
       "ipv4": "IPv4",
       "ipv6": "IPv6",
-      "speed": "Speed",
+      "speed": "Network Speed",
       "receive": "Rx",
       "send": "Tx",
       "dailyTraffic": "Daily Traffic",
