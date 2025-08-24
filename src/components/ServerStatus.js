@@ -263,7 +263,7 @@ export default {
           data.loss_cu = Math.round(item.ping.loss_cuv4);
 
           data.lossv4_detail = `${Math.round(item.ping.loss_cmv4)}% / ${Math.round(item.ping.loss_ctv4)}% / ${Math.round(item.ping.loss_cuv4)}%`;
-          data.pingv4_detail = `${Math.round(item.ping.ping_cmv4)}ms / ${Math.round(item.ping.ping_ctv4)}ms / ${Math.round(item.ping.ping_cuv4)}ms`;
+          data.pingv4_detail = `${Math.round(item.ping.ping_cmv4)} ms / ${Math.round(item.ping.ping_ctv4)} ms / ${Math.round(item.ping.ping_cuv4)} ms`;
         } else {
           data.loss_cm = Math.round(item.ping.loss_cmv6);
           data.loss_ct = Math.round(item.ping.loss_ctv6);
@@ -271,7 +271,7 @@ export default {
         }
         if (have_ipv6) {
           data.lossv6_detail = `${Math.round(item.ping.loss_cmv6)}% / ${Math.round(item.ping.loss_ctv6)}% / ${Math.round(item.ping.loss_cuv6)}%`;
-          data.pingv6_detail = `${Math.round(item.ping.ping_cmv6)}ms / ${Math.round(item.ping.ping_ctv6)}ms / ${Math.round(item.ping.ping_cuv6)}ms`;
+          data.pingv6_detail = `${Math.round(item.ping.ping_cmv6)} ms / ${Math.round(item.ping.ping_ctv6)} ms / ${Math.round(item.ping.ping_cuv6)} ms`;
         }
       }
       if (data.uptime <= 0) {
