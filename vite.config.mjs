@@ -36,6 +36,17 @@ export default defineConfig({
       },
     }),
   ],
+  build: {
+    rollupOptions: {
+      output: {
+        manualChunks(id) {
+          if (id.includes('vuetify')) {
+            return 'vuetify'
+          }
+        }
+      }
+    }
+  },
   optimizeDeps: {
     exclude: [
       'vuetify',
