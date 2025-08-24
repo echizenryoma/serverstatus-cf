@@ -30,8 +30,8 @@ export default {
           align: 'center',
           headerProps: { style: 'font-weight: bold;' },
           children: [
-            { title: '🔽', key: "net_recv", align: 'center', minWidth: '8em', headerProps: { style: 'font-weight: bold;' } },
-            { title: '🔼', key: "net_sent", align: 'center', minWidth: '8em', headerProps: { style: 'font-weight: bold;' } },
+            { title: '接收', key: "net_recv", align: 'center', minWidth: '8em', headerProps: { style: 'font-weight: bold;' } },
+            { title: '发送', key: "net_sent", align: 'center', minWidth: '8em', headerProps: { style: 'font-weight: bold;' } },
           ],
         },
         {
@@ -39,8 +39,8 @@ export default {
           align: 'center',
           headerProps: { style: 'font-weight: bold;' },
           children: [
-            { title: '🔽', key: "traffic_1d_recv", align: 'center', minWidth: '8em', headerProps: { style: 'font-weight: bold;' } },
-            { title: '🔼', key: "traffic_1d_sent", align: 'center', minWidth: '8em', headerProps: { style: 'font-weight: bold;' } },
+            { title: '接收', key: "traffic_1d_recv", align: 'center', minWidth: '8em', headerProps: { style: 'font-weight: bold;' } },
+            { title: '发送', key: "traffic_1d_sent", align: 'center', minWidth: '8em', headerProps: { style: 'font-weight: bold;' } },
           ],
         },
         {
@@ -48,8 +48,8 @@ export default {
           align: 'center',
           headerProps: { style: 'font-weight: bold;' },
           children: [
-            { title: '🔽', key: "traffic_recv", align: 'center', minWidth: '8em', headerProps: { style: 'font-weight: bold;' } },
-            { title: '🔼', key: "traffic_sent", align: 'center', minWidth: '8em', headerProps: { style: 'font-weight: bold;' } },
+            { title: '接收', key: "traffic_recv", align: 'center', minWidth: '8em', headerProps: { style: 'font-weight: bold;' } },
+            { title: '发送', key: "traffic_sent", align: 'center', minWidth: '8em', headerProps: { style: 'font-weight: bold;' } },
           ],
         },
         { title: "CPU", key: "cpu", align: 'center', headerProps: { style: 'font-weight: bold;' } },
@@ -149,14 +149,6 @@ export default {
           return 'warning';
         default:
           return 'secondary';
-      }
-    },
-    getNetProtoFlag(value) {
-      switch (value) {
-        case 'yes': return '✅';
-        case 'no': return '❌';
-        case 'nat': return '⚠️';
-        default: return '❔';
       }
     },
     formatSeconds(seconds) {
