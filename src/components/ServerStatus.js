@@ -1,7 +1,7 @@
 import axios from "axios";
 import Papa from "papaparse";
-import { Duration } from "luxon";
-import prettyBytes from 'pretty-bytes';
+import { filesize } from "filesize";
+import { ms, parseDuration } from 'enhanced-ms';
 import 'flag-icons/css/flag-icons.min.css';
 
 export default {
@@ -30,8 +30,8 @@ export default {
           align: 'center',
           headerProps: { style: 'font-weight: bold;' },
           children: [
-            { title: '接收', key: "net_recv", align: 'center', minWidth: '8em', headerProps: { style: 'font-weight: bold;' } },
-            { title: '发送', key: "net_sent", align: 'center', minWidth: '8em', headerProps: { style: 'font-weight: bold;' } },
+            { title: '接收', key: "net_recv", align: 'center', minWidth: '8em', headerProps: { style: 'font-weight: bold;' }, prependIcon: 'mdi-download' },
+            { title: '发送', key: "net_sent", align: 'center', minWidth: '8em', headerProps: { style: 'font-weight: bold;' }, prependIcon: 'mdi-upload' },
           ],
         },
         {
@@ -39,8 +39,8 @@ export default {
           align: 'center',
           headerProps: { style: 'font-weight: bold;' },
           children: [
-            { title: '接收', key: "traffic_1d_recv", align: 'center', minWidth: '8em', headerProps: { style: 'font-weight: bold;' } },
-            { title: '发送', key: "traffic_1d_sent", align: 'center', minWidth: '8em', headerProps: { style: 'font-weight: bold;' } },
+            { title: '接收', key: "traffic_1d_recv", align: 'center', minWidth: '8em', headerProps: { style: 'font-weight: bold;' }, prependIcon: 'mdi-download' },
+            { title: '发送', key: "traffic_1d_sent", align: 'center', minWidth: '8em', headerProps: { style: 'font-weight: bold;' }, prependIcon: 'mdi-upload' },
           ],
         },
         {
@@ -48,8 +48,8 @@ export default {
           align: 'center',
           headerProps: { style: 'font-weight: bold;' },
           children: [
-            { title: '接收', key: "traffic_recv", align: 'center', minWidth: '8em', headerProps: { style: 'font-weight: bold;' } },
-            { title: '发送', key: "traffic_sent", align: 'center', minWidth: '8em', headerProps: { style: 'font-weight: bold;' } },
+            { title: '接收', key: "traffic_recv", align: 'center', minWidth: '8em', headerProps: { style: 'font-weight: bold;' }, prependIcon: 'mdi-download' },
+            { title: '发送', key: "traffic_sent", align: 'center', minWidth: '8em', headerProps: { style: 'font-weight: bold;' }, prependIcon: 'mdi-upload' },
           ],
         },
         { title: "CPU", key: "cpu", align: 'center', headerProps: { style: 'font-weight: bold;' } },
@@ -151,20 +151,19 @@ export default {
           return 'secondary';
       }
     },
-    formatSeconds(seconds) {
-      if (!seconds || seconds <= 0) {
+    formatSeconds(seconds, options = {}) {
+      if (!seconds || seconds < 0) {
         return '-';
       }
-      const d = Duration.fromObject({ seconds }).shiftTo("days", "hours", "minutes", "seconds");
-
-      const days = d.days;
-      const hours = String(d.hours).padStart(2, "0");
-      const minutes = String(d.minutes).padStart(2, "0");
-      const secs = String(Math.floor(d.seconds)).padStart(2, "0");
-      if (days > 0) {
-        return `${days}天`;
+      const d = seconds * 1000;
+      if (d < parseDuration('1d')) {
+        options.includeZero = options.includeZero || true;
+        options.colonNotation = options.colonNotation || true;
+      } else {
+        options.includedUnits = options.includedUnits || ['day'];
+        options.useAbbreviations = options.useAbbreviations || true;
       }
-      return `${hours}:${minutes}:${secs}`;
+      return ms(d, options);
     },
     haveIPv4(value) {
       return value === 'yes';
@@ -176,7 +175,8 @@ export default {
       if (!size) {
         return '-';
       }
-      return prettyBytes(size, options);
+      options.precision = options.precision || 3;
+      return filesize(size, options);
     },
     formatViewDataItem(item) {
       if (!item || !item.host) {

@@ -32,12 +32,6 @@
         </v-icon>
       </template>
 
-      <template v-slot:header.net_recv="{ header }">
-        <v-icon small class="mr-1">mdi-download</v-icon>
-      </template>
-      <template v-slot:header.net_sent="{ header }">
-        <v-icon small class="mr-1">mdi-upload</v-icon>
-      </template>
       <template v-slot:item.net_recv="{ item }">
         {{ this.formatSize(item.net_recv, { bits: true }) }}
       </template>
@@ -45,12 +39,6 @@
         {{ this.formatSize(item.net_sent, { bits: true }) }}
       </template>
 
-      <template v-slot:header.traffic_1d_recv="{ header }">
-        <v-icon small class="mr-1">mdi-download</v-icon>
-      </template>
-      <template v-slot:header.traffic_1d_sent="{ header }">
-        <v-icon small class="mr-1">mdi-upload</v-icon>
-      </template>
       <template v-slot:item.traffic_1d_recv="{ item }">
         {{ this.formatSize(item.traffic_1d_recv) }}
       </template>
@@ -58,12 +46,6 @@
         {{ this.formatSize(item.traffic_1d_sent) }}
       </template>
 
-      <template v-slot:header.traffic_recv="{ header }">
-        <v-icon small class="mr-1">mdi-download</v-icon>
-      </template>
-      <template v-slot:header.traffic_sent="{ header }">
-        <v-icon small class="mr-1">mdi-upload</v-icon>
-      </template>
       <template v-slot:item.traffic_recv="{ item }">
         {{ this.formatSize(item.traffic_recv) }}
       </template>
@@ -115,7 +97,7 @@
               <div><strong>内存:</strong> {{ item.memory_detail }}</div>
               <div><strong>交换空间:</strong> {{ item.swap_detail }}</div>
               <div><strong>硬盘:</strong> {{ item.disk_detail }}</div>
-              <div><strong>网络限速(↓/↑):</strong> {{ item.network_detail }}</div>
+              <div><strong>限速(↓/↑):</strong> {{ item.network_detail }}</div>
               <div><strong>IPv4丢包率(移/电/联):</strong> {{ item.lossv4_detail }}</div>
               <div><strong>IPv4延迟(移/电/联):</strong> {{ item.pingv4_detail }}</div>
               <div><strong>IPv6丢包率(移/电/联):</strong> {{ item.lossv6_detail }}</div>

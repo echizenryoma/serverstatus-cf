@@ -12,10 +12,11 @@
   "dependencies": {
     "@fontsource/roboto": "^5.2.6",
     "axios": "^1.11.0",
+    "enhanced-ms": "^4.1.0",
+    "filesize": "^11.0.2",
     "flag-icons": "^7.5.0",
     "luxon": "^3.7.1",
     "papaparse": "^5.5.3",
-    "pretty-bytes": "^7.0.1",
     "vue": "^3.5.17",
     "vuetify": "^3.9.1"
   },
