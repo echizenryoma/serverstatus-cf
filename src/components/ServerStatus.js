@@ -390,7 +390,7 @@ export default {
         }
       } catch (e) {
         console.error("get failed: ", e);
-        this.fastFetchCountDown = this.fastFetchMaxCount;
+        this.fastFetchCountDown = 0;
       }
     },
     stopRefresh() {
