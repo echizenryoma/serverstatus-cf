@@ -259,12 +259,12 @@ export default {
       }
       if (item.mem) {
         data.memory = Math.round(item.mem.used / item.mem.total * 100) || 0;
-        data.memory_detail = `${this.formatSize(item.mem.used)} / ${this.formatSize(item.mem.total)}`;
-        data.swap_detail = `${this.formatSize(item.mem.swap_cached)} / ${this.formatSize(item.mem.swap_total)}`;
+        data.memory_detail = `${this.formatSize(item.mem.used)} \(${Math.round(item.mem.used / item.mem.total * 100)}%\) / ${this.formatSize(item.mem.total)}`;
+        data.swap_detail = `${this.formatSize(item.mem.swap_cached)} \(${Math.round(item.mem.swap_cached / item.mem.swap_total * 100)}%\) / ${this.formatSize(item.mem.swap_total)}`;
       }
       if (item.disk) {
         data.disk = Math.round(item.disk.used / item.disk.total * 100) || 0;
-        data.disk_detail = `${this.formatSize(item.disk.used)} / ${this.formatSize(item.disk.total)}`;
+        data.disk_detail = `${this.formatSize(item.disk.used)} \(${Math.round(item.disk.used / item.disk.total * 100)}%\) / ${this.formatSize(item.disk.total)}`;
       }
       if (item.net) {
         data.net_recv = item.net.bytes_recv;
@@ -292,17 +292,17 @@ export default {
 
           data.lossv4_detail = `${Math.round(item.ping.loss_cmv4)}% / ${Math.round(item.ping.loss_ctv4)}% / ${Math.round(item.ping.loss_cuv4)}%`;
           data.pingv4_detail = `${Math.round(item.ping.ping_cmv4)} ms / ${Math.round(item.ping.ping_ctv4)} ms / ${Math.round(item.ping.ping_cuv4)} ms`;
-        } else {
+        }
+        if (have_ipv6) {
           data.loss_cm = Math.round(item.ping.loss_cmv6);
           data.loss_ct = Math.round(item.ping.loss_ctv6);
           data.loss_cu = Math.round(item.ping.loss_cuv6);
-        }
-        if (have_ipv6) {
+
           data.lossv6_detail = `${Math.round(item.ping.loss_cmv6)}% / ${Math.round(item.ping.loss_ctv6)}% / ${Math.round(item.ping.loss_cuv6)}%`;
           data.pingv6_detail = `${Math.round(item.ping.ping_cmv6)} ms / ${Math.round(item.ping.ping_ctv6)} ms / ${Math.round(item.ping.ping_cuv6)} ms`;
         }
       }
-      if (data.uptime <= 0) {
+      if (data.uptime < 0) {
         return null;
       }
       return data;
