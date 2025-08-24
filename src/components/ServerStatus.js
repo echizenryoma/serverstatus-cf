@@ -26,7 +26,7 @@ export default {
         { title: "位置", key: "location", align: 'center', headerProps: { style: 'font-weight: bold;' } },
         { title: "负载", key: "load", align: 'center', headerProps: { style: 'font-weight: bold;' } },
         {
-          title: '网络',
+          title: '网速',
           align: 'center',
           headerProps: { style: 'font-weight: bold;' },
           children: [
@@ -114,7 +114,7 @@ export default {
     getLossColor(value) {
       switch (true) {
         case value < 20:
-          return 'green';
+          return 'success';
         case value > 50:
           return 'error';
         default:
