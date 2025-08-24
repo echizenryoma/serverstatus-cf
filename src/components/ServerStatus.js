@@ -35,7 +35,7 @@ export default {
           ],
         },
         {
-          title: '天流量',
+          title: '每日流量',
           align: 'center',
           headerProps: { style: 'font-weight: bold;' },
           children: [
@@ -44,7 +44,7 @@ export default {
           ],
         },
         {
-          title: '总流量',
+          title: '流量',
           align: 'center',
           headerProps: { style: 'font-weight: bold;' },
           children: [
