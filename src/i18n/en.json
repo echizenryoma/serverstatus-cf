@@ -26,7 +26,7 @@
       "rateLimit": "Rate Limit"
     },
     "cpu": "CPU",
-    "memory": "Memory",
+    "memory": "Mem",
     "disk": "Disk",
     "packetLoss": {
       "title": "Loss",
