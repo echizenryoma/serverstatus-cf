@@ -108,6 +108,9 @@ export default {
       this.darkMode = !this.darkMode
       this.$vuetify.theme.global.name = this.darkMode ? 'dark' : 'light'
     },
+    handleLanguageChange(lang) {
+      this.setCookie('lang', lang);
+    },
     getNetProtoColor(value) {
       switch (value) {
         case 'yes':

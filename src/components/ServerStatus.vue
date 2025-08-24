@@ -7,7 +7,8 @@
 
       <v-col cols="auto" class="d-flex align-center">
         <v-select v-model="$i18n.locale" :items="languageOptions" item-title="text" item-value="value" density="compact"
-          style="max-width: 10em" class="mr-2" hide-details single-line></v-select>
+          style="max-width: 10em" class="mr-2" hide-details single-line
+          @update:modelValue="this.handleLanguageChange"></v-select>
         <v-btn @click="toggleDarkMode" icon rounded class="mr-2">
           <v-icon>mdi-theme-light-dark</v-icon>
         </v-btn>
