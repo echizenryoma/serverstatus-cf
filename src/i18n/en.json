@@ -3,10 +3,7 @@
     "title": "Server Status",
     "footer": {
       "poweredBy": "℗ Powered by {influxDb}, {cloudflarePage}, {vuetify}",
-      "copyright": "Copyright © {year} Designed by {author}",
-      "influxDb": "InfluxDB",
-      "cloudflarePage": "Cloudflare Pages",
-      "vuetify": "Vuetify"
+      "copyright": "Copyright © {year} Designed by {author}"
     }
   },
   "server": {

@@ -115,13 +115,13 @@
       <v-col class="text-caption">
         <i18n-t keypath="app.footer.poweredBy">
           <template #influxDb>
-            <a href="https://www.influxdata.com/" target="_blank">{{ this.$t('app.footer.influxDb') }}</a>
+            <a href="https://www.influxdata.com/" target="_blank">InfluxDB</a>
           </template>
           <template #cloudflarePage>
-            <a href="https://pages.cloudflare.com/" target="_blank">{{ this.$t('app.footer.cloudflarePage') }}</a>
+            <a href="https://pages.cloudflare.com/" target="_blank">Cloudflare Pages</a>
           </template>
           <template #vuetify>
-            <a href="https://vuetifyjs.com/" target="_blank">{{ this.$t('app.footer.vuetify') }}</a>
+            <a href="https://vuetifyjs.com/" target="_blank">Vuetify</a>
           </template>
         </i18n-t>
       </v-col>

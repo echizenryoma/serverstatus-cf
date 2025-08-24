@@ -3,11 +3,7 @@
     "title": "服务器状态",
     "footer": {
       "poweredBy": "℗ 由{influxDb}、{cloudflarePage}、{vuetify}驱动",
-      "copyright": "版权所有 © {year} 由{author}设计",
-      "author": "Liu Yang",
-      "influxDb": "InfluxDB",
-      "cloudflarePage": "Cloudflare Pages",
-      "vuetify": "Vuetify"
+      "copyright": "版权所有 © {year} 由{author}设计"
     }
   },
   "server": {
