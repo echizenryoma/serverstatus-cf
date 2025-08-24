@@ -33,10 +33,10 @@
       </template>
 
       <template v-slot:header.net_recv="{ header }">
-        <v-icon small class="mr-1">mdi-upload</v-icon>
+        <v-icon small class="mr-1">mdi-download</v-icon>
       </template>
       <template v-slot:header.net_sent="{ header }">
-        <v-icon small class="mr-1">mdi-download</v-icon>
+        <v-icon small class="mr-1">mdi-upload</v-icon>
       </template>
       <template v-slot:item.net_recv="{ item }">
         {{ this.formatSize(item.net_recv, { bits: true }) }}
@@ -46,10 +46,10 @@
       </template>
 
       <template v-slot:header.traffic_1d_recv="{ header }">
-        <v-icon small class="mr-1">mdi-upload</v-icon>
+        <v-icon small class="mr-1">mdi-download</v-icon>
       </template>
       <template v-slot:header.traffic_1d_sent="{ header }">
-        <v-icon small class="mr-1">mdi-download</v-icon>
+        <v-icon small class="mr-1">mdi-upload</v-icon>
       </template>
       <template v-slot:item.traffic_1d_recv="{ item }">
         {{ this.formatSize(item.traffic_1d_recv) }}
@@ -59,10 +59,10 @@
       </template>
 
       <template v-slot:header.traffic_recv="{ header }">
-        <v-icon small class="mr-1">mdi-upload</v-icon>
+        <v-icon small class="mr-1">mdi-download</v-icon>
       </template>
       <template v-slot:header.traffic_sent="{ header }">
-        <v-icon small class="mr-1">mdi-download</v-icon>
+        <v-icon small class="mr-1">mdi-upload</v-icon>
       </template>
       <template v-slot:item.traffic_recv="{ item }">
         {{ this.formatSize(item.traffic_recv) }}
