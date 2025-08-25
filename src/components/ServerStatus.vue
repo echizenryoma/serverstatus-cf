@@ -9,6 +9,10 @@
         <v-select v-model="$i18n.locale" :items="languageOptions" item-title="text" item-value="value" density="compact"
           style="max-width: 10em" class="mr-2" hide-details single-line
           @update:modelValue="this.handleLanguageChange"></v-select>
+        <v-btn @click="toggleSpeedUnit" icon rounded class="mr-2"
+          :title="speedUnit === 'bit' ? $t('function.speedUnit.switchToByte') : $t('function.speedUnit.switchToBit')">
+          <v-icon>{{ speedUnit === 'bit' ? 'mdi-speedometer' : 'mdi-chip' }}</v-icon>
+        </v-btn>
         <v-btn @click="toggleDarkMode" icon rounded class="mr-2">
           <v-icon>mdi-theme-light-dark</v-icon>
         </v-btn>
@@ -37,10 +41,10 @@
       </template>
 
       <template v-slot:item.net_recv="{ item }">
-        {{ this.formatSize(item.net_recv, { bits: true }) }}
+        {{ this.formatSize(item.net_recv, { bits: this.speedUnit === 'bit' }) }}
       </template>
       <template v-slot:item.net_sent="{ item }">
-        {{ this.formatSize(item.net_sent, { bits: true }) }}
+        {{ this.formatSize(item.net_sent, { bits: this.speedUnit === 'bit' }) }}
       </template>
 
       <template v-slot:item.traffic_1d_recv="{ item }">

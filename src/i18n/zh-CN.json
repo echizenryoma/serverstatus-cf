@@ -6,6 +6,12 @@
       "copyright": "版权所有 © {year} 由{author}设计"
     }
   },
+  "function": {
+    "speedUnit": {
+      "switchToByte": "切换到字节(B)",
+      "switchToBit": "切换到位(bit)"
+    }
+  },
   "server": {
     "node": "节点",
     "uptime": "在线",

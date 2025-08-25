@@ -31,6 +31,7 @@ export default {
       refreshIntervalMs: 1500,
       fastFetchCountDown: 0,
       fastFetchMaxCount: 40,
+      speedUnit: 'bit',
     }
   },
   computed: {
@@ -110,6 +111,11 @@ export default {
     },
     handleLanguageChange(lang) {
       this.setCookie('lang', lang);
+    },
+    toggleSpeedUnit() {
+      this.speedUnit = this.speedUnit === 'bit' ? 'byte' : 'bit';
+      this.setCookie('speedUnit', this.speedUnit);
+      this.updateViewData();
     },
     getNetProtoColor(value) {
       switch (value) {
@@ -246,7 +252,12 @@ export default {
         data.ipv4 = item.info.have_ipv4;
         data.ipv6 = item.info.have_ipv6;
         data.location = (item.info.loc || 'un').toLowerCase();
-        data.network_detail = `${item.info.down_mbps} Mbit / ${item.info.up_mbps} Mbit`;
+        if (this.speedUnit == 'bit') {
+          data.network_detail = `${item.info.down_mbps} Mbit / ${item.info.up_mbps} Mbit`;
+        } else {
+          data.network_detail = `${(item.info.down_mbps / 8).toFixed(2)} MB / ${(item.info.up_mbps / 8).toFixed(2)} MB`;
+        }
+        
         have_ipv4 = this.haveIPv4(item.info.have_ipv4);
         have_ipv6 = this.haveIPv6(item.info.have_ipv6);
       }

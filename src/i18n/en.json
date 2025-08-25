@@ -6,6 +6,12 @@
       "copyright": "Copyright © {year} Designed by {author}"
     }
   },
+  "function": {
+    "speedUnit": {
+      "switchToByte": "Switch to Byte",
+      "switchToBit": "Switch to bit"
+    }
+  },
   "server": {
     "node": "Node",
     "uptime": "Uptime",
