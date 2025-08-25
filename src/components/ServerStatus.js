@@ -343,7 +343,7 @@ export default {
       }
       try {
         const requests = urls.map((url) => axios.get(url));
-        const responses = await Promise.all(requests);
+        const responses = await axios.all(requests);
         const dataMap = new Map(this.db.map(row => [row.host, row]));
         responses.forEach((res, index) => {
           if (!res || !res.data) {
