@@ -199,12 +199,6 @@ export default {
       }
       return formatDuration;
     },
-    haveIPv4(value) {
-      return value === 'yes';
-    },
-    haveIPv6(value) {
-      return value === 'yes';
-    },
     formatSize(size, options = {}) {
       if (!size) {
         return '-';
@@ -216,8 +210,6 @@ export default {
       if (!item || !item.host) {
         return null;
       }
-      let have_ipv4 = false;
-      let have_ipv6 = false;
       const data = {
         host: item.host,
         uptime: 0,
@@ -257,9 +249,6 @@ export default {
         } else {
           data.network_detail = `${(item.info.down_mbps / 8).toFixed(2)} MB / ${(item.info.up_mbps / 8).toFixed(2)} MB`;
         }
-
-        have_ipv4 = this.haveIPv4(item.info.have_ipv4);
-        have_ipv6 = this.haveIPv6(item.info.have_ipv6);
       }
       if (item.cpu) {
         data.uptime = item.cpu.uptime;
@@ -296,7 +285,7 @@ export default {
       }
 
       if (item.ping) {
-        if (have_ipv6) {
+        if (item.info.have_ipv6 === 'yes') {
           data.loss_cm = Math.round(item.ping.loss_cmv6);
           data.loss_ct = Math.round(item.ping.loss_ctv6);
           data.loss_cu = Math.round(item.ping.loss_cuv6);
@@ -304,7 +293,7 @@ export default {
           data.lossv6_detail = `${Math.round(item.ping.loss_cmv6)}% / ${Math.round(item.ping.loss_ctv6)}% / ${Math.round(item.ping.loss_cuv6)}%`;
           data.pingv6_detail = `${Math.round(item.ping.ping_cmv6)} ms / ${Math.round(item.ping.ping_ctv6)} ms / ${Math.round(item.ping.ping_cuv6)} ms`;
         }
-        if (have_ipv4) {
+        if (item.info.have_ipv4 === 'yes') {
           data.loss_cm = Math.round(item.ping.loss_cmv4);
           data.loss_ct = Math.round(item.ping.loss_ctv4);
           data.loss_cu = Math.round(item.ping.loss_cuv4);
