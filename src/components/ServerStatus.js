@@ -261,12 +261,12 @@ export default {
       }
       if (item.mem) {
         data.memory = Math.round(item.mem.used / item.mem.total * 100) || 0;
-        data.memory_detail = `${this.formatSize(item.mem.used)} \(${Math.round(item.mem.used / item.mem.total * 100)}%\) / ${this.formatSize(item.mem.total)}`;
-        data.swap_detail = `${this.formatSize(item.mem.swap_cached)} \(${Math.round(item.mem.swap_cached / item.mem.swap_total * 100)}%\) / ${this.formatSize(item.mem.swap_total)}`;
+        data.memory_detail = `${this.formatSize(item.mem.used, {standard: "iec"})} \(${Math.round(item.mem.used / item.mem.total * 100)}%\) / ${this.formatSize(item.mem.total, {standard: "iec"})}`;
+        data.swap_detail = `${this.formatSize(item.mem.swap_cached, {standard: "iec"})} \(${Math.round(item.mem.swap_cached / item.mem.swap_total * 100)}%\) / ${this.formatSize(item.mem.swap_total, {standard: "iec"})}`;
       }
       if (item.disk) {
         data.disk = Math.round(item.disk.used / item.disk.total * 100) || 0;
-        data.disk_detail = `${this.formatSize(item.disk.used)} \(${Math.round(item.disk.used / item.disk.total * 100)}%\) / ${this.formatSize(item.disk.total)}`;
+        data.disk_detail = `${this.formatSize(item.disk.used, {standard: "iec"})} \(${Math.round(item.disk.used / item.disk.total * 100)}%\) / ${this.formatSize(item.disk.total, {standard: "iec"})}`;
       }
       if (item.net) {
         data.net_recv = item.net.bytes_recv;
