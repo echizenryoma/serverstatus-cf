@@ -227,6 +227,7 @@ export default {
         traffic_1d_recv: 0,
         traffic_1d_sent: 0,
         load_detail: '-',
+        cpu_cores: 0,
         cpu_detail: '-',
         memory_detail: '-',
         swap_detail: '-',
@@ -256,6 +257,7 @@ export default {
         data.cpu = Math.round(item.cpu.usage_user + item.cpu.usage_system) || 0;
         data.load_detail = `${item.cpu.load1.toFixed(2)} / ${item.cpu.load5.toFixed(2)} / ${item.cpu.load15.toFixed(2)}`;
         data.cpu_detail = `${item.cpu.usage_system.toFixed(2)}% / ${item.cpu.usage_user.toFixed(2)}% / ${item.cpu.usage_steal.toFixed(2)}%`;
+        data.cpu_cores = item.cpu.n_cpus;
       }
       if (item.mem) {
         data.memory = Math.round(item.mem.used / item.mem.total * 100) || 0;

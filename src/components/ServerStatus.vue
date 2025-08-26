@@ -101,6 +101,7 @@
           <td :colspan="columns.length">
             <v-card flat class="pa-3">
               <div><strong>{{ $t('server.details.load') }}:</strong> {{ item.load_detail }}</div>
+              <div><strong>{{ $t('server.details.cpuCores') }}:</strong> {{ item.cpu_cores }}</div>
               <div><strong>{{ $t('server.details.cpu') }}:</strong> {{ item.cpu_detail }}</div>
               <div><strong>{{ $t('server.details.memory') }}:</strong> {{ item.memory_detail }}</div>
               <div><strong>{{ $t('server.details.swap') }}:</strong> {{ item.swap_detail }}</div>
