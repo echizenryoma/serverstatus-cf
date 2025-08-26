@@ -257,7 +257,7 @@ export default {
         } else {
           data.network_detail = `${(item.info.down_mbps / 8).toFixed(2)} MB / ${(item.info.up_mbps / 8).toFixed(2)} MB`;
         }
-        
+
         have_ipv4 = this.haveIPv4(item.info.have_ipv4);
         have_ipv6 = this.haveIPv6(item.info.have_ipv6);
       }
@@ -287,7 +287,7 @@ export default {
 
         let bytes_recv_1d = item.traffic.bytes_recv;
         let bytes_sent_1d = item.traffic.bytes_sent;
-        if (item.traffic_1d) {
+        if (item.traffic_1d && data.uptime * 1000 > parseDuration("1d")) {
           bytes_recv_1d = Math.max(0, item.traffic.bytes_recv - (item.traffic_1d.bytes_recv || 0));
           bytes_sent_1d = Math.max(0, item.traffic.bytes_sent - (item.traffic_1d.bytes_sent || 0));
         }
@@ -335,7 +335,7 @@ export default {
         `${baseUrl}/api/mem`,
         `${baseUrl}/api/disk`,
         `${baseUrl}/api/traffic`,
-        `${baseUrl}/api/traffic?start=-1d`,
+        `${baseUrl}/api/traffic/last-day`,
       ];
       this.fastFetchCountDown--;
       if (this.fastFetchCountDown >= 0) {
