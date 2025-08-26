@@ -12,7 +12,7 @@ export async function onRequest({ request, env }) {
     try {
       const query_url = new URL(`https://${influxdb_host}/api/v2/query?org=${influxdb_org}&t=${Date.now()}`);
       const influx_ql = `
-from(bucket: "server")
+from(bucket: "history")
   |> range(start: -1d5m, stop: -1d)
   |> filter(fn: (r) => r["_measurement"] == "net")
   |> filter(fn: (r) => r["_field"] == "bytes_recv" or r["_field"] == "bytes_sent")
