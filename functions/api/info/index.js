@@ -15,16 +15,9 @@ export async function onRequest({ request, env }) {
 from(bucket: "server")
   |> range(start: -5s)
   |> filter(fn: (r) => r["_measurement"] == "info")
-  |> filter(fn: (r) =>
-    r["_field"] == "loc" or
-    r["_field"] == "have_ipv4" or
-    r["_field"] == "have_ipv6" or
-    r["_field"] == "up_mbps" or
-    r["_field"] == "down_mbps"
-  )
   |> last(column: "host")
   |> pivot(rowKey:["host"], columnKey: ["_field"], valueColumn: "_value")
-  |> keep(columns: ["host", "loc", "have_ipv4", "have_ipv6", "up_mbps", "down_mbps"])
+  |> keep(columns: ["host", "loc", "have_ipv4", "have_ipv6", "up_mbps", "down_mbps", "cpu", "kernel"])
 `
       const response = await fetch(query_url, {
         method: 'POST',
