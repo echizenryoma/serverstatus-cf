@@ -441,10 +441,14 @@ export default {
     },
   },
   mounted() {
-    // 从cookie读取语言设置
     const savedLang = this.getCookie('lang');
     if (savedLang && (savedLang === 'zh-CN' || savedLang === 'en')) {
       this.$i18n.locale = savedLang;
+    }
+
+    const savedSpeedUnit = this.getCookie('speedUnit');
+    if (savedSpeedUnit && (savedSpeedUnit === 'bit' || savedSpeedUnit === 'byte')) {
+      this.speedUnit = savedSpeedUnit;
     }
 
     this.fetchData();
