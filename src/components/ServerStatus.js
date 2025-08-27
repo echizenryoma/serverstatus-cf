@@ -188,8 +188,11 @@ export default {
       const d = seconds * 1000;
       var formatDuration = "-";
       if (d < parseDuration('1d')) {
+        options.includedUnits = options.includedUnits || ['hour', 'minute', 'second'];
+        options.unitSeparator = options.unitSeparator || ':';
+        options.hideUnitNames = options.hideUnitNames || true;
         options.includeZero = options.includeZero || true;
-        options.colonNotation = options.colonNotation || true;
+        options.minimumDigits = options.minimumDigits || 2;
         formatDuration = ms(d, options);
       } else {
         options.includedUnits = options.includedUnits || ['day'];
