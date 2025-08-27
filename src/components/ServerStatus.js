@@ -206,7 +206,6 @@ export default {
       if (!size) {
         return '-';
       }
-      options.precision = options.precision || 3;
       return filesize(size, options);
     },
     formatViewDataItem(item) {
