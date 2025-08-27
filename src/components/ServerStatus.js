@@ -245,11 +245,7 @@ export default {
         data.ipv4 = item.info.have_ipv4;
         data.ipv6 = item.info.have_ipv6;
         data.location = (item.info.loc || 'un').toLowerCase();
-        if (this.speedUnit == 'bit') {
-          data.network_detail = `${item.info.down_mbps} Mbit / ${item.info.up_mbps} Mbit`;
-        } else {
-          data.network_detail = `${(item.info.down_mbps / 8).toFixed(2)} MB / ${(item.info.up_mbps / 8).toFixed(2)} MB`;
-        }
+        data.network_detail = `${this.formatSize(item.info.down_mbps / 8.0 * 1000 * 1000, { bits: this.speedUnit === 'bit' })} / ${this.formatSize(item.info.up_mbps / 8.0 * 1000 * 1000, { bits: this.speedUnit === 'bit' })}`;
       }
       if (item.cpu) {
         data.uptime = item.cpu.uptime;
@@ -261,12 +257,12 @@ export default {
       }
       if (item.mem) {
         data.memory = Math.round(item.mem.used / item.mem.total * 100) || 0;
-        data.memory_detail = `${this.formatSize(item.mem.used, {standard: "iec"})} \(${Math.round(item.mem.used / item.mem.total * 100)}%\) / ${this.formatSize(item.mem.total, {standard: "iec"})}`;
-        data.swap_detail = `${this.formatSize(item.mem.swap_cached, {standard: "iec"})} \(${Math.round(item.mem.swap_cached / item.mem.swap_total * 100)}%\) / ${this.formatSize(item.mem.swap_total, {standard: "iec"})}`;
+        data.memory_detail = `${this.formatSize(item.mem.used, { standard: "iec" })} \(${Math.round(item.mem.used / item.mem.total * 100)}%\) / ${this.formatSize(item.mem.total, { standard: "iec" })}`;
+        data.swap_detail = `${this.formatSize(item.mem.swap_cached, { standard: "iec" })} \(${Math.round(item.mem.swap_cached / item.mem.swap_total * 100)}%\) / ${this.formatSize(item.mem.swap_total, { standard: "iec" })}`;
       }
       if (item.disk) {
         data.disk = Math.round(item.disk.used / item.disk.total * 100) || 0;
-        data.disk_detail = `${this.formatSize(item.disk.used, {standard: "iec"})} \(${Math.round(item.disk.used / item.disk.total * 100)}%\) / ${this.formatSize(item.disk.total, {standard: "iec"})}`;
+        data.disk_detail = `${this.formatSize(item.disk.used, { standard: "iec" })} \(${Math.round(item.disk.used / item.disk.total * 100)}%\) / ${this.formatSize(item.disk.total, { standard: "iec" })}`;
       }
       if (item.net) {
         data.net_recv = item.net.bytes_recv;
