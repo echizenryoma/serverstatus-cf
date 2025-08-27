@@ -15,7 +15,7 @@
   "server": {
     "node": "Node",
     "uptime": "Uptime",
-    "location": "Location",
+    "location": "LOC",
     "load": "Load",
     "network": {
       "title": "Network Stack",
@@ -29,7 +29,7 @@
       "rateLimit": "Rate Limit"
     },
     "cpu": "CPU",
-    "memory": "Mem",
+    "memory": "MEM",
     "disk": "Disk",
     "packetLoss": {
       "title": "Loss",
