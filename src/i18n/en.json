@@ -40,7 +40,9 @@
     "details": {
       "load": "System Load(1/5/15)",
       "cpu": "CPU(System/User/Steal)",
+      "cpuModule": "CPU",
       "cpuCores": "CPU cores",
+      "kernel": "Kernel",
       "memory": "Memory",
       "swap": "Swap",
       "disk": "Disk",

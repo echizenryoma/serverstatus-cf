@@ -40,7 +40,9 @@
     "details": {
       "load": "系统负载(1/5/15)",
       "cpu": "CPU(系统/用户/窃取)",
+      "cpuModule": "CPU",
       "cpuCores": "CPU核心数",
+      "kernel": "内核",
       "memory": "内存",
       "swap": "交换空间",
       "disk": "硬盘",

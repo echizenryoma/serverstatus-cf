@@ -239,13 +239,17 @@ export default {
         lossv4_detail: '-',
         pingv4_detail: '-',
         lossv6_detail: '-',
-        pingv6_detail: '-'
+        pingv6_detail: '-',
+        cpu_module: '-',
+        kernel: '-',
       };
       if (item.info) {
         data.ipv4 = item.info.have_ipv4;
         data.ipv6 = item.info.have_ipv6;
         data.location = (item.info.loc || 'un').toLowerCase();
         data.network_detail = `${this.formatSize(item.info.down_mbps / 8.0 * 1000 * 1000, { bits: this.speedUnit === 'bit' })} / ${this.formatSize(item.info.up_mbps / 8.0 * 1000 * 1000, { bits: this.speedUnit === 'bit' })}`;
+        data.cpu_module = item.info.cpu;
+        data.kernel = item.info.kernel;
       }
       if (item.cpu) {
         data.uptime = item.cpu.uptime;
