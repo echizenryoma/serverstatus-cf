@@ -28,9 +28,9 @@ export default {
       db: [],
       viewData: [],
       refreshInterval: null,
-      refreshIntervalMs: 1500,
+      refreshIntervalMs: 1000,
       fastFetchCountDown: 0,
-      fastFetchMaxCount: 40,
+      fastFetchMaxCount: 60,
       speedUnit: 'bit',
     }
   },
@@ -206,7 +206,25 @@ export default {
       if (!size) {
         return '-';
       }
+      options.round = options.round || 1;
       return filesize(size, options);
+    },
+    formatSpeed(speed, options = {}) {
+      if (!speed) {
+        return '-';
+      }
+      options.standard = options.standard || "si";
+      options.round = options.round || 1;
+      if (this.speedUnit === 'bit') {
+        options.bits = options.bits || true;
+        options.fullform = true
+        options.fullforms = ["bps", "kbps", "Mbps", "Gbps", "Tbps", "Pbps"]
+      } else {
+        options.bits = options.bits || false;
+        options.fullform = true
+        options.fullforms = ["B/s", "kB/s", "MB/s", "GB/s", "TB/s", "PB/s"]
+      }
+      return filesize(speed, options);
     },
     formatViewDataItem(item) {
       if (!item || !item.host) {
@@ -249,7 +267,7 @@ export default {
         data.ipv4 = item.info.have_ipv4;
         data.ipv6 = item.info.have_ipv6;
         data.location = (item.info.loc || 'un').toLowerCase();
-        data.network_detail = `${this.formatSize(item.info.down_mbps / 8.0 * 1000 * 1000, { bits: this.speedUnit === 'bit' })} / ${this.formatSize(item.info.up_mbps / 8.0 * 1000 * 1000, { bits: this.speedUnit === 'bit' })}`;
+        data.network_detail = `${this.formatSpeed(item.info.down_mbps / 8.0 * 1000 * 1000)} / ${this.formatSpeed(item.info.up_mbps / 8.0 * 1000 * 1000)}`;
         data.cpu_module = item.info.cpu;
         data.kernel = item.info.kernel;
       }

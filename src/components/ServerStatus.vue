@@ -41,10 +41,10 @@
       </template>
 
       <template v-slot:item.net_recv="{ item }">
-        {{ this.formatSize(item.net_recv, { bits: this.speedUnit === 'bit' }) }}
+        {{ this.formatSpeed(item.net_recv) }}
       </template>
       <template v-slot:item.net_sent="{ item }">
-        {{ this.formatSize(item.net_sent, { bits: this.speedUnit === 'bit' }) }}
+        {{ this.formatSpeed(item.net_sent) }}
       </template>
 
       <template v-slot:item.traffic_1d_recv="{ item }">
