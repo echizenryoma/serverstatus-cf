@@ -6,8 +6,12 @@ import 'flag-icons/css/flag-icons.min.css';
 import { useHead } from '@vueuse/head';
 import { computed } from 'vue';
 import { useI18n } from 'vue-i18n';
+import Footer from '@/components/Footer.vue'
 
 export default {
+  components: {
+    Footer
+  },
   setup() {
     const { t } = useI18n()
     const title = computed(() => t('app.title'))
