@@ -62,7 +62,7 @@ export default {
         },
         yaxis: {
           labels: {
-            formatter: (value) => formatSpeed(value, this.speedUnit)
+            formatter: (value) => formatSpeed(value, this.speedUnit === 'bit')
           }
         },
         tooltip: {
@@ -70,7 +70,7 @@ export default {
             format: 'HH:mm:ss'
           },
           y: {
-            formatter: (value) => formatSpeed(value, this.speedUnit)
+            formatter: (value) => formatSpeed(value, this.speedUnit === 'bit')
           }
         },
         legend: {
