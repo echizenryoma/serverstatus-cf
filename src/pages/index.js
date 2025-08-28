@@ -6,10 +6,9 @@ import 'flag-icons/css/flag-icons.min.css';
 import { useHead } from '@vueuse/head';
 import { computed } from 'vue';
 import { useI18n } from 'vue-i18n';
-import { useTheme } from 'vuetify'
-import Footer from '@/components/Footer.vue'
-import ExpandedRow from '@/components/ExpandedRow.vue'
-import languageOptions from '@/config/languageOptions'
+import Footer from '@/components/Footer.vue';
+import ExpandedRow from '@/components/ExpandedRow.vue';
+import languageOptions from '@/config/languageOptions';
 
 export default {
   components: {
@@ -248,7 +247,7 @@ export default {
       view.ipv4 = info.have_ipv4 || '';
       view.ipv6 = info.have_ipv6 || '';
       view.location = (info.loc || 'un').toLowerCase();
-      view.network_detail = `${formatSpeed(info.down_mbps / 8.0 * 1000 * 1000, this.speedUnit)} / ${formatSpeed(info.up_mbps / 8.0 * 1000 * 1000, this.speedUnit)}`;
+      view.network_detail = `${formatSpeed(info.down_mbps / 8.0 * 1000 * 1000, this.speedUnit === 'bit')} / ${formatSpeed(info.up_mbps / 8.0 * 1000 * 1000, this.speedUnit === 'bit')}`;
       view.cpu_module = info.cpu;
       view.kernel = info.kernel;
     },
