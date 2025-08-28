@@ -50,6 +50,9 @@ export default {
           theme.current.value.colors.secondary,
           theme.current.value.colors.success,
         ],
+        theme: {
+          mode: theme.global.current.value.dark ? 'dark' : 'light'
+        },
         stroke: {
           width: 2,
           curve: 'smooth'
