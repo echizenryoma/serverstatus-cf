@@ -1,0 +1,476 @@
+import axios from "axios";
+import Papa from "papaparse";
+import { filesize } from "filesize";
+import { ms, parseDuration } from 'enhanced-ms';
+import 'flag-icons/css/flag-icons.min.css';
+import { useHead } from '@vueuse/head';
+import { computed } from 'vue';
+import { useI18n } from 'vue-i18n';
+
+export default {
+  setup() {
+    const { t } = useI18n()
+    const title = computed(() => t('app.title'))
+    useHead({
+      title,
+    })
+  },
+  data() {
+    return {
+      languageOptions: [
+        { text: '简体中文', value: 'zh-CN' },
+        { text: 'English', value: 'en' }
+      ],
+      darkMode: window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches,
+      themeMediaQuery: null,
+      isRefreshEnabled: true,
+      expandedRows: [],
+      db: [],
+      viewData: [],
+      refreshInterval: null,
+      refreshIntervalMs: 1000,
+      fastFetchCountDown: 0,
+      fastFetchMaxCount: 60,
+      speedUnit: 'bit',
+    }
+  },
+  computed: {
+    title() {
+      return this.$t('app.title');
+    },
+    headers() {
+      return [
+        { title: this.$t('server.node'), key: "host", align: 'center', minWidth: '8em', headerProps: { style: 'font-weight: bold;' } },
+        { title: this.$t('server.uptime'), key: "uptime", align: 'center', minWidth: '6em', headerProps: { style: 'font-weight: bold;' } },
+        {
+          title: this.$t('server.network.title'),
+          align: 'center',
+          headerProps: { style: 'font-weight: bold;' },
+          children: [
+            { title: this.$t('server.network.ipv4'), key: "ipv4", align: 'center', headerProps: { style: 'font-weight: bold;' } },
+            { title: this.$t('server.network.ipv6'), key: "ipv6", align: 'center', headerProps: { style: 'font-weight: bold;' } },
+          ],
+        },
+        { title: this.$t('server.location'), key: "location", align: 'center', minWidth: '6em', headerProps: { style: 'font-weight: bold;' } },
+        { title: this.$t('server.load'), key: "load", align: 'center', minWidth: '6em', headerProps: { style: 'font-weight: bold;' } },
+        {
+          title: this.$t('server.network.speed'),
+          align: 'center',
+          headerProps: { style: 'font-weight: bold;' },
+          children: [
+            { title: this.$t('server.network.receive'), key: "net_recv", align: 'center', minWidth: '8em', headerProps: { style: 'font-weight: bold;' }, prependIcon: 'mdi-download' },
+            { title: this.$t('server.network.send'), key: "net_sent", align: 'center', minWidth: '8em', headerProps: { style: 'font-weight: bold;' }, prependIcon: 'mdi-upload' },
+          ],
+        },
+        {
+          title: this.$t('server.network.dailyTraffic'),
+          align: 'center',
+          headerProps: { style: 'font-weight: bold;' },
+          children: [
+            { title: this.$t('server.network.receive'), key: "traffic_1d_recv", align: 'center', minWidth: '8em', headerProps: { style: 'font-weight: bold;' }, prependIcon: 'mdi-download' },
+            { title: this.$t('server.network.send'), key: "traffic_1d_sent", align: 'center', minWidth: '8em', headerProps: { style: 'font-weight: bold;' }, prependIcon: 'mdi-upload' },
+          ],
+        },
+        {
+          title: this.$t('server.network.traffic'),
+          align: 'center',
+          headerProps: { style: 'font-weight: bold;' },
+          children: [
+            { title: this.$t('server.network.receive'), key: "traffic_recv", align: 'center', minWidth: '8em', headerProps: { style: 'font-weight: bold;' }, prependIcon: 'mdi-download' },
+            { title: this.$t('server.network.send'), key: "traffic_sent", align: 'center', minWidth: '8em', headerProps: { style: 'font-weight: bold;' }, prependIcon: 'mdi-upload' },
+          ],
+        },
+        { title: this.$t('server.cpu'), key: "cpu", align: 'center', minWidth: '6em', headerProps: { style: 'font-weight: bold;' } },
+        { title: this.$t('server.memory'), key: "memory", align: 'center', minWidth: '6em', headerProps: { style: 'font-weight: bold;' } },
+        { title: this.$t('server.disk'), key: "disk", align: 'center', minWidth: '6em', headerProps: { style: 'font-weight: bold;' } },
+        {
+          title: this.$t('server.packetLoss.title'),
+          align: 'center',
+          headerProps: { style: 'font-weight: bold;' },
+          children: [
+            { title: this.$t('server.packetLoss.cm'), key: "loss_cm", align: 'center', minWidth: '6em', headerProps: { style: 'font-weight: bold;' } },
+            { title: this.$t('server.packetLoss.ct'), key: "loss_ct", align: 'center', minWidth: '6em', headerProps: { style: 'font-weight: bold;' } },
+            { title: this.$t('server.packetLoss.cu'), key: "loss_cu", align: 'center', minWidth: '6em', headerProps: { style: 'font-weight: bold;' } },
+          ],
+        },
+      ]
+    },
+  },
+  methods: {
+    toggleExpand(_, { item }) {
+      const index = this.expandedRows.indexOf(item.host);
+      if (index > -1) {
+        this.expandedRows.splice(index, 1);
+      } else {
+        this.expandedRows.push(item.host);
+      }
+    },
+    toggleDarkMode() {
+      this.darkMode = !this.darkMode
+      this.$vuetify.theme.global.name = this.darkMode ? 'dark' : 'light'
+    },
+    handleLanguageChange(lang) {
+      this.setCookie('lang', lang);
+    },
+    toggleSpeedUnit() {
+      this.speedUnit = this.speedUnit === 'bit' ? 'byte' : 'bit';
+      this.setCookie('speedUnit', this.speedUnit);
+      this.updateViewData();
+    },
+    getNetProtoColor(value) {
+      switch (value) {
+        case 'yes':
+          return 'success';
+        case 'nat':
+          return 'warning';
+        case 'no':
+          return 'error';
+        default:
+          return 'info';
+      }
+    },
+    getNetProtoIcon(value) {
+      switch (value) {
+        case 'yes':
+          return 'mdi-checkbox-marked-outline';
+        case 'nat':
+          return 'mdi-alert-box-outline';
+        case 'no':
+          return 'mdi-close-box-outline';
+        default:
+          return 'mdi-help-box-outline';
+      }
+    },
+    getLossColor(value) {
+      switch (true) {
+        case value < 20:
+          return 'success';
+        case value > 50:
+          return 'error';
+        default:
+          return 'warning';
+      }
+    },
+    getCPUColor(value) {
+      switch (true) {
+        case value > 80:
+          return 'error';
+        case value > 50:
+          return 'warning';
+        default:
+          return 'pink';
+      }
+    },
+    getMemoryColor(value) {
+      switch (true) {
+        case value > 80:
+          return 'error';
+        case value > 60:
+          return 'warning';
+        default:
+          return 'primary';
+      }
+    },
+    getDiskColor(value) {
+      switch (true) {
+        case value > 90:
+          return 'error';
+        case value > 75:
+          return 'warning';
+        default:
+          return 'secondary';
+      }
+    },
+    formatSeconds(seconds, options = {}) {
+      if (!seconds || seconds < 0) {
+        return '-';
+      }
+      const d = seconds * 1000;
+      var formatDuration = "-";
+      if (d < parseDuration('1d')) {
+        options.includedUnits = options.includedUnits || ['hour', 'minute', 'second'];
+        options.unitSeparator = options.unitSeparator || ':';
+        options.hideUnitNames = options.hideUnitNames || true;
+        options.includeZero = options.includeZero || true;
+        options.minimumDigits = options.minimumDigits || 2;
+        formatDuration = ms(d, options);
+      } else {
+        options.includedUnits = options.includedUnits || ['day'];
+        options.useAbbreviations = options.useAbbreviations || true;
+        options.hideUnitNames = options.hideUnitNames || true;
+        formatDuration = ms(d, options) + this.$t('units.day');
+      }
+      return formatDuration;
+    },
+    formatSize(size, options = {}) {
+      if (!size) {
+        return '-';
+      }
+      options.round = options.round || 1;
+      return filesize(size, options);
+    },
+    formatSpeed(speed, options = {}) {
+      if (!speed) {
+        return '-';
+      }
+      options.standard = options.standard || "si";
+      options.round = options.round || 1;
+      if (this.speedUnit === 'bit') {
+        options.bits = options.bits || true;
+        options.fullform = true
+        options.fullforms = ["bps", "kbps", "Mbps", "Gbps", "Tbps", "Pbps"]
+      } else {
+        options.bits = options.bits || false;
+        options.fullform = true
+        options.fullforms = ["B/s", "kB/s", "MB/s", "GB/s", "TB/s", "PB/s"]
+      }
+      return filesize(speed, options);
+    },
+    formatViewDataItem(item) {
+      if (!item || !item.host) {
+        return null;
+      }
+      const data = {
+        host: item.host,
+        uptime: 0,
+        ipv4: '-',
+        ipv6: '-',
+        location: 'un',
+        cpu: 0,
+        memory: 0,
+        disk: 0,
+        load: 0.0,
+        net_recv: 0,
+        net_sent: 0,
+        traffic_recv: 0,
+        traffic_sent: 0,
+        traffic_1d_recv: 0,
+        traffic_1d_sent: 0,
+        load_detail: '-',
+        cpu_cores: 0,
+        cpu_detail: '-',
+        memory_detail: '-',
+        swap_detail: '-',
+        disk_detail: '-',
+        network_detail: '-',
+        loss_cm: 100,
+        loss_ct: 100,
+        loss_cu: 100,
+        lossv4_detail: '-',
+        pingv4_detail: '-',
+        lossv6_detail: '-',
+        pingv6_detail: '-',
+        cpu_module: '-',
+        kernel: '-',
+      };
+      if (item.info) {
+        data.ipv4 = item.info.have_ipv4;
+        data.ipv6 = item.info.have_ipv6;
+        data.location = (item.info.loc || 'un').toLowerCase();
+        data.network_detail = `${this.formatSpeed(item.info.down_mbps / 8.0 * 1000 * 1000)} / ${this.formatSpeed(item.info.up_mbps / 8.0 * 1000 * 1000)}`;
+        data.cpu_module = item.info.cpu;
+        data.kernel = item.info.kernel;
+      }
+      if (item.cpu) {
+        data.uptime = item.cpu.uptime;
+        data.load = item.cpu.load1.toFixed(2) || 0.0;
+        data.cpu = Math.round(item.cpu.usage_user + item.cpu.usage_system) || 0;
+        data.load_detail = `${item.cpu.load1.toFixed(2)} / ${item.cpu.load5.toFixed(2)} / ${item.cpu.load15.toFixed(2)}`;
+        data.cpu_detail = `${item.cpu.usage_system.toFixed(2)}% / ${item.cpu.usage_user.toFixed(2)}% / ${item.cpu.usage_steal.toFixed(2)}%`;
+        data.cpu_cores = item.cpu.n_cpus;
+      }
+      if (item.mem) {
+        data.memory = Math.round(item.mem.used / item.mem.total * 100) || 0;
+        data.memory_detail = `${this.formatSize(item.mem.used, { standard: "iec" })} \(${Math.round(item.mem.used / item.mem.total * 100)}%\) / ${this.formatSize(item.mem.total, { standard: "iec" })}`;
+        data.swap_detail = `${this.formatSize(item.mem.swap_cached, { standard: "iec" })} \(${Math.round(item.mem.swap_cached / item.mem.swap_total * 100)}%\) / ${this.formatSize(item.mem.swap_total, { standard: "iec" })}`;
+      }
+      if (item.disk) {
+        data.disk = Math.round(item.disk.used / item.disk.total * 100) || 0;
+        data.disk_detail = `${this.formatSize(item.disk.used, { standard: "iec" })} \(${Math.round(item.disk.used / item.disk.total * 100)}%\) / ${this.formatSize(item.disk.total, { standard: "iec" })}`;
+      }
+      if (item.net) {
+        data.net_recv = item.net.bytes_recv;
+        data.net_sent = item.net.bytes_sent;
+      }
+      if (item.traffic) {
+        data.traffic_recv = item.traffic.bytes_recv;
+        data.traffic_sent = item.traffic.bytes_sent;
+
+        let bytes_recv_1d = item.traffic.bytes_recv;
+        let bytes_sent_1d = item.traffic.bytes_sent;
+        if (item.traffic_1d && data.uptime * 1000 > parseDuration("1d")) {
+          bytes_recv_1d = Math.max(0, item.traffic.bytes_recv - (item.traffic_1d.bytes_recv || 0));
+          bytes_sent_1d = Math.max(0, item.traffic.bytes_sent - (item.traffic_1d.bytes_sent || 0));
+        }
+        data.traffic_1d_recv = bytes_recv_1d;
+        data.traffic_1d_sent = bytes_sent_1d;
+      }
+
+      if (item.ping) {
+        if (item.info.have_ipv6 === 'yes') {
+          data.loss_cm = Math.round(item.ping.loss_cmv6);
+          data.loss_ct = Math.round(item.ping.loss_ctv6);
+          data.loss_cu = Math.round(item.ping.loss_cuv6);
+
+          data.lossv6_detail = `${Math.round(item.ping.loss_cmv6)}% / ${Math.round(item.ping.loss_ctv6)}% / ${Math.round(item.ping.loss_cuv6)}%`;
+          data.pingv6_detail = `${Math.round(item.ping.ping_cmv6)} ms / ${Math.round(item.ping.ping_ctv6)} ms / ${Math.round(item.ping.ping_cuv6)} ms`;
+        }
+        if (item.info.have_ipv4 === 'yes') {
+          data.loss_cm = Math.round(item.ping.loss_cmv4);
+          data.loss_ct = Math.round(item.ping.loss_ctv4);
+          data.loss_cu = Math.round(item.ping.loss_cuv4);
+
+          data.lossv4_detail = `${Math.round(item.ping.loss_cmv4)}% / ${Math.round(item.ping.loss_ctv4)}% / ${Math.round(item.ping.loss_cuv4)}%`;
+          data.pingv4_detail = `${Math.round(item.ping.ping_cmv4)} ms / ${Math.round(item.ping.ping_ctv4)} ms / ${Math.round(item.ping.ping_cuv4)} ms`;
+        }
+      }
+      if (data.uptime < 0) {
+        return null;
+      }
+      return data;
+    },
+    updateViewData() {
+      if (!this.db || this.db.length === 0) {
+        return;
+      }
+      this.viewData = this.db.map(item => this.formatViewDataItem(item)).filter(item => item !== null);
+    },
+    async fetchData() {
+      const baseUrl = import.meta.env.VITE_API_BASE_URL || '';
+      let urls = [
+        `${baseUrl}/api/cpu`,
+        `${baseUrl}/api/net`,
+        `${baseUrl}/api/ping`,
+
+        `${baseUrl}/api/info`,
+        `${baseUrl}/api/mem`,
+        `${baseUrl}/api/disk`,
+        `${baseUrl}/api/traffic`,
+        `${baseUrl}/api/traffic/last-day`,
+      ];
+      this.fastFetchCountDown--;
+      if (this.fastFetchCountDown >= 0) {
+        urls.splice(3);
+      }
+      try {
+        const requests = urls.map((url) => axios.get(url));
+        const responses = await axios.all(requests);
+        const dataMap = new Map(this.db.map(row => [row.host, row]));
+        responses.forEach((res, index) => {
+          if (!res || !res.data) {
+            console.error(`No data received from ${urls[index]}`);
+            return;
+          }
+          if (!res.data) {
+            console.error(`No data received from ${urls[index]}`);
+            return;
+          }
+          const csvText = res.data;
+          const parsed = Papa.parse(csvText, { header: true, dynamicTyping: true });
+          parsed.data.filter(
+            (row) => row.host && row.host.trim() !== ""
+          ).forEach((row) => {
+            const host = row.host;
+            if (!dataMap.has(host)) {
+              if (this.fastFetchCountDown >= 0) {
+                throw new Error(`Host ${host} not found in existing data map.`);
+              }
+              dataMap.set(host, {
+                host: host,
+              });
+            }
+            const item = dataMap.get(host);
+            switch (index) {
+              case 0:
+                item.cpu = row;
+                break;
+              case 1:
+                item.net = row;
+                break;
+              case 2:
+                item.ping = row;
+                break;
+
+              case 3:
+                item.info = row;
+                break;
+              case 4:
+                item.mem = row;
+                break;
+              case 5:
+                item.disk = row;
+                break;
+              case 6:
+                item.traffic = row;
+                break;
+              case 7:
+                item.traffic_1d = row;
+                break;
+            }
+          });
+        });
+        this.db = Array.from(dataMap.values());
+        this.updateViewData();
+        if (this.fastFetchCountDown < 0) {
+          this.fastFetchCountDown = this.fastFetchMaxCount;
+        }
+      } catch (e) {
+        console.error("get failed: ", e);
+        this.fastFetchCountDown = 0;
+      }
+    },
+    stopRefresh() {
+      this.isRefreshEnabled = !this.isRefreshEnabled;
+      if (this.isRefreshEnabled) {
+        this.refreshInterval = setInterval(() => {
+          this.fetchData();
+        }, this.refreshIntervalMs);
+      } else {
+        clearInterval(this.refreshInterval);
+      }
+    },
+    getCookie(name) {
+      const value = `; ${document.cookie}`;
+      const parts = value.split(`; ${name}=`);
+      if (parts.length === 2) return parts.pop().split(';').shift();
+    },
+    setCookie(name, value, days = 30) {
+      const date = new Date();
+      date.setTime(date.getTime() + parseDuration(days + 'd'));
+      document.cookie = `${name}=${value};expires=${date.toUTCString()};path=/`;
+    },
+  },
+  mounted() {
+    const savedLang = this.getCookie('lang');
+    if (savedLang && (savedLang === 'zh-CN' || savedLang === 'en')) {
+      this.$i18n.locale = savedLang;
+    }
+
+    const savedSpeedUnit = this.getCookie('speedUnit');
+    if (savedSpeedUnit && (savedSpeedUnit === 'bit' || savedSpeedUnit === 'byte')) {
+      this.speedUnit = savedSpeedUnit;
+    }
+
+    this.fetchData();
+    if (this.isRefreshEnabled) {
+      this.refreshInterval = setInterval(() => {
+        this.fetchData();
+      }, this.refreshIntervalMs);
+    }
+
+    if (window.matchMedia) {
+      this.themeMediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+      const themeChangeHandler = (e) => {
+        this.darkMode = e.matches;
+        this.$vuetify.theme.global.name = this.darkMode ? 'dark' : 'light';
+      };
+      this.themeMediaQuery.addEventListener('change', themeChangeHandler);
+    }
+  },
+  beforeUnmount() {
+    clearInterval(this.refreshInterval);
+    if (this.themeMediaQuery) {
+      this.themeMediaQuery.removeEventListener('change', themeChangeHandler);
+    }
+  },
+}
