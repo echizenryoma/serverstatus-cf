@@ -1,0 +1,83 @@
+<template>
+  <v-card class="mb-4" v-if="series && series.length">
+    <v-card-title>{{ title }}</v-card-title>
+    <v-card-text>
+      <VueApexCharts type="line" height="180" :options="chartOptions" :series="series">
+      </VueApexCharts>
+    </v-card-text>
+  </v-card>
+</template>
+
+<script>
+import VueApexCharts from "vue3-apexcharts";
+import { formatSpeed } from '@/utils/format';
+import { useTheme } from 'vuetify'
+
+export default {
+  name: 'SpeedChart',
+  components: {
+    VueApexCharts
+  },
+  props: {
+    series: {
+      type: Array,
+      required: true
+    },
+    speedUnit: {
+      type: String,
+      default: 'bit'
+    },
+    title: {
+      type: String,
+      required: true
+    }
+  },
+  computed: {
+    chartOptions() {
+      const theme = useTheme();
+      return {
+        chart: {
+          id: 'speed-chart',
+          animations: {
+            enabled: false
+          },
+          toolbar: {
+            show: false
+          }
+        },
+        colors: [
+          theme.current.value.colors.primary,
+          theme.current.value.colors.secondary,
+          theme.current.value.colors.success,
+        ],
+        stroke: {
+          width: 2,
+          curve: 'smooth'
+        },
+        xaxis: {
+          type: 'datetime',
+          labels: {
+            datetimeUTC: false
+          }
+        },
+        yaxis: {
+          labels: {
+            formatter: (value) => formatSpeed(value, this.speedUnit)
+          }
+        },
+        tooltip: {
+          x: {
+            format: 'HH:mm:ss'
+          },
+          y: {
+            formatter: (value) => formatSpeed(value, this.speedUnit)
+          }
+        },
+        legend: {
+          position: 'top'
+        }
+      }
+    }
+  }
+}
+</script>

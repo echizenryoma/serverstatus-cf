@@ -1,6 +1,5 @@
 import axios from "axios";
 import Papa from "papaparse";
-import VueApexCharts from "vue3-apexcharts";
 import { formatSize, formatSpeed, formatSeconds } from '@/utils/format';
 import { parseDuration } from 'enhanced-ms';
 import 'flag-icons/css/flag-icons.min.css';
@@ -9,11 +8,12 @@ import { computed } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useTheme } from 'vuetify'
 import Footer from '@/components/Footer.vue'
+import SpeedChart from '@/components/SpeedChart.vue'
 
 export default {
   components: {
     Footer,
-    VueApexCharts
+    SpeedChart
   },
   setup() {
     const { t } = useI18n()
@@ -43,51 +43,6 @@ export default {
     }
   },
   computed: {
-    chartOptions() {
-      const theme = useTheme();
-      return {
-        chart: {
-          id: 'speed-chart',
-          animations: {
-            enabled: false
-          },
-          toolbar: {
-            show: false
-          }
-        },
-        colors: [
-          theme.current.value.colors.primary,
-          theme.current.value.colors.secondary,
-          theme.current.value.colors.success,
-        ],
-        stroke: {
-          width: 2,
-          curve: 'smooth'
-        },
-        xaxis: {
-          type: 'datetime',
-          labels: {
-            datetimeUTC: false
-          }
-        },
-        yaxis: {
-          labels: {
-            formatter: (value) => formatSpeed(value, this.speedUnit)
-          }
-        },
-        tooltip: {
-          x: {
-            format: 'HH:mm:ss'
-          },
-          y: {
-            formatter: (value) => formatSpeed(value, this.speedUnit)
-          }
-        },
-        legend: {
-          position: 'top'
-        }
-      }
-    },
     title() {
       return this.$t('app.title');
     },

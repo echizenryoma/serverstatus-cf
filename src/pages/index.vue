@@ -67,8 +67,7 @@
         </v-progress-linear>
       </template>
       <template v-slot:item.memory="{ item }">
-        <v-progress-linear :model-value="item.memory" :color="`${getMemoryColor(item.memory)}`" height="15"
-          rounded>
+        <v-progress-linear :model-value="item.memory" :color="`${getMemoryColor(item.memory)}`" height="15" rounded>
           {{ item.memory }}%
         </v-progress-linear>
       </template>
@@ -117,13 +116,8 @@
                   <div><strong>{{ $t('server.details.ipv6Ping') }}:</strong> {{ item.pingv6_detail }}</div>
                 </v-col>
                 <v-col cols="4" md="4">
-                  <v-card class="mb-4" v-if="item.chart.speed && item.chart.speed.length">
-                    <v-card-title>{{ $t('server.details.speedChart') }}</v-card-title>
-                    <v-card-text>
-                      <VueApexCharts type="line" height="180" :options="chartOptions" :series="item.chart.speed">
-                      </VueApexCharts>
-                    </v-card-text>
-                  </v-card>
+                  <SpeedChart :series="item.chart.speed" :speed-unit="speedUnit"
+                    :title="$t('server.details.speedChart')" />
                 </v-col>
               </v-row>
             </v-card>
