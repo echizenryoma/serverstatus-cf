@@ -9,6 +9,7 @@ import { useI18n } from 'vue-i18n';
 import { useTheme } from 'vuetify'
 import Footer from '@/components/Footer.vue'
 import ExpandedRow from '@/components/ExpandedRow.vue'
+import languageOptions from '@/config/languageOptions'
 
 export default {
   components: {
@@ -24,10 +25,7 @@ export default {
   },
   data() {
     return {
-      languageOptions: [
-        { text: '简体中文', value: 'zh-CN' },
-        { text: 'English', value: 'en' }
-      ],
+      languageOptions,
       darkMode: window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches,
       themeMediaQuery: null,
       isRefreshEnabled: true,
