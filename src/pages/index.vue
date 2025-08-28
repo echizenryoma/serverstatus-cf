@@ -8,7 +8,7 @@
       <v-col cols="auto" class="d-flex align-center">
         <v-select v-model="$i18n.locale" :items="languageOptions" item-title="text" item-value="value" density="compact"
           style="max-width: 10em" class="mr-2" hide-details single-line
-          @update:modelValue="this.handleLanguageChange"></v-select>
+          @update:modelValue="handleLanguageChange"></v-select>
         <v-btn @click="toggleSpeedUnit" icon rounded class="mr-2"
           :title="speedUnit === 'bit' ? $t('function.speedUnit.switchToByte') : $t('function.speedUnit.switchToBit')">
           <v-icon>{{ speedUnit === 'bit' ? 'mdi-speedometer' : 'mdi-chip' }}</v-icon>
@@ -24,56 +24,56 @@
     <v-data-table :headers="headers" :items="viewData" item-value="host" class="elevation-1" :items-per-page="-1"
       :expanded="expandedRows" hide-default-footer @click:row="toggleExpand" rounded>
       <template v-slot:item.uptime="{ item }">
-        {{ this.formatSeconds(item.uptime) }}
+        {{ formatSeconds(item.uptime) }}
       </template>
       <template v-slot:item.location="{ item }">
         <span :class="`fi fi-${item.location}`"></span>
       </template>
       <template v-slot:item.ipv4="{ item }">
-        <v-icon :color="this.getNetProtoColor(item.ipv4)" class="mr-1">
-          {{ this.getNetProtoIcon(item.ipv4) }}
+        <v-icon :color="getNetProtoColor(item.ipv4)" class="mr-1">
+          {{ getNetProtoIcon(item.ipv4) }}
         </v-icon>
       </template>
       <template v-slot:item.ipv6="{ item }">
-        <v-icon :color="this.getNetProtoColor(item.ipv6)" class="mr-1">
-          {{ this.getNetProtoIcon(item.ipv6) }}
+        <v-icon :color="getNetProtoColor(item.ipv6)" class="mr-1">
+          {{ getNetProtoIcon(item.ipv6) }}
         </v-icon>
       </template>
 
       <template v-slot:item.net_recv="{ item }">
-        {{ this.formatSpeed(item.net_recv) }}
+        {{ formatSpeed(item.net_recv, speedUnit === 'bit') }}
       </template>
       <template v-slot:item.net_sent="{ item }">
-        {{ this.formatSpeed(item.net_sent) }}
+        {{ formatSpeed(item.net_sent, speedUnit === 'bit') }}
       </template>
 
       <template v-slot:item.traffic_1d_recv="{ item }">
-        {{ this.formatSize(item.traffic_1d_recv) }}
+        {{ formatSize(item.traffic_1d_recv) }}
       </template>
       <template v-slot:item.traffic_1d_sent="{ item }">
-        {{ this.formatSize(item.traffic_1d_sent) }}
+        {{ formatSize(item.traffic_1d_sent) }}
       </template>
 
       <template v-slot:item.traffic_recv="{ item }">
-        {{ this.formatSize(item.traffic_recv) }}
+        {{ formatSize(item.traffic_recv) }}
       </template>
       <template v-slot:item.traffic_sent="{ item }">
-        {{ this.formatSize(item.traffic_sent) }}
+        {{ formatSize(item.traffic_sent) }}
       </template>
 
       <template v-slot:item.cpu="{ item }">
-        <v-progress-linear :model-value="item.cpu" :color="`${this.getCPUColor(item.cpu)}`" height="15" rounded>
+        <v-progress-linear :model-value="item.cpu" :color="`${getCPUColor(item.cpu)}`" height="15" rounded>
           {{ item.cpu }}%
         </v-progress-linear>
       </template>
       <template v-slot:item.memory="{ item }">
-        <v-progress-linear :model-value="item.memory" :color="`${this.getMemoryColor(item.memory)}`" height="15"
+        <v-progress-linear :model-value="item.memory" :color="`${getMemoryColor(item.memory)}`" height="15"
           rounded>
           {{ item.memory }}%
         </v-progress-linear>
       </template>
       <template v-slot:item.disk="{ item }">
-        <v-progress-linear :model-value="item.disk" :color="`${this.getDiskColor(item.disk)}`" height="15" rounded>
+        <v-progress-linear :model-value="item.disk" :color="`${getDiskColor(item.disk)}`" height="15" rounded>
           {{ item.disk }}%
         </v-progress-linear>
       </template>

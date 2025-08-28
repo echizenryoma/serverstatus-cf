@@ -1,8 +1,8 @@
 import axios from "axios";
 import Papa from "papaparse";
-import { filesize } from "filesize";
 import VueApexCharts from "vue3-apexcharts";
-import { ms, parseDuration } from 'enhanced-ms';
+import { formatSize, formatSpeed, formatSeconds } from '@/utils/format';
+import { parseDuration } from 'enhanced-ms';
 import 'flag-icons/css/flag-icons.min.css';
 import { useHead } from '@vueuse/head';
 import { computed } from 'vue';
@@ -72,7 +72,7 @@ export default {
         },
         yaxis: {
           labels: {
-            formatter: (value) => this.formatSpeed(value, { round: 1 })
+            formatter: (value) => formatSpeed(value, this.speedUnit)
           }
         },
         tooltip: {
@@ -80,7 +80,7 @@ export default {
             format: 'HH:mm:ss'
           },
           y: {
-            formatter: (value) => this.formatSpeed(value, { round: 2 })
+            formatter: (value) => formatSpeed(value, this.speedUnit)
           }
         },
         legend: {
@@ -150,6 +150,9 @@ export default {
     },
   },
   methods: {
+    formatSpeed,
+    formatSize,
+    formatSeconds,
     toggleExpand(_, { item }) {
       const index = this.expandedRows.indexOf(item.host);
       if (index > -1) {
@@ -234,51 +237,6 @@ export default {
           return 'secondary';
       }
     },
-    formatSeconds(seconds, options = {}) {
-      if (!seconds || seconds < 0) {
-        return '-';
-      }
-      const d = seconds * 1000;
-      var formatDuration = "-";
-      if (d < parseDuration('1d')) {
-        options.includedUnits = options.includedUnits || ['hour', 'minute', 'second'];
-        options.unitSeparator = options.unitSeparator || ':';
-        options.hideUnitNames = options.hideUnitNames || true;
-        options.includeZero = options.includeZero || true;
-        options.minimumDigits = options.minimumDigits || 2;
-        formatDuration = ms(d, options);
-      } else {
-        options.includedUnits = options.includedUnits || ['day'];
-        options.useAbbreviations = options.useAbbreviations || true;
-        options.hideUnitNames = options.hideUnitNames || true;
-        formatDuration = ms(d, options) + this.$t('units.day');
-      }
-      return formatDuration;
-    },
-    formatSize(size, options = {}) {
-      if (!size) {
-        return '-';
-      }
-      options.round = options.round || 1;
-      return filesize(size, options);
-    },
-    formatSpeed(speed, options = {}) {
-      if (!speed) {
-        return '-';
-      }
-      options.standard = options.standard || "si";
-      options.round = options.round || 1;
-      if (this.speedUnit === 'bit') {
-        options.bits = options.bits || true;
-        options.fullform = true
-        options.fullforms = ["bps", "kbps", "Mbps", "Gbps", "Tbps", "Pbps"]
-      } else {
-        options.bits = options.bits || false;
-        options.fullform = true
-        options.fullforms = ["B/s", "kB/s", "MB/s", "GB/s", "TB/s", "PB/s"]
-      }
-      return filesize(speed, options);
-    },
     initializeView(host) {
       return {
         host: host,
@@ -337,7 +295,7 @@ export default {
       view.ipv4 = info.have_ipv4 || '';
       view.ipv6 = info.have_ipv6 || '';
       view.location = (info.loc || 'un').toLowerCase();
-      view.network_detail = `${this.formatSpeed(info.down_mbps / 8.0 * 1000 * 1000)} / ${this.formatSpeed(info.up_mbps / 8.0 * 1000 * 1000)}`;
+      view.network_detail = `${formatSpeed(info.down_mbps / 8.0 * 1000 * 1000, this.speedUnit)} / ${formatSpeed(info.up_mbps / 8.0 * 1000 * 1000, this.speedUnit)}`;
       view.cpu_module = info.cpu;
       view.kernel = info.kernel;
     },
@@ -353,13 +311,13 @@ export default {
     updateMemoryView(mem, view) {
       if (!mem) return;
       view.memory = Math.round(mem.used / mem.total * 100) || 0;
-      view.memory_detail = `${this.formatSize(mem.used, { standard: "iec" })} \(${Math.round(mem.used / mem.total * 100)}%\) / ${this.formatSize(mem.total, { standard: "iec" })}`;
-      view.swap_detail = `${this.formatSize(mem.swap_cached, { standard: "iec" })} \(${Math.round(mem.swap_cached / mem.swap_total * 100)}%\) / ${this.formatSize(mem.swap_total, { standard: "iec" })}`;
+      view.memory_detail = `${formatSize(mem.used, { standard: "iec" })} \(${Math.round(mem.used / mem.total * 100)}%\) / ${formatSize(mem.total, { standard: "iec" })}`;
+      view.swap_detail = `${formatSize(mem.swap_cached, { standard: "iec" })} \(${Math.round(mem.swap_cached / mem.swap_total * 100)}%\) / ${formatSize(mem.swap_total, { standard: "iec" })}`;
     },
     updateDiskView(disk, view) {
       if (!disk) return;
       view.disk = Math.round(disk.used / disk.total * 100) || 0;
-      view.disk_detail = `${this.formatSize(disk.used, { standard: "iec" })} \(${Math.round(disk.used / disk.total * 100)}%\) / ${this.formatSize(disk.total, { standard: "iec" })}`;
+      view.disk_detail = `${formatSize(disk.used, { standard: "iec" })} \(${Math.round(disk.used / disk.total * 100)}%\) / ${formatSize(disk.total, { standard: "iec" })}`;
     },
     updateNetworkView(net, view) {
       if (!net) return;
