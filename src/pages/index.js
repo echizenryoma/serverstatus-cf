@@ -8,12 +8,12 @@ import { computed } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useTheme } from 'vuetify'
 import Footer from '@/components/Footer.vue'
-import SpeedChart from '@/components/SpeedChart.vue'
+import ExpandedRow from '@/components/ExpandedRow.vue'
 
 export default {
   components: {
     Footer,
-    SpeedChart
+    ExpandedRow
   },
   setup() {
     const { t } = useI18n()
