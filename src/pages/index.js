@@ -1,16 +1,19 @@
 import axios from "axios";
 import Papa from "papaparse";
 import { filesize } from "filesize";
+import VueApexCharts from "vue3-apexcharts";
 import { ms, parseDuration } from 'enhanced-ms';
 import 'flag-icons/css/flag-icons.min.css';
 import { useHead } from '@vueuse/head';
 import { computed } from 'vue';
 import { useI18n } from 'vue-i18n';
+import { useTheme } from 'vuetify'
 import Footer from '@/components/Footer.vue'
 
 export default {
   components: {
-    Footer
+    Footer,
+    VueApexCharts
   },
   setup() {
     const { t } = useI18n()
@@ -36,9 +39,55 @@ export default {
       fastFetchCountDown: 0,
       fastFetchMaxCount: 60,
       speedUnit: 'bit',
+      maxHistoryPoints: 60,
     }
   },
   computed: {
+    chartOptions() {
+      const theme = useTheme();
+      return {
+        chart: {
+          id: 'speed-chart',
+          animations: {
+            enabled: false
+          },
+          toolbar: {
+            show: false
+          }
+        },
+        colors: [
+          theme.current.value.colors.primary,
+          theme.current.value.colors.secondary,
+          theme.current.value.colors.success,
+        ],
+        stroke: {
+          width: 2,
+          curve: 'smooth'
+        },
+        xaxis: {
+          type: 'datetime',
+          labels: {
+            datetimeUTC: false
+          }
+        },
+        yaxis: {
+          labels: {
+            formatter: (value) => this.formatSpeed(value, { round: 1 })
+          }
+        },
+        tooltip: {
+          x: {
+            format: 'HH:mm:ss'
+          },
+          y: {
+            formatter: (value) => this.formatSpeed(value, { round: 2 })
+          }
+        },
+        legend: {
+          position: 'top'
+        }
+      }
+    },
     title() {
       return this.$t('app.title');
     },
@@ -230,12 +279,9 @@ export default {
       }
       return filesize(speed, options);
     },
-    formatViewDataItem(item) {
-      if (!item || !item.host) {
-        return null;
-      }
-      const data = {
-        host: item.host,
+    initializeView(host) {
+      return {
+        host: host,
         uptime: 0,
         ipv4: '-',
         ipv6: '-',
@@ -266,78 +312,137 @@ export default {
         pingv6_detail: '-',
         cpu_module: '-',
         kernel: '-',
-      };
-      if (item.info) {
-        data.ipv4 = item.info.have_ipv4;
-        data.ipv6 = item.info.have_ipv6;
-        data.location = (item.info.loc || 'un').toLowerCase();
-        data.network_detail = `${this.formatSpeed(item.info.down_mbps / 8.0 * 1000 * 1000)} / ${this.formatSpeed(item.info.up_mbps / 8.0 * 1000 * 1000)}`;
-        data.cpu_module = item.info.cpu;
-        data.kernel = item.info.kernel;
+        chart: {
+          speed: [],
+        },
       }
-      if (item.cpu) {
-        data.uptime = item.cpu.uptime;
-        data.load = item.cpu.load1.toFixed(2) || 0.0;
-        data.cpu = Math.round(item.cpu.usage_user + item.cpu.usage_system) || 0;
-        data.load_detail = `${item.cpu.load1.toFixed(2)} / ${item.cpu.load5.toFixed(2)} / ${item.cpu.load15.toFixed(2)}`;
-        data.cpu_detail = `${item.cpu.usage_system.toFixed(2)}% / ${item.cpu.usage_user.toFixed(2)}% / ${item.cpu.usage_steal.toFixed(2)}%`;
-        data.cpu_cores = item.cpu.n_cpus;
-      }
-      if (item.mem) {
-        data.memory = Math.round(item.mem.used / item.mem.total * 100) || 0;
-        data.memory_detail = `${this.formatSize(item.mem.used, { standard: "iec" })} \(${Math.round(item.mem.used / item.mem.total * 100)}%\) / ${this.formatSize(item.mem.total, { standard: "iec" })}`;
-        data.swap_detail = `${this.formatSize(item.mem.swap_cached, { standard: "iec" })} \(${Math.round(item.mem.swap_cached / item.mem.swap_total * 100)}%\) / ${this.formatSize(item.mem.swap_total, { standard: "iec" })}`;
-      }
-      if (item.disk) {
-        data.disk = Math.round(item.disk.used / item.disk.total * 100) || 0;
-        data.disk_detail = `${this.formatSize(item.disk.used, { standard: "iec" })} \(${Math.round(item.disk.used / item.disk.total * 100)}%\) / ${this.formatSize(item.disk.total, { standard: "iec" })}`;
-      }
-      if (item.net) {
-        data.net_recv = item.net.bytes_recv;
-        data.net_sent = item.net.bytes_sent;
-      }
-      if (item.traffic) {
-        data.traffic_recv = item.traffic.bytes_recv;
-        data.traffic_sent = item.traffic.bytes_sent;
+    },
+    formatViewDataItem(item, view) {
+      if (!item?.host) return null;
 
-        let bytes_recv_1d = item.traffic.bytes_recv;
-        let bytes_sent_1d = item.traffic.bytes_sent;
-        if (item.traffic_1d && data.uptime * 1000 > parseDuration("1d")) {
-          bytes_recv_1d = Math.max(0, item.traffic.bytes_recv - (item.traffic_1d.bytes_recv || 0));
-          bytes_sent_1d = Math.max(0, item.traffic.bytes_sent - (item.traffic_1d.bytes_sent || 0));
+      const newView = view || this.initializeView(item.host);
+
+      this.updateInfoView(item.info, newView);
+      this.updateCpuView(item.cpu, newView);
+      this.updateMemoryView(item.mem, newView);
+      this.updateDiskView(item.disk, newView);
+      this.updateNetworkView(item.net, newView);
+      this.updateTrafficView(item.traffic, item.traffic_1d, newView);
+      this.updatePingView(item.ping, newView);
+
+      return newView;
+    },
+    updateInfoView(info, view) {
+      if (!info) return;
+      view.ipv4 = info.have_ipv4 || '';
+      view.ipv6 = info.have_ipv6 || '';
+      view.location = (info.loc || 'un').toLowerCase();
+      view.network_detail = `${this.formatSpeed(info.down_mbps / 8.0 * 1000 * 1000)} / ${this.formatSpeed(info.up_mbps / 8.0 * 1000 * 1000)}`;
+      view.cpu_module = info.cpu;
+      view.kernel = info.kernel;
+    },
+    updateCpuView(cpu, view) {
+      if (!cpu) return;
+      view.uptime = cpu.uptime;
+      view.load = cpu.load1.toFixed(2) || 0.0;
+      view.cpu = Math.round(cpu.usage_user + cpu.usage_system) || 0;
+      view.load_detail = `${cpu.load1.toFixed(2)} / ${cpu.load5.toFixed(2)} / ${cpu.load15.toFixed(2)}`;
+      view.cpu_detail = `${cpu.usage_system.toFixed(2)}% / ${cpu.usage_user.toFixed(2)}% / ${cpu.usage_steal.toFixed(2)}%`;
+      view.cpu_cores = cpu.n_cpus;
+    },
+    updateMemoryView(mem, view) {
+      if (!mem) return;
+      view.memory = Math.round(mem.used / mem.total * 100) || 0;
+      view.memory_detail = `${this.formatSize(mem.used, { standard: "iec" })} \(${Math.round(mem.used / mem.total * 100)}%\) / ${this.formatSize(mem.total, { standard: "iec" })}`;
+      view.swap_detail = `${this.formatSize(mem.swap_cached, { standard: "iec" })} \(${Math.round(mem.swap_cached / mem.swap_total * 100)}%\) / ${this.formatSize(mem.swap_total, { standard: "iec" })}`;
+    },
+    updateDiskView(disk, view) {
+      if (!disk) return;
+      view.disk = Math.round(disk.used / disk.total * 100) || 0;
+      view.disk_detail = `${this.formatSize(disk.used, { standard: "iec" })} \(${Math.round(disk.used / disk.total * 100)}%\) / ${this.formatSize(disk.total, { standard: "iec" })}`;
+    },
+    updateNetworkView(net, view) {
+      if (!net) return;
+      view.net_recv = net.bytes_recv;
+      view.net_sent = net.bytes_sent;
+      this.appendSpeedChart(view, net);
+    },
+    initializeSpeedChart() {
+      const now = new Date().getTime();
+      return [
+        {
+          name: this.$t('server.network.receive'),
+          data: Array.from({ length: this.maxHistoryPoints }, (_, i) => [
+            now - (this.maxHistoryPoints - i + 1) * 1000,
+            0
+          ])
+        },
+        {
+          name: this.$t('server.network.send'),
+          data: Array.from({ length: this.maxHistoryPoints }, (_, i) => [
+            now - (this.maxHistoryPoints - i + 1) * 1000,
+            0,
+          ])
         }
-        data.traffic_1d_recv = bytes_recv_1d;
-        data.traffic_1d_sent = bytes_sent_1d;
+      ];
+    },
+    appendSpeedChart(view, netData) {
+      if (view.chart.speed?.length === 0) {
+        view.chart.speed = this.initializeSpeedChart()
       }
-
-      if (item.ping) {
-        if (item.info.have_ipv6 === 'yes') {
-          data.loss_cm = Math.round(item.ping.loss_cmv6);
-          data.loss_ct = Math.round(item.ping.loss_ctv6);
-          data.loss_cu = Math.round(item.ping.loss_cuv6);
-
-          data.lossv6_detail = `${Math.round(item.ping.loss_cmv6)}% / ${Math.round(item.ping.loss_ctv6)}% / ${Math.round(item.ping.loss_cuv6)}%`;
-          data.pingv6_detail = `${Math.round(item.ping.ping_cmv6)} ms / ${Math.round(item.ping.ping_ctv6)} ms / ${Math.round(item.ping.ping_cuv6)} ms`;
+      const now = new Date().getTime();
+      view.chart.speed = [
+        {
+          name: this.$t('server.network.receive'),
+          data: [...(view.chart.speed[0]?.data || []).slice(-this.maxHistoryPoints + 1), [now, netData.bytes_recv]]
+        },
+        {
+          name: this.$t('server.network.send'),
+          data: [...(view.chart.speed[1]?.data || []).slice(-this.maxHistoryPoints + 1), [now, netData.bytes_sent]]
         }
-        if (item.info.have_ipv4 === 'yes') {
-          data.loss_cm = Math.round(item.ping.loss_cmv4);
-          data.loss_ct = Math.round(item.ping.loss_ctv4);
-          data.loss_cu = Math.round(item.ping.loss_cuv4);
+      ];
+    },
+    updateTrafficView(currentTraffic, Last1dTraffic, curr) {
+      if (!currentTraffic) return;
 
-          data.lossv4_detail = `${Math.round(item.ping.loss_cmv4)}% / ${Math.round(item.ping.loss_ctv4)}% / ${Math.round(item.ping.loss_cuv4)}%`;
-          data.pingv4_detail = `${Math.round(item.ping.ping_cmv4)} ms / ${Math.round(item.ping.ping_ctv4)} ms / ${Math.round(item.ping.ping_cuv4)} ms`;
-        }
+      curr.traffic_recv = currentTraffic.bytes_recv;
+      curr.traffic_sent = currentTraffic.bytes_sent;
+
+      let bytes_recv_1d = currentTraffic.bytes_recv;
+      let bytes_sent_1d = currentTraffic.bytes_sent;
+
+      if (Last1dTraffic && curr.uptime * 1000 > parseDuration("1d")) {
+        bytes_recv_1d = Math.max(0, currentTraffic.bytes_recv - (Last1dTraffic.bytes_recv || 0));
+        bytes_sent_1d = Math.max(0, currentTraffic.bytes_sent - (Last1dTraffic.bytes_sent || 0));
       }
-      if (data.uptime < 0) {
-        return null;
+      curr.traffic_1d_recv = bytes_recv_1d;
+      curr.traffic_1d_sent = bytes_sent_1d;
+    },
+    updatePingView(ping, view) {
+      if (!ping) return;
+      if (view.ipv6 === 'yes') {
+        view.loss_cm = Math.round(ping.loss_cmv6);
+        view.loss_ct = Math.round(ping.loss_ctv6);
+        view.loss_cu = Math.round(ping.loss_cuv6);
+
+        view.lossv6_detail = `${Math.round(ping.loss_cmv6)}% / ${Math.round(ping.loss_ctv6)}% / ${Math.round(ping.loss_cuv6)}%`;
+        view.pingv6_detail = `${Math.round(ping.ping_cmv6)} ms / ${Math.round(ping.ping_ctv6)} ms / ${Math.round(ping.ping_cuv6)} ms`;
       }
-      return data;
+      if (view.ipv4 === 'yes') {
+        view.loss_cm = Math.round(ping.loss_cmv4);
+        view.loss_ct = Math.round(ping.loss_ctv4);
+        view.loss_cu = Math.round(ping.loss_cuv4);
+
+        view.lossv4_detail = `${Math.round(ping.loss_cmv4)}% / ${Math.round(ping.loss_ctv4)}% / ${Math.round(ping.loss_cuv4)}%`;
+        view.pingv4_detail = `${Math.round(ping.ping_cmv4)} ms / ${Math.round(ping.ping_ctv4)} ms / ${Math.round(ping.ping_cuv4)} ms`;
+      }
     },
     updateViewData() {
       if (!this.db || this.db.length === 0) {
         return;
       }
-      this.viewData = this.db.map(item => this.formatViewDataItem(item)).filter(item => item !== null);
+      const preViewDataMap = new Map(this.viewData.map(r => [r.host, r]));
+      this.viewData = this.db.map(item => this.formatViewDataItem(item, preViewDataMap.get(item.host)));
     },
     async fetchData() {
       const baseUrl = import.meta.env.VITE_API_BASE_URL || '';

@@ -12,6 +12,7 @@
   "dependencies": {
     "@fontsource/roboto": "^5.2.6",
     "@vueuse/head": "^2.0.0",
+    "apexcharts": "^5.3.4",
     "axios": "^1.11.0",
     "enhanced-ms": "^4.1.0",
     "filesize": "^11.0.2",
@@ -20,6 +21,7 @@
     "papaparse": "^5.5.3",
     "vue": "^3.5.20",
     "vue-i18n": "^11.1.11",
+    "vue3-apexcharts": "^1.8.0",
     "vuetify": "^3.9.6"
   },
   "devDependencies": {
