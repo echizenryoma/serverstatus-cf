@@ -15,7 +15,7 @@ export async function onRequest({ request, env }) {
       let stop = new Date(now);
       stop.setUTCHours(0, 5, 0, 0);
       if (now < stop) {
-        stop.setDate(target.getDate() - 1);
+        stop.setUTCDate(stop.getUTCDate() - 1);
       }
       const start = new Date(stop);
       start.setUTCHours(0, 0, 0, 0);
