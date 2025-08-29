@@ -10,10 +10,23 @@ export async function onRequest({ request, env }) {
 
   if (request.method === 'GET') {
     try {
-      const query_url = new URL(`https://${influxdb_host}/api/v2/query?org=${influxdb_org}&t=${Date.now()}`);
+      const now = new Date();
+
+      let stop = new Date(now);
+      stop.setUTCHours(0, 5, 0, 0);
+      if (now < stop) {
+        stop.setDate(target.getDate() - 1);
+      }
+      const start = new Date(stop);
+      start.setUTCHours(0, 0, 0, 0);
+
+      console.log("start: ", start.toISOString());
+      console.log("stop: ", stop.toISOString());
+
+      const query_url = new URL(`https://${influxdb_host}/api/v2/query?org=${influxdb_org}`);
       const influx_ql = `
 from(bucket: "history")
-  |> range(start: -1d5m, stop: -1d)
+  |> range(start: ${start.toISOString()}, stop: ${stop.toISOString()})
   |> filter(fn: (r) => r["_measurement"] == "net")
   |> filter(fn: (r) => r["_field"] == "bytes_recv" or r["_field"] == "bytes_sent")
   |> last()
@@ -30,7 +43,7 @@ from(bucket: "history")
         },
         body: influx_ql,
       });
-      if (!response.ok) throw new Error(`fetch CSV failed: ${res.status} ${res.statusText}`);
+      if (!response.ok) throw new Error(`fetch CSV failed: ${response.status} ${response.statusText}`);
       const csvText = await response.text();
       const headers = corsHeaders;
       headers['Content-Type'] = 'text/csv';
