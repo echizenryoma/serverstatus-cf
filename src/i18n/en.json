@@ -47,6 +47,7 @@
       "swap": "Swap(Cached/Total)",
       "disk": "Disk(Used/Total)",
       "network": "Network(Recv/Sent)",
+      "traffic": "Traffic(Recv/Sent)",
       "ipv4Loss": "IPv4 Loss(CM/CT/CU)",
       "ipv4Ping": "IPv4 Latency(CM/CT/CU)",
       "ipv6Loss": "IPv6 Loss(CM/CT/CU)",

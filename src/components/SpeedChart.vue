@@ -2,7 +2,7 @@
   <v-card class="mb-4" v-if="series && series.length">
     <v-card-title>{{ title }}</v-card-title>
     <v-card-text>
-      <VueApexCharts type="line" height="180" :options="chartOptions" :series="series">
+      <VueApexCharts type="line" height="200" :options="chartOptions" :series="series">
       </VueApexCharts>
     </v-card-text>
   </v-card>

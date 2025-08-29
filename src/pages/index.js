@@ -214,6 +214,7 @@ export default {
         swap_detail: '-',
         disk_detail: '-',
         network_detail: '-',
+        traffic_detail: '-',
         loss_cm: 100,
         loss_ct: 100,
         loss_cu: 100,
@@ -313,21 +314,23 @@ export default {
         }
       ];
     },
-    updateTrafficView(currentTraffic, Last1dTraffic, curr) {
+    updateTrafficView(currentTraffic, Last1dTraffic, view) {
       if (!currentTraffic) return;
 
-      curr.traffic_recv = currentTraffic.bytes_recv;
-      curr.traffic_sent = currentTraffic.bytes_sent;
+      view.traffic_recv = currentTraffic.bytes_recv;
+      view.traffic_sent = currentTraffic.bytes_sent;
 
       let bytes_recv_1d = currentTraffic.bytes_recv;
       let bytes_sent_1d = currentTraffic.bytes_sent;
 
-      if (Last1dTraffic && curr.uptime * 1000 > parseDuration("1d")) {
+      if (Last1dTraffic && view.uptime * 1000 > parseDuration("1d")) {
         bytes_recv_1d = Math.max(0, currentTraffic.bytes_recv - (Last1dTraffic.bytes_recv || 0));
         bytes_sent_1d = Math.max(0, currentTraffic.bytes_sent - (Last1dTraffic.bytes_sent || 0));
       }
-      curr.traffic_1d_recv = bytes_recv_1d;
-      curr.traffic_1d_sent = bytes_sent_1d;
+      view.traffic_1d_recv = bytes_recv_1d;
+      view.traffic_1d_sent = bytes_sent_1d;
+
+      view.traffic_detail = `${formatSize(currentTraffic.bytes_recv)} / ${formatSize(currentTraffic.bytes_sent)}`;
     },
     updatePingView(ping, view) {
       if (!ping) return;
