@@ -10,23 +10,10 @@ export async function onRequest({ request, env }) {
 
   if (request.method === 'GET') {
     try {
-      const now = new Date();
-
-      let stop = new Date(now);
-      stop.setUTCHours(0, 5, 0, 0);
-      if (now < stop) {
-        stop.setUTCDate(stop.getUTCDate() - 1);
-      }
-      const start = new Date(stop);
-      start.setUTCHours(0, 0, 0, 0);
-
-      console.log("start: ", start.toISOString());
-      console.log("stop: ", stop.toISOString());
-
       const query_url = new URL(`https://${influxdb_host}/api/v2/query?org=${influxdb_org}`);
       const influx_ql = `
 from(bucket: "history")
-  |> range(start: ${start.toISOString()}, stop: ${stop.toISOString()})
+  |> range(start: -1d, stop: -23h55m})
   |> filter(fn: (r) => r["_measurement"] == "net")
   |> filter(fn: (r) => r["_field"] == "bytes_recv" or r["_field"] == "bytes_sent")
   |> last()
