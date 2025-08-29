@@ -119,6 +119,7 @@ export default {
     },
     handleLanguageChange(lang) {
       this.setCookie('lang', lang);
+      this.updateViewData();
     },
     toggleSpeedUnit() {
       this.speedUnit = this.speedUnit === 'bit' ? 'byte' : 'bit';
