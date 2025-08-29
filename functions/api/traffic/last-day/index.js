@@ -13,7 +13,7 @@ export async function onRequest({ request, env }) {
       const query_url = new URL(`https://${influxdb_host}/api/v2/query?org=${influxdb_org}`);
       const influx_ql = `
 from(bucket: "history")
-  |> range(start: -1d, stop: -23h55m})
+  |> range(start: -1d, stop: -23h55m)
   |> filter(fn: (r) => r["_measurement"] == "net")
   |> filter(fn: (r) => r["_field"] == "bytes_recv" or r["_field"] == "bytes_sent")
   |> last()
