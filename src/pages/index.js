@@ -326,6 +326,9 @@ export default {
       if (Last1dTraffic && view.uptime * 1000 > parseDuration("1d")) {
         bytes_recv_1d = Math.max(0, currentTraffic.bytes_recv - (Last1dTraffic.bytes_recv || 0));
         bytes_sent_1d = Math.max(0, currentTraffic.bytes_sent - (Last1dTraffic.bytes_sent || 0));
+      } else {
+        bytes_recv_1d = Math.max(0, currentTraffic.bytes_recv / (view.uptime * 1000 / parseDuration("1d")));
+        bytes_sent_1d = Math.max(0, currentTraffic.bytes_sent / (view.uptime * 1000 / parseDuration("1d")));
       }
       view.traffic_1d_recv = bytes_recv_1d;
       view.traffic_1d_sent = bytes_sent_1d;
