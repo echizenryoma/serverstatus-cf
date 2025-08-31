@@ -22,6 +22,9 @@
           <v-col cols="4">
             <SpeedChart :series="item.chart.speed" :speed-unit="speedUnit" :title="$t('server.details.speedChart')" />
           </v-col>
+          <v-col cols="4">
+            <LatencyChart :series="item.chart.latency" :title="$t('server.details.latencyChart')" />
+          </v-col>
         </v-row>
       </v-card>
     </td>
@@ -30,6 +33,7 @@
 
 <script>
 import SpeedChart from './SpeedChart.vue'
+import LatencyChart from './LatencyChart.vue'
 
 export default {
   name: 'ExpandedRow',

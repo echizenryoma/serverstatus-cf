@@ -226,6 +226,7 @@ export default {
         kernel: '-',
         chart: {
           speed: [],
+          latency: [],
         },
       }
     },
@@ -298,7 +299,7 @@ export default {
         }
       ];
     },
-    appendSpeedChart(view, netData) {
+    appendSpeedChart(view, net) {
       if (view.chart.speed?.length === 0) {
         view.chart.speed = this.initializeSpeedChart()
       }
@@ -306,12 +307,58 @@ export default {
       view.chart.speed = [
         {
           name: this.$t('server.network.receive'),
-          data: [...(view.chart.speed[0]?.data || []).slice(-this.maxHistoryPoints + 1), [now, netData.bytes_recv]]
+          data: [...(view.chart.speed[0]?.data || []).slice(-this.maxHistoryPoints + 1), [now, net.bytes_recv]]
         },
         {
           name: this.$t('server.network.send'),
-          data: [...(view.chart.speed[1]?.data || []).slice(-this.maxHistoryPoints + 1), [now, netData.bytes_sent]]
+          data: [...(view.chart.speed[1]?.data || []).slice(-this.maxHistoryPoints + 1), [now, net.bytes_sent]]
         }
+      ];
+    },
+    initializeLatencyChart() {
+      const now = new Date().getTime();
+      return [
+        {
+          name: this.$t('server.packetLoss.cm'),
+          data: Array.from({ length: this.maxHistoryPoints }, (_, i) => [
+            now - (this.maxHistoryPoints - i + 1) * 1000,
+            0.0,
+          ])
+        },
+        {
+          name: this.$t('server.packetLoss.ct'),
+          data: Array.from({ length: this.maxHistoryPoints }, (_, i) => [
+            now - (this.maxHistoryPoints - i + 1) * 1000,
+            0.0,
+          ])
+        },
+        {
+          name: this.$t('server.packetLoss.cu'),
+          data: Array.from({ length: this.maxHistoryPoints }, (_, i) => [
+            now - (this.maxHistoryPoints - i + 1) * 1000,
+            0.0,
+          ])
+        },
+      ];
+    },
+    appendLatencyChart(view, ping) {
+      if (view.chart.latency?.length === 0) {
+        view.chart.latency = this.initializeLatencyChart()
+      }
+      const now = new Date().getTime();
+      view.chart.latency = [
+        {
+          name: this.$t('server.packetLoss.cm'),
+          data: [...(view.chart.latency[0]?.data || []).slice(-this.maxHistoryPoints + 1), [now, ping.ping_cmv4]]
+        },
+        {
+          name: this.$t('server.packetLoss.ct'),
+          data: [...(view.chart.latency[1]?.data || []).slice(-this.maxHistoryPoints + 1), [now, ping.ping_ctv4]]
+        },
+        {
+          name: this.$t('server.packetLoss.cu'),
+          data: [...(view.chart.latency[2]?.data || []).slice(-this.maxHistoryPoints + 1), [now, ping.ping_cuv4]]
+        },
       ];
     },
     updateTrafficView(currentTraffic, Last1dTraffic, view) {
@@ -352,6 +399,8 @@ export default {
 
         view.lossv4_detail = `${Math.round(ping.loss_cmv4)}% / ${Math.round(ping.loss_ctv4)}% / ${Math.round(ping.loss_cuv4)}%`;
         view.pingv4_detail = `${Math.round(ping.ping_cmv4)} ms / ${Math.round(ping.ping_ctv4)} ms / ${Math.round(ping.ping_cuv4)} ms`;
+
+        this.appendLatencyChart(view, ping);
       }
     },
     updateViewData() {

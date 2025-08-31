@@ -52,7 +52,8 @@
       "ipv4Ping": "IPv4延迟(移/电/联)",
       "ipv6Loss": "IPv6丢包率(移/电/联)",
       "ipv6Ping": "IPv6延迟(移/电/联)",
-      "speedChart": "网速"
+      "speedChart": "网速",
+      "latencyChart": "延迟"
     }
   },
   "actions": {

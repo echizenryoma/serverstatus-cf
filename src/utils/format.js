@@ -27,6 +27,10 @@ export function formatSpeed(speed, bits = true, options = {}) {
   return filesize(speed, options);
 }
 
+export function formatLatency(latency_ms) {
+  return `${Math.round(latency_ms ?? 0)} ms`;
+}
+
 export function formatSeconds(seconds, options = {}) {
   if (!seconds || seconds < 0) {
     return '-';

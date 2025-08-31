@@ -10,6 +10,7 @@ declare module 'vue' {
   export interface GlobalComponents {
     ExpandedRow: typeof import('./src/components/ExpandedRow.vue')['default']
     Footer: typeof import('./src/components/Footer.vue')['default']
+    LatencyChart: typeof import('./src/components/LatencyChart.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
     SpeedChart: typeof import('./src/components/SpeedChart.vue')['default']
