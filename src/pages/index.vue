@@ -54,11 +54,11 @@
         {{ formatSize(item.traffic_1d_sent) }}
       </template>
 
-      <template v-slot:item.traffic_recv="{ item }">
-        {{ formatSize(item.traffic_recv) }}
+      <template v-slot:item.traffic_1m_recv="{ item }">
+        {{ formatSize(item.traffic_1m_recv) }}
       </template>
-      <template v-slot:item.traffic_sent="{ item }">
-        {{ formatSize(item.traffic_sent) }}
+      <template v-slot:item.traffic_1m_sent="{ item }">
+        {{ formatSize(item.traffic_1m_sent) }}
       </template>
 
       <template v-slot:item.cpu="{ item }">

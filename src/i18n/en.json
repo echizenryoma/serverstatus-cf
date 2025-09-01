@@ -25,6 +25,7 @@
       "receive": "Rx",
       "send": "Tx",
       "dailyTraffic": "Daily Traffic",
+      "monthlyTraffic": "Monthly Traffic",
       "traffic": "Traffic",
       "rateLimit": "Rate Limit"
     },

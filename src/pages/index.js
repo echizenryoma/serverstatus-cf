@@ -77,12 +77,12 @@ export default {
           ],
         },
         {
-          title: this.$t('server.network.traffic'),
+          title: this.$t('server.network.monthlyTraffic'),
           align: 'center',
           headerProps: { style: 'font-weight: bold;' },
           children: [
-            { title: this.$t('server.network.receive'), key: "traffic_recv", align: 'center', minWidth: '8em', headerProps: { style: 'font-weight: bold;' }, prependIcon: 'mdi-download' },
-            { title: this.$t('server.network.send'), key: "traffic_sent", align: 'center', minWidth: '8em', headerProps: { style: 'font-weight: bold;' }, prependIcon: 'mdi-upload' },
+            { title: this.$t('server.network.receive'), key: "traffic_1m_recv", align: 'center', minWidth: '8em', headerProps: { style: 'font-weight: bold;' }, prependIcon: 'mdi-download' },
+            { title: this.$t('server.network.send'), key: "traffic_1m_sent", align: 'center', minWidth: '8em', headerProps: { style: 'font-weight: bold;' }, prependIcon: 'mdi-upload' },
           ],
         },
         { title: this.$t('server.cpu'), key: "cpu", align: 'center', minWidth: '6em', headerProps: { style: 'font-weight: bold;' } },
@@ -207,6 +207,8 @@ export default {
         traffic_sent: 0,
         traffic_1d_recv: 0,
         traffic_1d_sent: 0,
+        traffic_1m_recv: 0,
+        traffic_1m_sent: 0,
         load_detail: '-',
         cpu_cores: 0,
         cpu_detail: '-',
@@ -240,7 +242,7 @@ export default {
       this.updateMemoryView(item.mem, newView);
       this.updateDiskView(item.disk, newView);
       this.updateNetworkView(item.net, newView);
-      this.updateTrafficView(item.traffic, item.traffic_1d, newView);
+      this.updateTrafficView(item.traffic, item.traffic_1d, item.traffic_1m, newView);
       this.updatePingView(item.ping, newView);
 
       return newView;
@@ -361,7 +363,7 @@ export default {
         },
       ];
     },
-    updateTrafficView(currentTraffic, Last1dTraffic, view) {
+    updateTrafficView(currentTraffic, last1dTraffic, last1mTraffic, view) {
       if (!currentTraffic) return;
 
       view.traffic_recv = currentTraffic.bytes_recv;
@@ -370,15 +372,27 @@ export default {
       let bytes_recv_1d = currentTraffic.bytes_recv;
       let bytes_sent_1d = currentTraffic.bytes_sent;
 
-      if (Last1dTraffic) {
-        bytes_recv_1d = Math.max(0, currentTraffic.bytes_recv - (Last1dTraffic.bytes_recv || 0));
-        bytes_sent_1d = Math.max(0, currentTraffic.bytes_sent - (Last1dTraffic.bytes_sent || 0));
+      if (last1dTraffic) {
+        bytes_recv_1d = Math.max(0, currentTraffic.bytes_recv - (last1dTraffic.bytes_recv || 0));
+        bytes_sent_1d = Math.max(0, currentTraffic.bytes_sent - (last1dTraffic.bytes_sent || 0));
       } else {
         bytes_recv_1d = Math.max(0, currentTraffic.bytes_recv / (view.uptime * 1000 / parseDuration("1d")));
         bytes_sent_1d = Math.max(0, currentTraffic.bytes_sent / (view.uptime * 1000 / parseDuration("1d")));
       }
       view.traffic_1d_recv = bytes_recv_1d;
       view.traffic_1d_sent = bytes_sent_1d;
+
+      let bytes_recv_1m = currentTraffic.bytes_recv;
+      let bytes_sent_1m = currentTraffic.bytes_sent;
+      if (last1mTraffic) {
+        bytes_recv_1m = Math.max(0, currentTraffic.bytes_recv - (last1mTraffic.bytes_recv || 0));
+        bytes_sent_1m = Math.max(0, currentTraffic.bytes_sent - (last1mTraffic.bytes_sent || 0));
+      } else {
+        bytes_recv_1m = Math.max(0, currentTraffic.bytes_recv / (view.uptime * 1000 / parseDuration("1m")));
+        bytes_sent_1m = Math.max(0, currentTraffic.bytes_sent / (view.uptime * 1000 / parseDuration("1m")));
+      }
+      view.traffic_1m_recv = bytes_recv_1m;
+      view.traffic_1m_sent = bytes_sent_1m;
 
       view.traffic_detail = `${formatSize(currentTraffic.bytes_recv)} / ${formatSize(currentTraffic.bytes_sent)}`;
     },
@@ -422,6 +436,7 @@ export default {
         `${baseUrl}/api/disk`,
         `${baseUrl}/api/traffic`,
         `${baseUrl}/api/traffic/last-day`,
+        `${baseUrl}/api/traffic/last-month`,
       ];
       this.fastFetchCountDown--;
       if (this.fastFetchCountDown >= 0) {
@@ -480,6 +495,9 @@ export default {
                 break;
               case 7:
                 item.traffic_1d = row;
+                break;
+              case 8:
+                item.traffic_1m = row;
                 break;
             }
           });
