@@ -382,8 +382,8 @@ export default {
         bytes_recv_1m = Math.max(0, currentTraffic.bytes_recv - (last1mTraffic.bytes_recv || 0));
         bytes_sent_1m = Math.max(0, currentTraffic.bytes_sent - (last1mTraffic.bytes_sent || 0));
       } else {
-        bytes_recv_1m = Math.max(0, currentTraffic.bytes_recv / (view.uptime * 1000 / parseDuration("1m")));
-        bytes_sent_1m = Math.max(0, currentTraffic.bytes_sent / (view.uptime * 1000 / parseDuration("1m")));
+        bytes_recv_1m = Math.max(0, currentTraffic.bytes_recv / (view.uptime * 1000 / parseDuration("30d")));
+        bytes_sent_1m = Math.max(0, currentTraffic.bytes_sent / (view.uptime * 1000 / parseDuration("30d")));
       }
       view.traffic_1m_recv = bytes_recv_1m;
       view.traffic_1m_sent = bytes_sent_1m;
