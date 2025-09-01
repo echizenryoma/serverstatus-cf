@@ -1,4 +1,7 @@
 <template>
+  <div class="text-caption text-right mt-2" style="color: #888;">
+    <i18n-t keypath="app.footer.version"></i18n-t>: {{ appVersion }}
+  </div>
   <v-footer app absolute color="transparent" class="text-center d-flex flex-column">
     <v-col class="text-caption">
       <i18n-t keypath="app.footer.poweredBy">
@@ -24,6 +27,11 @@
 
 <script>
 export default {
-  name: 'Footer'
+  name: 'Footer',
+  data() {
+    return {
+      appVersion: __APP_VERSION__,
+    }
+  },
 }
 </script>
