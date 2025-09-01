@@ -203,8 +203,6 @@ export default {
         load: 0.0,
         net_recv: 0,
         net_sent: 0,
-        traffic_recv: 0,
-        traffic_sent: 0,
         traffic_1d_recv: 0,
         traffic_1d_sent: 0,
         traffic_1m_recv: 0,
@@ -365,10 +363,6 @@ export default {
     },
     updateTrafficView(currentTraffic, last1dTraffic, last1mTraffic, view) {
       if (!currentTraffic) return;
-
-      view.traffic_recv = currentTraffic.bytes_recv;
-      view.traffic_sent = currentTraffic.bytes_sent;
-
       let bytes_recv_1d = currentTraffic.bytes_recv;
       let bytes_sent_1d = currentTraffic.bytes_sent;
 
