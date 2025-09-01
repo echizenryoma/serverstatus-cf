@@ -42,9 +42,9 @@ export default {
           }
         },
         colors: [
-          theme.current.value.colors.primary,
-          theme.current.value.colors.secondary,
           theme.current.value.colors.success,
+          theme.current.value.colors.primary,
+          theme.current.value.colors.error,
         ],
         theme: {
           mode: theme.global.current.value.dark ? 'dark' : 'light'
