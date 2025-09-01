@@ -341,7 +341,7 @@ export default {
         },
       ];
     },
-    appendLatencyChart(view, ping) {
+    appendLatencyChart(view, ping, ipv6 = false) {
       if (view.chart.latency?.length === 0) {
         view.chart.latency = this.initializeLatencyChart()
       }
@@ -349,15 +349,15 @@ export default {
       view.chart.latency = [
         {
           name: this.$t('server.packetLoss.cm'),
-          data: [...(view.chart.latency[0]?.data || []).slice(-this.maxHistoryPoints + 1), [now, ping.ping_cmv4]]
+          data: [...(view.chart.latency[0]?.data || []).slice(-this.maxHistoryPoints + 1), [now, ipv6 ? ping.ping_cmv6 : ping.ping_cmv4]]
         },
         {
           name: this.$t('server.packetLoss.ct'),
-          data: [...(view.chart.latency[1]?.data || []).slice(-this.maxHistoryPoints + 1), [now, ping.ping_ctv4]]
+          data: [...(view.chart.latency[1]?.data || []).slice(-this.maxHistoryPoints + 1), [now, ipv6 ? ping.ping_ctv6 : ping.ping_ctv4]]
         },
         {
           name: this.$t('server.packetLoss.cu'),
-          data: [...(view.chart.latency[2]?.data || []).slice(-this.maxHistoryPoints + 1), [now, ping.ping_cuv4]]
+          data: [...(view.chart.latency[2]?.data || []).slice(-this.maxHistoryPoints + 1), [now, ipv6 ? ping.ping_cuv6 : ping.ping_cuv4]]
         },
       ];
     },
@@ -399,6 +399,9 @@ export default {
 
         view.lossv6_detail = `${Math.round(ping.loss_cmv6)}% / ${Math.round(ping.loss_ctv6)}% / ${Math.round(ping.loss_cuv6)}%`;
         view.pingv6_detail = `${Math.round(ping.ping_cmv6)} ms / ${Math.round(ping.ping_ctv6)} ms / ${Math.round(ping.ping_cuv6)} ms`;
+        if (view.ipv4 !== 'yes') {
+          this.appendLatencyChart(view, ping, true);
+        }
       }
       if (view.ipv4 === 'yes') {
         view.loss_cm = Math.round(ping.loss_cmv4);
@@ -408,7 +411,7 @@ export default {
         view.lossv4_detail = `${Math.round(ping.loss_cmv4)}% / ${Math.round(ping.loss_ctv4)}% / ${Math.round(ping.loss_cuv4)}%`;
         view.pingv4_detail = `${Math.round(ping.ping_cmv4)} ms / ${Math.round(ping.ping_ctv4)} ms / ${Math.round(ping.ping_cuv4)} ms`;
 
-        this.appendLatencyChart(view, ping);
+        this.appendLatencyChart(view, ping, false);
       }
     },
     updateViewData() {
