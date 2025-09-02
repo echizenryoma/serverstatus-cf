@@ -365,13 +365,16 @@ export default {
       if (!currentTraffic) return;
       let bytes_recv_1d = currentTraffic.bytes_recv;
       let bytes_sent_1d = currentTraffic.bytes_sent;
+      const now = new Date();
 
       if (last1dTraffic) {
         bytes_recv_1d = Math.max(0, currentTraffic.bytes_recv - (last1dTraffic.bytes_recv || 0));
         bytes_sent_1d = Math.max(0, currentTraffic.bytes_sent - (last1dTraffic.bytes_sent || 0));
       } else {
-        bytes_recv_1d = Math.max(0, currentTraffic.bytes_recv / (view.uptime * 1000 / parseDuration("1d")));
-        bytes_sent_1d = Math.max(0, currentTraffic.bytes_sent / (view.uptime * 1000 / parseDuration("1d")));
+        const dayStart = Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(), 0, 0, 0, 0);
+        const duration = now.getTime() - dayStart;
+        bytes_recv_1d = Math.max(0, currentTraffic.bytes_recv / (view.uptime * 1000 / duration));
+        bytes_sent_1d = Math.max(0, currentTraffic.bytes_sent / (view.uptime * 1000 / duration));
       }
       view.traffic_1d_recv = bytes_recv_1d;
       view.traffic_1d_sent = bytes_sent_1d;
@@ -382,8 +385,10 @@ export default {
         bytes_recv_1m = Math.max(0, currentTraffic.bytes_recv - (last1mTraffic.bytes_recv || 0));
         bytes_sent_1m = Math.max(0, currentTraffic.bytes_sent - (last1mTraffic.bytes_sent || 0));
       } else {
-        bytes_recv_1m = Math.max(0, currentTraffic.bytes_recv / (view.uptime * 1000 / parseDuration("30d")));
-        bytes_sent_1m = Math.max(0, currentTraffic.bytes_sent / (view.uptime * 1000 / parseDuration("30d")));
+        const monthStart = Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), 1, 0, 0, 0, 0);
+        const duration = now.getTime() - monthStart;
+        bytes_recv_1m = Math.max(0, currentTraffic.bytes_recv / (view.uptime * 1000 / duration));
+        bytes_sent_1m = Math.max(0, currentTraffic.bytes_sent / (view.uptime * 1000 / duration));
       }
       view.traffic_1m_recv = bytes_recv_1m;
       view.traffic_1m_sent = bytes_sent_1m;
