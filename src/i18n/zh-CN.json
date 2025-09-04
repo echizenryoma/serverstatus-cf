@@ -33,8 +33,9 @@
     "cpu": "CPU",
     "memory": "内存",
     "disk": "硬盘",
-    "packetLoss": {
-      "title": "丢包率",
+    "ping": {
+      "latencyTitle": "延迟",
+      "lossTitle": "丢包率",
       "cm": "移动",
       "ct": "电信",
       "cu": "联通"

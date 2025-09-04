@@ -1,6 +1,6 @@
 import axios from "axios";
 import Papa from "papaparse";
-import { formatSize, formatSpeed, formatSeconds } from '@/utils/format';
+import { formatSize, formatSpeed, formatSeconds, formatLatency } from '@/utils/format';
 import { parseDuration } from 'enhanced-ms';
 import 'flag-icons/css/flag-icons.min.css';
 import { useHead } from '@vueuse/head';
@@ -37,6 +37,7 @@ export default {
       fastFetchMaxCount: 60,
       speedUnit: 'bit',
       maxHistoryPoints: 60,
+      showPingLatency: false,
     }
   },
   computed: {
@@ -89,13 +90,16 @@ export default {
         { title: this.$t('server.memory'), key: "memory", align: 'center', minWidth: '6em', headerProps: { style: 'font-weight: bold;' } },
         { title: this.$t('server.disk'), key: "disk", align: 'center', minWidth: '6em', headerProps: { style: 'font-weight: bold;' } },
         {
-          title: this.$t('server.packetLoss.title'),
+          title: this.$t(this.showPingLatency ? 'server.ping.latencyTitle' : 'server.ping.lossTitle'),
           align: 'center',
-          headerProps: { style: 'font-weight: bold;' },
+          headerProps: {
+            style: 'font-weight: bold; cursor: pointer;',
+            onClick: () => this.togglePingLatency()
+          },
           children: [
-            { title: this.$t('server.packetLoss.cm'), key: "loss_cm", align: 'center', minWidth: '6em', headerProps: { style: 'font-weight: bold;' } },
-            { title: this.$t('server.packetLoss.ct'), key: "loss_ct", align: 'center', minWidth: '6em', headerProps: { style: 'font-weight: bold;' } },
-            { title: this.$t('server.packetLoss.cu'), key: "loss_cu", align: 'center', minWidth: '6em', headerProps: { style: 'font-weight: bold;' } },
+            { title: this.$t('server.ping.cm'), key: "ping_cm", align: 'center', minWidth: '6em', headerProps: { style: 'font-weight: bold;' } },
+            { title: this.$t('server.ping.ct'), key: "ping_ct", align: 'center', minWidth: '6em', headerProps: { style: 'font-weight: bold;' } },
+            { title: this.$t('server.ping.cu'), key: "ping_cu", align: 'center', minWidth: '6em', headerProps: { style: 'font-weight: bold;' } },
           ],
         },
       ]
@@ -105,6 +109,7 @@ export default {
     formatSpeed,
     formatSize,
     formatSeconds,
+    formatLatency,
     toggleExpand(_, { item }) {
       const index = this.expandedRows.indexOf(item.host);
       if (index > -1) {
@@ -124,6 +129,10 @@ export default {
     toggleSpeedUnit() {
       this.speedUnit = this.speedUnit === 'bit' ? 'byte' : 'bit';
       this.setCookie('speedUnit', this.speedUnit);
+      this.updateViewData();
+    },
+    togglePingLatency() {
+      this.showPingLatency = !this.showPingLatency;
       this.updateViewData();
     },
     getNetProtoColor(value) {
@@ -158,6 +167,16 @@ export default {
           return 'error';
         default:
           return 'warning';
+      }
+    },
+    getLatencyColor(value) {
+      switch (true) {
+        case value <= 125:
+          return 'success';
+        case value <= 250:
+          return 'warning';
+        default:
+          return 'error';
       }
     },
     getCPUColor(value) {
@@ -215,9 +234,9 @@ export default {
         disk_detail: '-',
         network_detail: '-',
         traffic_detail: '-',
-        loss_cm: 100,
-        loss_ct: 100,
-        loss_cu: 100,
+        ping_cm: 100,
+        ping_ct: 100,
+        ping_cu: 100,
         lossv4_detail: '-',
         pingv4_detail: '-',
         lossv6_detail: '-',
@@ -319,21 +338,21 @@ export default {
       const now = new Date().getTime();
       return [
         {
-          name: this.$t('server.packetLoss.cm'),
+          name: this.$t('server.ping.cm'),
           data: Array.from({ length: this.maxHistoryPoints }, (_, i) => [
             now - (this.maxHistoryPoints - i + 1) * 1000,
             0.0,
           ])
         },
         {
-          name: this.$t('server.packetLoss.ct'),
+          name: this.$t('server.ping.ct'),
           data: Array.from({ length: this.maxHistoryPoints }, (_, i) => [
             now - (this.maxHistoryPoints - i + 1) * 1000,
             0.0,
           ])
         },
         {
-          name: this.$t('server.packetLoss.cu'),
+          name: this.$t('server.ping.cu'),
           data: Array.from({ length: this.maxHistoryPoints }, (_, i) => [
             now - (this.maxHistoryPoints - i + 1) * 1000,
             0.0,
@@ -348,15 +367,15 @@ export default {
       const now = new Date().getTime();
       view.chart.latency = [
         {
-          name: this.$t('server.packetLoss.cm'),
+          name: this.$t('server.ping.cm'),
           data: [...(view.chart.latency[0]?.data || []).slice(-this.maxHistoryPoints + 1), [now, ipv6 ? ping.ping_cmv6 : ping.ping_cmv4]]
         },
         {
-          name: this.$t('server.packetLoss.ct'),
+          name: this.$t('server.ping.ct'),
           data: [...(view.chart.latency[1]?.data || []).slice(-this.maxHistoryPoints + 1), [now, ipv6 ? ping.ping_ctv6 : ping.ping_ctv4]]
         },
         {
-          name: this.$t('server.packetLoss.cu'),
+          name: this.$t('server.ping.cu'),
           data: [...(view.chart.latency[2]?.data || []).slice(-this.maxHistoryPoints + 1), [now, ipv6 ? ping.ping_cuv6 : ping.ping_cuv4]]
         },
       ];
@@ -398,9 +417,15 @@ export default {
     updatePingView(ping, view) {
       if (!ping) return;
       if (view.ipv6 === 'yes') {
-        view.loss_cm = Math.round(ping.loss_cmv6);
-        view.loss_ct = Math.round(ping.loss_ctv6);
-        view.loss_cu = Math.round(ping.loss_cuv6);
+        if (this.showPingLatency) {
+          view.ping_cm = Math.round(ping.ping_cmv6);
+          view.ping_ct = Math.round(ping.ping_ctv6);
+          view.ping_cu = Math.round(ping.ping_cuv6);
+        } else {
+          view.ping_cm = Math.round(ping.loss_cmv6);
+          view.ping_ct = Math.round(ping.loss_ctv6);
+          view.ping_cu = Math.round(ping.loss_cuv6);
+        }
 
         view.lossv6_detail = `${Math.round(ping.loss_cmv6)}% / ${Math.round(ping.loss_ctv6)}% / ${Math.round(ping.loss_cuv6)}%`;
         view.pingv6_detail = `${Math.round(ping.ping_cmv6)} ms / ${Math.round(ping.ping_ctv6)} ms / ${Math.round(ping.ping_cuv6)} ms`;
@@ -409,9 +434,15 @@ export default {
         }
       }
       if (view.ipv4 === 'yes') {
-        view.loss_cm = Math.round(ping.loss_cmv4);
-        view.loss_ct = Math.round(ping.loss_ctv4);
-        view.loss_cu = Math.round(ping.loss_cuv4);
+        if (this.showPingLatency) {
+          view.ping_cm = Math.round(ping.ping_cmv4);
+          view.ping_ct = Math.round(ping.ping_ctv4);
+          view.ping_cu = Math.round(ping.ping_cuv4);
+        } else {
+          view.ping_cm = Math.round(ping.loss_cmv4);
+          view.ping_ct = Math.round(ping.loss_ctv4);
+          view.ping_cu = Math.round(ping.loss_cuv4);
+        }
 
         view.lossv4_detail = `${Math.round(ping.loss_cmv4)}% / ${Math.round(ping.loss_ctv4)}% / ${Math.round(ping.loss_cuv4)}%`;
         view.pingv4_detail = `${Math.round(ping.ping_cmv4)} ms / ${Math.round(ping.ping_ctv4)} ms / ${Math.round(ping.ping_cuv4)} ms`;

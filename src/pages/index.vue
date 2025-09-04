@@ -77,21 +77,33 @@
         </v-progress-linear>
       </template>
 
-      <template v-slot:item.loss_cm="{ item }">
-        <v-sheet :color="`${getLossColor(item.loss_cm)}`" rounded>
-          {{ item.loss_cm }}%
+      <template v-slot:item.ping_cm="{ item }">
+        <v-sheet :color="showPingLatency ? getLatencyColor(item.ping_cm) : getLossColor(item.ping_cm)" rounded>
+          <template v-if="!showPingLatency">
+            {{ item.ping_cm }}%
+          </template>
+          <template v-else>
+            {{ formatLatency(item.ping_cm) }}
+          </template>
         </v-sheet>
       </template>
-
-      <template v-slot:item.loss_ct="{ item }">
-        <v-sheet :color="`${getLossColor(item.loss_ct)}`" rounded>
-          {{ item.loss_ct }}%
+      <template v-slot:item.ping_ct="{ item }">
+        <v-sheet :color="showPingLatency ? getLatencyColor(item.ping_ct) : getLossColor(item.ping_ct)" rounded>
+          <template v-if="!showPingLatency">
+            {{ item.ping_ct }}%
+          </template>
+          <template v-else>
+            {{ formatLatency(item.ping_ct) }}
+          </template>
         </v-sheet>
-      </template>
-
-      <template v-slot:item.loss_cu="{ item }">
-        <v-sheet :color="`${getLossColor(item.loss_cu)}`" rounded>
-          {{ item.loss_cu }}%
+      </template> <template v-slot:item.ping_cu="{ item }">
+        <v-sheet :color="showPingLatency ? getLatencyColor(item.ping_cu) : getLossColor(item.ping_cu)" rounded>
+          <template v-if="!showPingLatency">
+            {{ item.ping_cu }}%
+          </template>
+          <template v-else>
+            {{ formatLatency(item.ping_cu) }}
+          </template>
         </v-sheet>
       </template>
 

@@ -33,8 +33,9 @@
     "cpu": "CPU",
     "memory": "MEM",
     "disk": "Disk",
-    "packetLoss": {
-      "title": "Loss",
+    "ping": {
+      "latencyTitle": "Latency",
+      "lossTitle": "Loss",
       "cm": "CM",
       "ct": "CT",
       "cu": "CU"
