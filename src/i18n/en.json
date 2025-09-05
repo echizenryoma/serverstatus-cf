@@ -27,6 +27,7 @@
       "send": "Tx",
       "dailyTraffic": "Daily Traffic",
       "monthlyTraffic": "Monthly Traffic",
+      "estimatedMonthlyTraffic": "Est. Monthly Traffic",
       "traffic": "Traffic",
       "rateLimit": "Rate Limit"
     },

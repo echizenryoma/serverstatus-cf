@@ -38,6 +38,7 @@ export default {
       speedUnit: 'bit',
       maxHistoryPoints: 60,
       showPingLatency: false,
+      showEstimatedMonthlyTraffic: false,
     }
   },
   computed: {
@@ -78,9 +79,12 @@ export default {
           ],
         },
         {
-          title: this.$t('server.network.monthlyTraffic'),
+          title: this.$t(this.showEstimatedMonthlyTraffic ? 'server.network.estimatedMonthlyTraffic' : 'server.network.monthlyTraffic'),
           align: 'center',
-          headerProps: { style: 'font-weight: bold;' },
+          headerProps: {
+            style: 'font-weight: bold; cursor: pointer;',
+            onClick: () => this.toggleMonthlyTraffic()
+          },
           children: [
             { title: this.$t('server.network.receive'), key: "traffic_1m_recv", align: 'center', minWidth: '8em', headerProps: { style: 'font-weight: bold;' }, prependIcon: 'mdi-download' },
             { title: this.$t('server.network.send'), key: "traffic_1m_sent", align: 'center', minWidth: '8em', headerProps: { style: 'font-weight: bold;' }, prependIcon: 'mdi-upload' },
@@ -134,6 +138,14 @@ export default {
     togglePingLatency() {
       this.showPingLatency = !this.showPingLatency;
       this.updateViewData();
+    },
+    toggleMonthlyTraffic() {
+      const now = new Date();
+      const startInCurrentMonth = new Date(now.getUTCFullYear(), now.getUTCMonth(), 1);
+      if (now - startInCurrentMonth >= 60 * 1000) {
+        this.showEstimatedMonthlyTraffic = !this.showEstimatedMonthlyTraffic;
+        this.updateViewData();
+      }
     },
     getNetProtoColor(value) {
       switch (value) {
@@ -409,6 +421,18 @@ export default {
         bytes_recv_1m = Math.max(0, currentTraffic.bytes_recv / (view.uptime * 1000 / duration));
         bytes_sent_1m = Math.max(0, currentTraffic.bytes_sent / (view.uptime * 1000 / duration));
       }
+      if (this.showEstimatedMonthlyTraffic) {
+        const now = new Date();
+        const startInCurrentMonth = new Date(now.getUTCFullYear(), now.getUTCMonth(), 1);
+        const startInNextMonth = new Date(now.getUTCFullYear(), now.getUTCMonth() + 1, 1);
+
+        if (now - startInCurrentMonth >= 60 * 1000) {
+          const rate = (startInNextMonth - startInCurrentMonth) / (now - startInCurrentMonth);
+          bytes_recv_1m = bytes_recv_1m * rate;
+          bytes_sent_1m = bytes_sent_1m * rate;
+        }
+      }
+
       view.traffic_1m_recv = bytes_recv_1m;
       view.traffic_1m_sent = bytes_sent_1m;
 
