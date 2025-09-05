@@ -38,6 +38,7 @@ export default {
       speedUnit: 'bit',
       maxHistoryPoints: 60,
       showPingLatency: false,
+      showEstimatedDailyTraffic: false,
       showEstimatedMonthlyTraffic: false,
     }
   },
@@ -70,9 +71,12 @@ export default {
           ],
         },
         {
-          title: this.$t('server.network.dailyTraffic'),
+          title: this.$t(this.showEstimatedDailyTraffic ? 'server.network.estimatedDailyTraffic' : 'server.network.dailyTraffic'),
           align: 'center',
-          headerProps: { style: 'font-weight: bold;' },
+          headerProps: {
+            style: 'font-weight: bold; cursor: pointer;',
+            onClick: () => this.toggleDailyTraffic()
+          },
           children: [
             { title: this.$t('server.network.receive'), key: "traffic_1d_recv", align: 'center', minWidth: '8em', headerProps: { style: 'font-weight: bold;' }, prependIcon: 'mdi-download' },
             { title: this.$t('server.network.send'), key: "traffic_1d_sent", align: 'center', minWidth: '8em', headerProps: { style: 'font-weight: bold;' }, prependIcon: 'mdi-upload' },
@@ -139,10 +143,18 @@ export default {
       this.showPingLatency = !this.showPingLatency;
       this.updateViewData();
     },
+    toggleDailyTraffic() {
+      const now = new Date();
+      const startInDay = new Date(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate());
+      if (now - startInDay >= 60 * 1000) {
+        this.showEstimatedDailyTraffic = !this.showEstimatedDailyTraffic;
+        this.updateViewData();
+      }
+    },
     toggleMonthlyTraffic() {
       const now = new Date();
-      const startInCurrentMonth = new Date(now.getUTCFullYear(), now.getUTCMonth(), 1);
-      if (now - startInCurrentMonth >= 60 * 1000) {
+      const startInMonth = new Date(now.getUTCFullYear(), now.getUTCMonth(), 1);
+      if (now - startInMonth >= 60 * 1000) {
         this.showEstimatedMonthlyTraffic = !this.showEstimatedMonthlyTraffic;
         this.updateViewData();
       }
@@ -397,15 +409,24 @@ export default {
       let bytes_recv_1d = currentTraffic.bytes_recv;
       let bytes_sent_1d = currentTraffic.bytes_sent;
       const now = new Date();
+      const startInDay = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate()));
+      const startInMonth = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), 1));
 
       if (last1dTraffic) {
         bytes_recv_1d = Math.max(0, currentTraffic.bytes_recv - (last1dTraffic.bytes_recv || 0));
         bytes_sent_1d = Math.max(0, currentTraffic.bytes_sent - (last1dTraffic.bytes_sent || 0));
       } else {
-        const dayStart = Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(), 0, 0, 0, 0);
-        const duration = now.getTime() - dayStart;
+        const duration = now.getTime() - startInDay;
         bytes_recv_1d = Math.max(0, currentTraffic.bytes_recv / (view.uptime * 1000 / duration));
         bytes_sent_1d = Math.max(0, currentTraffic.bytes_sent / (view.uptime * 1000 / duration));
+      }
+      if (this.showEstimatedDailyTraffic) {
+        const startInNextDay = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate() + 1));
+        if (now - startInDay >= 60 * 1000) {
+          const rate = (startInNextDay - startInDay) / (now - startInDay);
+          bytes_recv_1d = bytes_recv_1d * rate;
+          bytes_sent_1d = bytes_sent_1d * rate;
+        }
       }
       view.traffic_1d_recv = bytes_recv_1d;
       view.traffic_1d_sent = bytes_sent_1d;
@@ -416,18 +437,14 @@ export default {
         bytes_recv_1m = Math.max(0, currentTraffic.bytes_recv - (last1mTraffic.bytes_recv || 0));
         bytes_sent_1m = Math.max(0, currentTraffic.bytes_sent - (last1mTraffic.bytes_sent || 0));
       } else {
-        const monthStart = Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), 1, 0, 0, 0, 0);
-        const duration = now.getTime() - monthStart;
+        const duration = now.getTime() - startInMonth;
         bytes_recv_1m = Math.max(0, currentTraffic.bytes_recv / (view.uptime * 1000 / duration));
         bytes_sent_1m = Math.max(0, currentTraffic.bytes_sent / (view.uptime * 1000 / duration));
       }
       if (this.showEstimatedMonthlyTraffic) {
-        const now = new Date();
-        const startInCurrentMonth = new Date(now.getUTCFullYear(), now.getUTCMonth(), 1);
-        const startInNextMonth = new Date(now.getUTCFullYear(), now.getUTCMonth() + 1, 1);
-
-        if (now - startInCurrentMonth >= 60 * 1000) {
-          const rate = (startInNextMonth - startInCurrentMonth) / (now - startInCurrentMonth);
+        const startInNextMonth = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth() + 1, 1));
+        if (now - startInMonth >= 60 * 1000) {
+          const rate = (startInNextMonth - startInMonth) / (now - startInMonth);
           bytes_recv_1m = bytes_recv_1m * rate;
           bytes_sent_1m = bytes_sent_1m * rate;
         }

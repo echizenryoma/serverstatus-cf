@@ -26,6 +26,7 @@
       "receive": "Rx",
       "send": "Tx",
       "dailyTraffic": "Daily Traffic",
+      "estimatedDailyTraffic": "Est. Daily Traffic",
       "monthlyTraffic": "Monthly Traffic",
       "estimatedMonthlyTraffic": "Est. Monthly Traffic",
       "traffic": "Traffic",

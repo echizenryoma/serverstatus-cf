@@ -26,8 +26,9 @@
       "receive": "接收",
       "send": "发送",
       "dailyTraffic": "当日流量",
+      "estimatedDailyTraffic": "预计全天流量",
       "monthlyTraffic": "当月流量",
-      "estimatedMonthlyTraffic": "预计月末流量",
+      "estimatedMonthlyTraffic": "预计全月流量",
       "traffic": "流量",
       "rateLimit": "限速"
     },
