@@ -406,19 +406,20 @@ export default {
     },
     updateTrafficView(currentTraffic, last1dTraffic, last1mTraffic, view) {
       if (!currentTraffic) return;
-      let bytes_recv_1d = currentTraffic.bytes_recv;
-      let bytes_sent_1d = currentTraffic.bytes_sent;
+
       const now = new Date();
       const startInDay = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate()));
       const startInMonth = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), 1));
 
+      let bytes_recv_1d = 0;
+      let bytes_sent_1d = 0;
       if (last1dTraffic) {
         bytes_recv_1d = Math.max(0, currentTraffic.bytes_recv - (last1dTraffic.bytes_recv || 0));
         bytes_sent_1d = Math.max(0, currentTraffic.bytes_sent - (last1dTraffic.bytes_sent || 0));
       } else {
-        const duration = now.getTime() - startInDay;
-        bytes_recv_1d = Math.max(0, currentTraffic.bytes_recv / (view.uptime * 1000 / duration));
-        bytes_sent_1d = Math.max(0, currentTraffic.bytes_sent / (view.uptime * 1000 / duration));
+        const rate = (now - startInDay) / (view.uptime * 1000);
+        bytes_recv_1d = Math.max(0, currentTraffic.bytes_recv * rate);
+        bytes_sent_1d = Math.max(0, currentTraffic.bytes_sent * rate);
       }
       if (this.showEstimatedDailyTraffic) {
         const startInNextDay = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate() + 1));
@@ -431,15 +432,15 @@ export default {
       view.traffic_1d_recv = bytes_recv_1d;
       view.traffic_1d_sent = bytes_sent_1d;
 
-      let bytes_recv_1m = currentTraffic.bytes_recv;
-      let bytes_sent_1m = currentTraffic.bytes_sent;
+      let bytes_recv_1m = 0;
+      let bytes_sent_1m = 0;
       if (last1mTraffic) {
         bytes_recv_1m = Math.max(0, currentTraffic.bytes_recv - (last1mTraffic.bytes_recv || 0));
         bytes_sent_1m = Math.max(0, currentTraffic.bytes_sent - (last1mTraffic.bytes_sent || 0));
       } else {
-        const duration = now.getTime() - startInMonth;
-        bytes_recv_1m = Math.max(0, currentTraffic.bytes_recv / (view.uptime * 1000 / duration));
-        bytes_sent_1m = Math.max(0, currentTraffic.bytes_sent / (view.uptime * 1000 / duration));
+        const rate = (now - startInMonth) / (view.uptime * 1000);
+        bytes_recv_1m = Math.max(0, currentTraffic.bytes_recv * rate);
+        bytes_sent_1m = Math.max(0, currentTraffic.bytes_sent * rate);
       }
       if (this.showEstimatedMonthlyTraffic) {
         const startInNextMonth = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth() + 1, 1));
