@@ -11,7 +11,7 @@ export function formatSize(size, options = {}) {
 
 export function formatSpeed(speed, bits = true, options = {}) {
   if (!speed) {
-    return '-';
+    speed = 0;
   }
   options.standard = options.standard || "si";
   options.round = options.round || 1;
