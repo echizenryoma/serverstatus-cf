@@ -2,7 +2,7 @@ import { filesize } from "filesize";
 import { ms, parseDuration } from 'enhanced-ms';
 
 export function formatSize(size, options = {}) {
-  if (!size) {
+  if (isNaN(size)) {
     return '-';
   }
   options.round = options.round || 1;
@@ -10,7 +10,7 @@ export function formatSize(size, options = {}) {
 }
 
 export function formatSpeed(speed, bits = true, options = {}) {
-  if (!speed) {
+  if (isNaN(speed)) {
     speed = 0;
   }
   options.standard = options.standard || "si";
@@ -32,7 +32,7 @@ export function formatLatency(latency_ms) {
 }
 
 export function formatSeconds(seconds, options = {}) {
-  if (!seconds || seconds < 0) {
+  if (isNaN(seconds) || seconds < 0) {
     return '-';
   }
   const d = seconds * 1000;
