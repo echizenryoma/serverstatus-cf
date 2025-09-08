@@ -40,6 +40,7 @@ export default {
       showPingLatency: false,
       showEstimatedDailyTraffic: false,
       showEstimatedMonthlyTraffic: false,
+      search: '',
     }
   },
   computed: {

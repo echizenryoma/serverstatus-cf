@@ -5,6 +5,10 @@
         <v-card-title class="text-h4 text-center">{{ $t('app.title') }}</v-card-title>
       </v-col>
 
+      <v-col cols="4" class="d-flex align-center">
+        <v-text-field v-model="search" dense clearable hide-details prepend-inner-icon="mdi-magnify" />
+      </v-col>
+
       <v-col cols="auto" class="d-flex align-center">
         <v-select v-model="$i18n.locale" :items="languageOptions" item-title="text" item-value="value" density="compact"
           style="max-width: 10em" class="mr-2" hide-details single-line
@@ -22,7 +26,7 @@
       </v-col>
     </v-row>
     <v-data-table :headers="headers" :items="viewData" item-value="host" class="elevation-1" :items-per-page="-1"
-      :expanded="expandedRows" @click:row="toggleExpand" rounded>
+      :search="search" :expanded="expandedRows" @click:row="toggleExpand" rounded>
       <template v-slot:item.uptime="{ item }">
         {{ formatSeconds(item.uptime) }}
       </template>
