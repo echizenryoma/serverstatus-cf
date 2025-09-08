@@ -1,17 +1,29 @@
 import { createI18n } from 'vue-i18n'
 import en from './en.json'
-import zhCN from './zh-CN.json'
+import zhHans from './zhHans.json'
 
-const messages = {
-  'en': en,
-  'zh-CN': zhCN
-}
+import { en as vuetifyEn, zhHans as vuetifyZhHans } from 'vuetify/locale'
 
-const i18n = createI18n({
+export const messages = {
+  en: {
+    ...en,
+    $vuetify: {
+      ...vuetifyEn,
+    },
+  },
+  zhHans: {
+    ...zhHans,
+    $vuetify: {
+      ...vuetifyZhHans,
+    },
+  },
+};
+
+export const i18n = createI18n({
   legacy: false,
-  locale: 'zh-CN',
+  locale: 'zhHans',
   fallbackLocale: 'en',
-  messages
+  messages,
 })
 
 export default i18n

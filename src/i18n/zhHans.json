@@ -1,0 +1,71 @@
+{
+  "app": {
+    "title": "服务器状态",
+    "footer": {
+      "poweredBy": "℗ 由{influxDb}、{cloudflarePage}、{vuetify}驱动",
+      "copyright": "版权所有 © {year} 由{author}设计",
+      "version": "版本"
+    }
+  },
+  "function": {
+    "speedUnit": {
+      "switchToByte": "切换到字节(B)",
+      "switchToBit": "切换到位(bit)"
+    }
+  },
+  "server": {
+    "node": "节点",
+    "uptime": "在线",
+    "location": "位置",
+    "load": "负载",
+    "network": {
+      "title": "协议栈",
+      "ipv4": "IPv4",
+      "ipv6": "IPv6",
+      "speed": "网速",
+      "receive": "接收",
+      "send": "发送",
+      "dailyTraffic": "当日流量",
+      "estimatedDailyTraffic": "预计全天流量",
+      "monthlyTraffic": "当月流量",
+      "estimatedMonthlyTraffic": "预计全月流量",
+      "traffic": "流量",
+      "rateLimit": "限速"
+    },
+    "cpu": "CPU",
+    "memory": "内存",
+    "disk": "硬盘",
+    "ping": {
+      "latencyTitle": "延迟",
+      "lossTitle": "丢包率",
+      "cm": "移动",
+      "ct": "电信",
+      "cu": "联通"
+    },
+    "details": {
+      "load": "系统负载(1/5/15)",
+      "cpu": "CPU(系统/用户/窃取)",
+      "cpuModule": "CPU",
+      "cpuCores": "CPU核心数",
+      "kernel": "内核",
+      "memory": "内存(已使用/总共)",
+      "swap": "交换空间(已缓存/总共)",
+      "disk": "硬盘(已使用/总共)",
+      "network": "网络(接收/发送)",
+      "traffic": "流量(接收/发送)",
+      "ipv4Loss": "IPv4丢包率(移/电/联)",
+      "ipv4Ping": "IPv4延迟(移/电/联)",
+      "ipv6Loss": "IPv6丢包率(移/电/联)",
+      "ipv6Ping": "IPv6延迟(移/电/联)",
+      "speedChart": "网速",
+      "latencyChart": "延迟"
+    }
+  },
+  "actions": {
+    "refresh": "刷新",
+    "pause": "暂停"
+  },
+  "units": {
+    "day": "天"
+  }
+}

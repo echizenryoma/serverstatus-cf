@@ -131,6 +131,7 @@ export default {
       this.$vuetify.theme.global.name = this.darkMode ? 'dark' : 'light'
     },
     handleLanguageChange(lang) {
+      this.$vuetify.locale.current = lang
       this.setCookie('lang', lang);
       this.updateViewData();
     },
@@ -610,7 +611,7 @@ export default {
   },
   mounted() {
     const savedLang = this.getCookie('lang');
-    if (savedLang && (savedLang === 'zh-CN' || savedLang === 'en')) {
+    if (savedLang && (savedLang === 'zhHans' || savedLang === 'en')) {
       this.$i18n.locale = savedLang;
     }
 

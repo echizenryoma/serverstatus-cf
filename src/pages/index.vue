@@ -22,7 +22,7 @@
       </v-col>
     </v-row>
     <v-data-table :headers="headers" :items="viewData" item-value="host" class="elevation-1" :items-per-page="-1"
-      :expanded="expandedRows" hide-default-footer @click:row="toggleExpand" rounded>
+      :expanded="expandedRows" @click:row="toggleExpand" rounded>
       <template v-slot:item.uptime="{ item }">
         {{ formatSeconds(item.uptime) }}
       </template>
@@ -116,3 +116,9 @@
 </template>
 
 <script src="./index.js"></script>
+
+<style>
+.v-data-table-footer__items-per-page .v-select {
+  min-width: 6em;
+}
+</style>

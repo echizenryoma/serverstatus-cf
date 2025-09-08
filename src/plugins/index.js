@@ -8,8 +8,11 @@
 import vuetify from './vuetify'
 import router from '@/router'
 
-export function registerPlugins (app) {
+import i18n from '../i18n'
+
+export function registerPlugins(app) {
   app
+    .use(i18n)
     .use(vuetify)
     .use(router)
 }
