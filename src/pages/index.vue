@@ -1,17 +1,17 @@
 <template>
   <v-container fluid>
-    <v-row align="center" justify="space-between">
-      <v-col cols="auto" class="align-left">
-        <v-card-title class="text-h4 text-center">{{ $t('app.title') }}</v-card-title>
+    <v-row align="center" justify="space-between" no-gutters>
+      <v-col cols="auto" class="d-flex align-center">
+        <v-card-title class="text-h4 text-left mr-2">{{ $t('app.title') }}</v-card-title>
       </v-col>
 
-      <v-col cols="auto" style="min-width: 24em;" class="align-center">
-        <v-text-field v-model="search" prepend-inner-icon="mdi-magnify" />
+      <v-col cols="4" class="d-flex align-center">
+        <v-text-field v-model="search" prepend-inner-icon="mdi-magnify" class="mr-2" />
       </v-col>
 
-      <v-col cols="auto" class="align-right">
+      <v-col cols="auto" class="d-flex align-center">
         <v-select v-model="$i18n.locale" :items="languageOptions" item-title="text" item-value="value"
-          style="min-width: 10em" @update:modelValue="toggleLanguageChange"></v-select>
+          hide-details="auto" style="min-width: 8em" @update:modelValue="toggleLanguageChange" class="mr-2"></v-select>
         <v-btn @click="toggleSpeedUnit" icon rounded class="mr-2"
           :title="speedUnit === 'bit' ? $t('function.speedUnit.switchToByte') : $t('function.speedUnit.switchToBit')">
           <v-icon>{{ speedUnit === 'bit' ? 'mdi-speedometer' : 'mdi-chip' }}</v-icon>
@@ -19,13 +19,13 @@
         <v-btn @click="toggleDarkMode" icon rounded class="mr-2">
           <v-icon>mdi-theme-light-dark</v-icon>
         </v-btn>
-        <v-btn @click="stopRefresh" :color="isRefreshEnabled ? 'error' : 'success'" icon rounded>
+        <v-btn @click="stopRefresh" :color="isRefreshEnabled ? 'error' : 'success'" icon rounded class="mr-2">
           <v-icon>{{ isRefreshEnabled ? 'mdi-pause' : 'mdi-refresh' }}</v-icon>
         </v-btn>
       </v-col>
     </v-row>
-    <v-data-table :headers="headers" :items="filteredViewData" item-value="host" class="elevation-1" :items-per-page="-1"
-      :expanded="expandedRows" @click:row="toggleExpand" rounded>
+    <v-data-table :headers="headers" :items="filteredViewData" item-value="host" class="elevation-1"
+      :items-per-page="-1" :expanded="expandedRows" @click:row="toggleExpand" rounded>
       <template v-slot:item.uptime="{ item }">
         {{ formatSeconds(item.uptime) }}
       </template>
@@ -99,7 +99,8 @@
             {{ formatLatency(item.ping_ct) }}
           </template>
         </v-sheet>
-      </template> <template v-slot:item.ping_cu="{ item }">
+      </template>
+      <template v-slot:item.ping_cu="{ item }">
         <v-sheet :color="showPingLatency ? getLatencyColor(item.ping_cu) : getLossColor(item.ping_cu)" rounded>
           <template v-if="!showPingLatency">
             {{ item.ping_cu }}%
