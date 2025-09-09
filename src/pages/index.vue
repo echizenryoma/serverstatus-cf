@@ -30,7 +30,7 @@
         {{ formatSeconds(item.uptime) }}
       </template>
       <template v-slot:item.location="{ item }">
-        <span :class="`fi fi-${item.location}`"></span>
+        <span :class="'fi fi-' + getFlags(item.location)"></span>
       </template>
       <template v-slot:item.ipv4="{ item }">
         <v-icon :color="getNetProtoColor(item.ipv4)" class="mr-1">

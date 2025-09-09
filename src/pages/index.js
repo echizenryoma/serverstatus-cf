@@ -255,6 +255,19 @@ export default {
           return 'secondary';
       }
     },
+    getFlags(location) {
+      const currentLocale = this.$vuetify.locale.current;
+      if (currentLocale === 'zhHans') {
+        const chinaFlagsMap = {
+          hk: 'cn',
+          tw: 'cn',
+        };
+        if (chinaFlagsMap[location]) {
+          return chinaFlagsMap[location];
+        }
+      }
+      return location;
+    },
     initializeView(host) {
       return {
         host: host,
