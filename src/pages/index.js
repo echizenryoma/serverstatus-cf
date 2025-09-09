@@ -47,6 +47,24 @@ export default {
     title() {
       return this.$t('app.title');
     },
+    filteredViewData() {
+      if (!this.search) {
+        return this.viewData;
+      }
+      
+      const searchTerm = this.search.toLowerCase();
+      return this.viewData.filter(item => {
+        for (const key in item) {
+          if (item[key] !== null && item[key] !== undefined) {
+            const value = String(item[key]).toLowerCase();
+            if (value.includes(searchTerm)) {
+              return true;
+            }
+          }
+        }
+        return false;
+      });
+    },
     headers() {
       return [
         { title: this.$t('server.node'), key: "host", align: 'center', minWidth: '8em', headerProps: { style: 'font-weight: bold;' } },
@@ -131,7 +149,7 @@ export default {
       this.darkMode = !this.darkMode
       this.$vuetify.theme.global.name = this.darkMode ? 'dark' : 'light'
     },
-    handleLanguageChange(lang) {
+    toggleLanguageChange(lang) {
       this.$vuetify.locale.current = lang
       this.setCookie('lang', lang);
       this.updateViewData();

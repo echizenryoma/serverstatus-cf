@@ -6,12 +6,12 @@
       </v-col>
 
       <v-col cols="auto" style="min-width: 24em;" class="align-center">
-        <v-text-field v-model="search" dense clearable hide-details prepend-inner-icon="mdi-magnify" />
+        <v-text-field v-model="search" prepend-inner-icon="mdi-magnify" />
       </v-col>
 
       <v-col cols="auto" class="align-right">
         <v-select v-model="$i18n.locale" :items="languageOptions" item-title="text" item-value="value"
-          style="min-width: 10em" @update:modelValue="handleLanguageChange"></v-select>
+          style="min-width: 10em" @update:modelValue="toggleLanguageChange"></v-select>
         <v-btn @click="toggleSpeedUnit" icon rounded class="mr-2"
           :title="speedUnit === 'bit' ? $t('function.speedUnit.switchToByte') : $t('function.speedUnit.switchToBit')">
           <v-icon>{{ speedUnit === 'bit' ? 'mdi-speedometer' : 'mdi-chip' }}</v-icon>
@@ -24,8 +24,8 @@
         </v-btn>
       </v-col>
     </v-row>
-    <v-data-table :headers="headers" :items="viewData" item-value="host" class="elevation-1" :items-per-page="-1"
-      :search="search" :expanded="expandedRows" @click:row="toggleExpand" rounded>
+    <v-data-table :headers="headers" :items="filteredViewData" item-value="host" class="elevation-1" :items-per-page="-1"
+      :expanded="expandedRows" @click:row="toggleExpand" rounded>
       <template v-slot:item.uptime="{ item }">
         {{ formatSeconds(item.uptime) }}
       </template>
