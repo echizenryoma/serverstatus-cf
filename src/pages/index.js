@@ -435,7 +435,7 @@ export default {
 
       let bytes_recv_1d = 0;
       let bytes_sent_1d = 0;
-      if (last1dTraffic) {
+      if (last1dTraffic && view.uptime * 1000 > (now - startInDay)) {
         bytes_recv_1d = Math.max(0, currentTraffic.bytes_recv - (last1dTraffic.bytes_recv || 0));
         bytes_sent_1d = Math.max(0, currentTraffic.bytes_sent - (last1dTraffic.bytes_sent || 0));
       } else {
@@ -456,7 +456,7 @@ export default {
 
       let bytes_recv_1m = 0;
       let bytes_sent_1m = 0;
-      if (last1mTraffic) {
+      if (last1mTraffic && view.uptime * 1000 > (now - startInMonth)) {
         bytes_recv_1m = Math.max(0, currentTraffic.bytes_recv - (last1mTraffic.bytes_recv || 0));
         bytes_sent_1m = Math.max(0, currentTraffic.bytes_sent - (last1mTraffic.bytes_sent || 0));
       } else {
