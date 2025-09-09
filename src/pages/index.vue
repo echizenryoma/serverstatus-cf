@@ -1,18 +1,17 @@
 <template>
   <v-container fluid>
-    <v-row align="center" justify="space-between" class="mb-3">
-      <v-col cols="auto">
+    <v-row align="center" justify="space-between">
+      <v-col cols="auto" class="align-left">
         <v-card-title class="text-h4 text-center">{{ $t('app.title') }}</v-card-title>
       </v-col>
 
-      <v-col cols="4" class="d-flex align-center">
+      <v-col cols="auto" style="min-width: 24em;" class="align-center">
         <v-text-field v-model="search" dense clearable hide-details prepend-inner-icon="mdi-magnify" />
       </v-col>
 
-      <v-col cols="auto" class="d-flex align-center">
-        <v-select v-model="$i18n.locale" :items="languageOptions" item-title="text" item-value="value" density="compact"
-          style="max-width: 10em" class="mr-2" hide-details single-line
-          @update:modelValue="handleLanguageChange"></v-select>
+      <v-col cols="auto" class="align-right">
+        <v-select v-model="$i18n.locale" :items="languageOptions" item-title="text" item-value="value"
+          style="min-width: 10em" @update:modelValue="handleLanguageChange"></v-select>
         <v-btn @click="toggleSpeedUnit" icon rounded class="mr-2"
           :title="speedUnit === 'bit' ? $t('function.speedUnit.switchToByte') : $t('function.speedUnit.switchToBit')">
           <v-icon>{{ speedUnit === 'bit' ? 'mdi-speedometer' : 'mdi-chip' }}</v-icon>
