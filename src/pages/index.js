@@ -51,11 +51,13 @@ export default {
       if (!this.search) {
         return this.viewData;
       }
-      
       const searchTerm = this.search.toLowerCase();
       return this.viewData.filter(item => {
         for (const key in item) {
-          if (item[key] !== null && item[key] !== undefined) {
+          if (key.endsWith("_detail")) {
+            continue;
+          }
+          if (item[key] !== null && item[key] !== undefined && typeof item[key] === "string") {
             const value = String(item[key]).toLowerCase();
             if (value.includes(searchTerm)) {
               return true;
