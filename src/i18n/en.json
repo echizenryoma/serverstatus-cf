@@ -7,19 +7,13 @@
       "version": "version"
     }
   },
-  "function": {
-    "speedUnit": {
-      "switchToByte": "Switch to Byte",
-      "switchToBit": "Switch to bit"
-    }
-  },
   "server": {
-    "node": "Node",
-    "uptime": "Uptime",
-    "location": "LOC",
-    "load": "Load",
-    "network": {
-      "title": "Network Stack",
+    "title": {
+      "node": "Node",
+      "uptime": "Uptime",
+      "location": "LOC",
+      "load": "Load",
+      "networkStack": "Network Stack",
       "ipv4": "IPv4",
       "ipv6": "IPv6",
       "speed": "Network Speed",
@@ -29,25 +23,21 @@
       "estimatedDailyTraffic": "Est. Daily Traffic",
       "monthlyTraffic": "Monthly Traffic",
       "estimatedMonthlyTraffic": "Est. Monthly Traffic",
-      "traffic": "Traffic",
-      "rateLimit": "Rate Limit"
-    },
-    "cpu": "CPU",
-    "memory": "MEM",
-    "disk": "Disk",
-    "ping": {
-      "latencyTitle": "Latency",
-      "lossTitle": "Loss",
+      "cpu": "CPU",
+      "memory": "MEM",
+      "disk": "Disk",
+      "latency": "Latency",
+      "loss": "Loss",
       "cm": "CM",
       "ct": "CT",
       "cu": "CU"
     },
     "details": {
       "load": "System Load(1/5/15)",
-      "cpu": "CPU(System/User/Steal)",
-      "cpuModule": "CPU",
-      "cpuCores": "CPU cores",
       "kernel": "Kernel",
+      "cpu": "CPU",
+      "cpuCores": "CPU cores",
+      "cpuUsage": "CPU(System/User/Steal)",
       "memory": "Memory(Used/Total)",
       "swap": "Swap(Cached/Total)",
       "disk": "Disk(Used/Total)",
@@ -57,13 +47,17 @@
       "ipv4Ping": "IPv4 Latency(CM/CT/CU)",
       "ipv6Loss": "IPv6 Loss(CM/CT/CU)",
       "ipv6Ping": "IPv6 Latency(CM/CT/CU)",
-      "speedChart": "Network Speed",
-      "latencyChart": "Latency"
+      "speedChartTitle": "Network Speed",
+      "latencyChartTitle": "Latency"
     }
   },
   "actions": {
     "refresh": "Refresh",
-    "pause": "Pause"
+    "pause": "Pause",
+    "speedUnit": {
+      "switchToByte": "Switch to Byte",
+      "switchToBit": "Switch to bit"
+    }
   },
   "units": {
     "day": "d"

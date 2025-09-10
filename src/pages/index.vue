@@ -13,7 +13,7 @@
         <v-select v-model="$i18n.locale" :items="languageOptions" item-title="text" item-value="value"
           hide-details="auto" style="min-width: 8em" @update:modelValue="toggleLanguageChange" class="mr-2"></v-select>
         <v-btn @click="toggleSpeedUnit" icon rounded class="mr-2"
-          :title="speedUnit === 'bit' ? $t('function.speedUnit.switchToByte') : $t('function.speedUnit.switchToBit')">
+          :title="speedUnit === 'bit' ? $t('actions.speedUnit.switchToByte') : $t('actions.speedUnit.switchToBit')">
           <v-icon>{{ speedUnit === 'bit' ? 'mdi-speedometer' : 'mdi-chip' }}</v-icon>
         </v-btn>
         <v-btn @click="toggleDarkMode" icon rounded class="mr-2">

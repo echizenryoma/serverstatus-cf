@@ -7,63 +7,57 @@
       "version": "版本"
     }
   },
-  "function": {
-    "speedUnit": {
-      "switchToByte": "切換到字節(B)",
-      "switchToBit": "切換到位(bit)"
-    }
-  },
   "server": {
-    "node": "節點",
-    "uptime": "在線",
-    "location": "位置",
-    "load": "負載",
-    "network": {
-      "title": "協議棧",
+    "title": {
+      "node": "節點",
+      "uptime": "在線",
+      "location": "位置",
+      "load": "負載",
+      "networkStack": "協議棧",
       "ipv4": "IPv4",
       "ipv6": "IPv6",
       "speed": "網速",
       "receive": "接收",
       "send": "發送",
-      "dailyTraffic": "當日流量",
+      "dailyTraffic": "今日流量",
       "estimatedDailyTraffic": "預計全天流量",
-      "monthlyTraffic": "當月流量",
+      "monthlyTraffic": "本月流量",
       "estimatedMonthlyTraffic": "預計全月流量",
-      "traffic": "流量",
-      "rateLimit": "限速"
-    },
-    "cpu": "CPU",
-    "memory": "記憶體",
-    "disk": "硬盤",
-    "ping": {
-      "latencyTitle": "延遲",
-      "lossTitle": "丟包率",
+      "cpu": "CPU",
+      "memory": "記憶體",
+      "disk": "硬盤",
+      "latency": "延遲",
+      "loss": "丟包率",
       "cm": "移動",
       "ct": "電信",
       "cu": "聯通"
     },
     "details": {
       "load": "系統負載(1/5/15)",
-      "cpu": "CPU(系統/用戶/竊取)",
-      "cpuModule": "CPU",
-      "cpuCores": "CPU核心數",
       "kernel": "內核",
+      "cpu": "CPU",
+      "cpuUsage": "CPU(系統/用戶/竊取)",
+      "cpuCores": "CPU核心數",
       "memory": "記憶體(已使用/總共)",
       "swap": "交換空間(已緩存/總共)",
       "disk": "硬盤(已使用/總共)",
       "network": "網絡(接收/發送)",
       "traffic": "流量(接收/發送)",
-      "ipv4Loss": "IPv4丟包率(移/電/聯)",
-      "ipv4Ping": "IPv4延遲(移/電/聯)",
-      "ipv6Loss": "IPv6丟包率(移/電/聯)",
-      "ipv6Ping": "IPv6延遲(移/電/聯)",
-      "speedChart": "網速",
-      "latencyChart": "延遲"
+      "ipv4Loss": "IPv4丟包率(移动/電信/聯通)",
+      "ipv4Ping": "IPv4延遲(移动/電信/聯通)",
+      "ipv6Loss": "IPv6丟包率(移动/電信/聯通)",
+      "ipv6Ping": "IPv6延遲(移动/電信/聯通)",
+      "speedChartTitle": "網速",
+      "latencyChartTitle": "延遲"
     }
   },
   "actions": {
     "refresh": "刷新",
-    "pause": "暫停"
+    "pause": "暫停",
+    "speedUnit": {
+      "switchToByte": "切換到字節(B)",
+      "switchToBit": "切換到位(bit)"
+    }
   },
   "units": {
     "day": "天"

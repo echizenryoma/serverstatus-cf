@@ -5,6 +5,12 @@ import zhHant from './zhHant.json'
 
 import { en as vuetifyEn, zhHans as vuetifyZhHans, zhHant as vuetifyZhHant } from 'vuetify/locale'
 
+export const languageOptions = [
+  { text: '简体中文', value: 'zhHans' },
+  { text: '繁体中文', value: 'zhHant' },
+  { text: 'English', value: 'en' }
+];
+
 export const messages = {
   en: {
     ...en,
@@ -31,6 +37,6 @@ export const i18n = createI18n({
   locale: 'zhHans',
   fallbackLocale: 'en',
   messages,
-})
+});
 
-export default i18n
+export default i18n;

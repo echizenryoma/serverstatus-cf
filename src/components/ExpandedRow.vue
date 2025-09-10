@@ -6,9 +6,9 @@
           <v-col cols="4">
             <div><strong>{{ $t('server.details.kernel') }}:</strong> {{ item.kernel }}</div>
             <div><strong>{{ $t('server.details.load') }}:</strong> {{ item.load_detail }}</div>
-            <div><strong>{{ $t('server.details.cpuModule') }}:</strong> {{ item.cpu_module }}</div>
+            <div><strong>{{ $t('server.details.cpu') }}:</strong> {{ item.cpu_module }}</div>
             <div><strong>{{ $t('server.details.cpuCores') }}:</strong> {{ item.cpu_cores }}</div>
-            <div><strong>{{ $t('server.details.cpu') }}:</strong> {{ item.cpu_detail }}</div>
+            <div><strong>{{ $t('server.details.cpuUsage') }}:</strong> {{ item.cpu_detail }}</div>
             <div><strong>{{ $t('server.details.memory') }}:</strong> {{ item.memory_detail }}</div>
             <div><strong>{{ $t('server.details.swap') }}:</strong> {{ item.swap_detail }}</div>
             <div><strong>{{ $t('server.details.disk') }}:</strong> {{ item.disk_detail }}</div>
@@ -20,10 +20,10 @@
             <div><strong>{{ $t('server.details.ipv6Ping') }}:</strong> {{ item.pingv6_detail }}</div>
           </v-col>
           <v-col cols="4">
-            <SpeedChart :series="item.chart.speed" :speed-unit="speedUnit" :title="$t('server.details.speedChart')" />
+            <SpeedChart :series="item.chart.speed" :speed-unit="speedUnit" :title="$t('server.details.speedChartTitle')" />
           </v-col>
           <v-col cols="4">
-            <LatencyChart :series="item.chart.latency" :title="$t('server.details.latencyChart')" />
+            <LatencyChart :series="item.chart.latency" :title="$t('server.details.latencyChartTitle')" />
           </v-col>
         </v-row>
       </v-card>
