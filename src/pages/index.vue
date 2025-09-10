@@ -123,6 +123,6 @@
 
 <style>
 .v-data-table-footer__items-per-page .v-select {
-  min-width: 6em;
+  min-width: 8rem;
 }
 </style>
