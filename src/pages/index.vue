@@ -65,19 +65,19 @@
       </template>
 
       <template v-slot:item.cpu="{ item }">
-        <v-progress-linear :model-value="item.cpu" :color="`${getCPUColor(item.cpu)}`" height="15" rounded>
+        <v-progress-circular :model-value="item.cpu" :color="`${getCPUColor(item.cpu)}`">
           {{ item.cpu }}%
-        </v-progress-linear>
+        </v-progress-circular>
       </template>
       <template v-slot:item.memory="{ item }">
-        <v-progress-linear :model-value="item.memory" :color="`${getMemoryColor(item.memory)}`" height="15" rounded>
+        <v-progress-circular :model-value="item.memory" :color="`${getMemoryColor(item.memory)}`">
           {{ item.memory }}%
-        </v-progress-linear>
+        </v-progress-circular>
       </template>
       <template v-slot:item.disk="{ item }">
-        <v-progress-linear :model-value="item.disk" :color="`${getDiskColor(item.disk)}`" height="15" rounded>
+        <v-progress-circular :model-value="item.disk" :color="`${getDiskColor(item.disk)}`">
           {{ item.disk }}%
-        </v-progress-linear>
+        </v-progress-circular>
       </template>
 
       <template v-slot:item.ping_cm="{ item }">

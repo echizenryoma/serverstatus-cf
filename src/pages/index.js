@@ -235,7 +235,7 @@ export default {
         case value > 50:
           return 'warning';
         default:
-          return 'pink';
+          return 'indigo';
       }
     },
     getMemoryColor(value) {
