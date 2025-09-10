@@ -67,6 +67,9 @@ export default {
         return false;
       });
     },
+    languageMap() {
+      return new Map(languageOptions.map(obj => [obj.value, obj]));
+    },
     headers() {
       return [
         { title: this.$t('server.node'), key: "host", align: 'center', minWidth: '8em', headerProps: { style: 'font-weight: bold;' } },
@@ -645,7 +648,7 @@ export default {
   },
   mounted() {
     const savedLang = this.getCookie('lang');
-    if (savedLang && (savedLang === 'zhHans' || savedLang === 'en')) {
+    if (savedLang && (this.languageMap.has(savedLang))) {
       this.$i18n.locale = savedLang;
     }
 
