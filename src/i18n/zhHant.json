@@ -36,7 +36,7 @@
       "load": "系統負載(1/5/15)",
       "kernel": "內核",
       "cpu": "CPU",
-      "cpuUsage": "CPU(系統/用戶/竊取)",
+      "cpuUsage": "CPU使用率(系統/用戶/竊取)",
       "cpuCores": "CPU核心數",
       "memory": "記憶體(已使用/總共)",
       "swap": "交換空間(已緩存/總共)",
