@@ -33,11 +33,11 @@
       "cu": "CU"
     },
     "details": {
-      "load": "System Load(1/5/15)",
+      "load": "System Load(1/5/15min)",
       "kernel": "Kernel",
       "cpu": "CPU",
       "cpuCores": "CPU cores",
-      "cpuUsage": "CPU(System/User/Steal)",
+      "cpuUsage": "CPU Usage(System/User/Steal)",
       "memory": "Memory(Used/Total)",
       "swap": "Swap(Cached/Total)",
       "disk": "Disk(Used/Total)",
