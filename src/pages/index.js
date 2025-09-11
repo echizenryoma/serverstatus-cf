@@ -564,10 +564,6 @@ export default {
             console.error(`No data received from ${urls[index]}`);
             return;
           }
-          if (!res.data) {
-            console.error(`No data received from ${urls[index]}`);
-            return;
-          }
           const csvText = res.data;
           const parsed = Papa.parse(csvText, { header: true, dynamicTyping: true });
           parsed.data.filter(
@@ -575,9 +571,6 @@ export default {
           ).forEach((row) => {
             const host = row.host;
             if (!dataMap.has(host)) {
-              if (this.fastFetchCountDown >= 0) {
-                throw new Error(`Host ${host} not found in existing data map.`);
-              }
               dataMap.set(host, {
                 host: host,
               });
