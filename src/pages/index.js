@@ -339,7 +339,7 @@ export default {
       if (!cpu) return;
       view.uptime = cpu.uptime;
       view.load = cpu.load1.toFixed(2) || 0.0;
-      view.cpu = Math.round(cpu.usage_user + cpu.usage_system) || 0;
+      view.cpu = Math.round(cpu.usage_user + cpu.usage_system + cpu.usage_steal) || 0;
       view.load_detail = `${cpu.load1.toFixed(2)} / ${cpu.load5.toFixed(2)} / ${cpu.load15.toFixed(2)}`;
       view.cpu_detail = `${cpu.usage_system.toFixed(2)}% / ${cpu.usage_user.toFixed(2)}% / ${cpu.usage_steal.toFixed(2)}%`;
       view.cpu_cores = cpu.n_cpus;
