@@ -19,8 +19,9 @@ from(bucket: "server")
     r["_field"] == "used" or
     r["_field"] == "total"
   )
-  |> filter(fn: (r) => r["path"] == "/")
   |> last()
+  |> group(columns: ["_field", "host"])
+  |> sum()
   |> pivot(rowKey:["host"], columnKey: ["_field"], valueColumn: "_value")
   |> keep(columns: ["host", "total", "used"])
 `
