@@ -39,6 +39,9 @@ export default {
           },
           toolbar: {
             show: false
+          },
+          zoom: {
+            enabled: false
           }
         },
         colors: [
