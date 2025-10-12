@@ -84,7 +84,7 @@
       <template v-slot:item.ping_cm="{ item }">
         <v-sheet :color="showPingLatency ? getLatencyColor(item.ping_cm) : getLossColor(item.ping_cm)" rounded>
           <template v-if="!showPingLatency">
-            {{ item.ping_cm }}%
+            {{ Math.min(100, item.ping_cm) }}%
           </template>
           <template v-else>
             {{ formatLatency(item.ping_cm) }}
@@ -94,7 +94,7 @@
       <template v-slot:item.ping_ct="{ item }">
         <v-sheet :color="showPingLatency ? getLatencyColor(item.ping_ct) : getLossColor(item.ping_ct)" rounded>
           <template v-if="!showPingLatency">
-            {{ item.ping_ct }}%
+            {{ Math.min(100, item.ping_ct) }}%
           </template>
           <template v-else>
             {{ formatLatency(item.ping_ct) }}
@@ -104,7 +104,7 @@
       <template v-slot:item.ping_cu="{ item }">
         <v-sheet :color="showPingLatency ? getLatencyColor(item.ping_cu) : getLossColor(item.ping_cu)" rounded>
           <template v-if="!showPingLatency">
-            {{ item.ping_cu }}%
+            {{ Math.min(100, item.ping_cu) }}%
           </template>
           <template v-else>
             {{ formatLatency(item.ping_cu) }}
