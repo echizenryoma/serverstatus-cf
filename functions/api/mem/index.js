@@ -18,11 +18,11 @@ from(bucket: "server")
     r["_field"] == "total" or
     r["_field"] == "used" or
     r["_field"] == "swap_total" or
-    r["_field"] == "swap_cached" 
+    r["_field"] == "swap_free"
   )
   |> last()
   |> pivot(rowKey:["host"], columnKey: ["_field"], valueColumn: "_value")
-  |> keep(columns: ["host", "total", "used", "swap_total", "swap_cached"])
+  |> keep(columns: ["host", "total", "used", "swap_total", "swap_free"])
 `
       const response = await fetch(query_url, {
         method: 'POST',
