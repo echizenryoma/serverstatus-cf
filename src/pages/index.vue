@@ -24,9 +24,9 @@
         </v-btn>
       </v-col>
     </v-row>
-    <v-data-table :headers="headers" :items="filteredViewData" item-value="host"
-      class="elevation-1" :items-per-page-options="[5, 10, 15, 20, -1]" :items-per-page="-1"
-      :expanded="expandedRows" @click:row="toggleExpand" rounded>
+    <v-data-table :headers="headers" :items="filteredViewData" item-value="host" class="elevation-1 frosted-table rounded-xl"
+      :items-per-page-options="[5, 10, 15, 20, -1]" :items-per-page="-1" :expanded="expandedRows"
+      @click:row="toggleExpand">
       <template v-slot:item.uptime="{ item }">
         {{ formatSeconds(item.uptime) }}
       </template>
@@ -111,12 +111,9 @@
           </template>
         </v-sheet>
       </template>
-
       <template v-slot:expanded-row="{ columns, item }">
         <ExpandedRow :columns="columns" :item="item" :speed-unit="speedUnit" />
       </template>
-
-
     </v-data-table>
   </v-container>
   <Footer />
@@ -127,6 +124,16 @@
 <style>
 .v-data-table-footer__items-per-page .v-select {
   min-width: 8rem;
+}
+
+.frosted-table {
+  border-radius: 16px;
+  overflow: hidden;
+}
+
+.v-theme--dark .frosted-table {
+  border-radius: 16px;
+  overflow: hidden;
 }
 
 .v-data-table,
