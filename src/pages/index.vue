@@ -24,100 +24,103 @@
         </v-btn>
       </v-col>
     </v-row>
-    <v-data-table :headers="headers" :items="filteredViewData" item-value="host" class="elevation-1"
-      :items-per-page-options="[5, 10, 15, 20, -1]" :items-per-page="-1" :expanded="expandedRows"
-      @click:row="toggleExpand" rounded>
-      <template v-slot:item.uptime="{ item }">
-        {{ formatSeconds(item.uptime) }}
-      </template>
-      <template v-slot:item.location="{ item }">
-        <span :class="'fi fi-' + getFlags(item.location)"></span>
-      </template>
-      <template v-slot:item.ipv4="{ item }">
-        <v-icon :color="getNetProtoColor(item.ipv4)" class="mr-1">
-          {{ getNetProtoIcon(item.ipv4) }}
-        </v-icon>
-      </template>
-      <template v-slot:item.ipv6="{ item }">
-        <v-icon :color="getNetProtoColor(item.ipv6)" class="mr-1">
-          {{ getNetProtoIcon(item.ipv6) }}
-        </v-icon>
-      </template>
+    <v-sheet class="position-relative"
+      style="background-image: url('@/assets/background.jpg'); background-size: cover;">
+      <v-data-table :headers="headers" :items="filteredViewData" item-value="host" class="elevation-1"
+        :items-per-page-options="[5, 10, 15, 20, -1]" :items-per-page="-1" :expanded="expandedRows"
+        @click:row="toggleExpand" rounded>
+        <template v-slot:item.uptime="{ item }">
+          {{ formatSeconds(item.uptime) }}
+        </template>
+        <template v-slot:item.location="{ item }">
+          <span :class="'fi fi-' + getFlags(item.location)"></span>
+        </template>
+        <template v-slot:item.ipv4="{ item }">
+          <v-icon :color="getNetProtoColor(item.ipv4)" class="mr-1">
+            {{ getNetProtoIcon(item.ipv4) }}
+          </v-icon>
+        </template>
+        <template v-slot:item.ipv6="{ item }">
+          <v-icon :color="getNetProtoColor(item.ipv6)" class="mr-1">
+            {{ getNetProtoIcon(item.ipv6) }}
+          </v-icon>
+        </template>
 
-      <template v-slot:item.net_recv="{ item }">
-        {{ formatSpeed(item.net_recv, speedUnit === 'bit') }}
-      </template>
-      <template v-slot:item.net_sent="{ item }">
-        {{ formatSpeed(item.net_sent, speedUnit === 'bit') }}
-      </template>
+        <template v-slot:item.net_recv="{ item }">
+          {{ formatSpeed(item.net_recv, speedUnit === 'bit') }}
+        </template>
+        <template v-slot:item.net_sent="{ item }">
+          {{ formatSpeed(item.net_sent, speedUnit === 'bit') }}
+        </template>
 
-      <template v-slot:item.traffic_1d_recv="{ item }">
-        {{ formatSize(item.traffic_1d_recv) }}
-      </template>
-      <template v-slot:item.traffic_1d_sent="{ item }">
-        {{ formatSize(item.traffic_1d_sent) }}
-      </template>
+        <template v-slot:item.traffic_1d_recv="{ item }">
+          {{ formatSize(item.traffic_1d_recv) }}
+        </template>
+        <template v-slot:item.traffic_1d_sent="{ item }">
+          {{ formatSize(item.traffic_1d_sent) }}
+        </template>
 
-      <template v-slot:item.traffic_1m_recv="{ item }">
-        {{ formatSize(item.traffic_1m_recv) }}
-      </template>
-      <template v-slot:item.traffic_1m_sent="{ item }">
-        {{ formatSize(item.traffic_1m_sent) }}
-      </template>
+        <template v-slot:item.traffic_1m_recv="{ item }">
+          {{ formatSize(item.traffic_1m_recv) }}
+        </template>
+        <template v-slot:item.traffic_1m_sent="{ item }">
+          {{ formatSize(item.traffic_1m_sent) }}
+        </template>
 
-      <template v-slot:item.cpu="{ item }">
-        <v-progress-circular :model-value="item.cpu" :color="`${getCPUColor(item.cpu)}`">
-          {{ item.cpu }}%
-        </v-progress-circular>
-      </template>
-      <template v-slot:item.memory="{ item }">
-        <v-progress-circular :model-value="item.memory" :color="`${getMemoryColor(item.memory)}`">
-          {{ item.memory }}%
-        </v-progress-circular>
-      </template>
-      <template v-slot:item.disk="{ item }">
-        <v-progress-circular :model-value="item.disk" :color="`${getDiskColor(item.disk)}`">
-          {{ item.disk }}%
-        </v-progress-circular>
-      </template>
+        <template v-slot:item.cpu="{ item }">
+          <v-progress-circular :model-value="item.cpu" :color="`${getCPUColor(item.cpu)}`">
+            {{ item.cpu }}%
+          </v-progress-circular>
+        </template>
+        <template v-slot:item.memory="{ item }">
+          <v-progress-circular :model-value="item.memory" :color="`${getMemoryColor(item.memory)}`">
+            {{ item.memory }}%
+          </v-progress-circular>
+        </template>
+        <template v-slot:item.disk="{ item }">
+          <v-progress-circular :model-value="item.disk" :color="`${getDiskColor(item.disk)}`">
+            {{ item.disk }}%
+          </v-progress-circular>
+        </template>
 
-      <template v-slot:item.ping_cm="{ item }">
-        <v-sheet :color="showPingLatency ? getLatencyColor(item.ping_cm) : getLossColor(item.ping_cm)" rounded>
-          <template v-if="!showPingLatency">
-            {{ Math.min(100, item.ping_cm) }}%
-          </template>
-          <template v-else>
-            {{ formatLatency(item.ping_cm) }}
-          </template>
-        </v-sheet>
-      </template>
-      <template v-slot:item.ping_ct="{ item }">
-        <v-sheet :color="showPingLatency ? getLatencyColor(item.ping_ct) : getLossColor(item.ping_ct)" rounded>
-          <template v-if="!showPingLatency">
-            {{ Math.min(100, item.ping_ct) }}%
-          </template>
-          <template v-else>
-            {{ formatLatency(item.ping_ct) }}
-          </template>
-        </v-sheet>
-      </template>
-      <template v-slot:item.ping_cu="{ item }">
-        <v-sheet :color="showPingLatency ? getLatencyColor(item.ping_cu) : getLossColor(item.ping_cu)" rounded>
-          <template v-if="!showPingLatency">
-            {{ Math.min(100, item.ping_cu) }}%
-          </template>
-          <template v-else>
-            {{ formatLatency(item.ping_cu) }}
-          </template>
-        </v-sheet>
-      </template>
+        <template v-slot:item.ping_cm="{ item }">
+          <v-sheet :color="showPingLatency ? getLatencyColor(item.ping_cm) : getLossColor(item.ping_cm)" rounded>
+            <template v-if="!showPingLatency">
+              {{ Math.min(100, item.ping_cm) }}%
+            </template>
+            <template v-else>
+              {{ formatLatency(item.ping_cm) }}
+            </template>
+          </v-sheet>
+        </template>
+        <template v-slot:item.ping_ct="{ item }">
+          <v-sheet :color="showPingLatency ? getLatencyColor(item.ping_ct) : getLossColor(item.ping_ct)" rounded>
+            <template v-if="!showPingLatency">
+              {{ Math.min(100, item.ping_ct) }}%
+            </template>
+            <template v-else>
+              {{ formatLatency(item.ping_ct) }}
+            </template>
+          </v-sheet>
+        </template>
+        <template v-slot:item.ping_cu="{ item }">
+          <v-sheet :color="showPingLatency ? getLatencyColor(item.ping_cu) : getLossColor(item.ping_cu)" rounded>
+            <template v-if="!showPingLatency">
+              {{ Math.min(100, item.ping_cu) }}%
+            </template>
+            <template v-else>
+              {{ formatLatency(item.ping_cu) }}
+            </template>
+          </v-sheet>
+        </template>
 
-      <template v-slot:expanded-row="{ columns, item }">
-        <ExpandedRow :columns="columns" :item="item" :speed-unit="speedUnit" />
-      </template>
-    </v-data-table>
-    <Footer />
+        <template v-slot:expanded-row="{ columns, item }">
+          <ExpandedRow :columns="columns" :item="item" :speed-unit="speedUnit" />
+        </template>
+      </v-data-table>
+    </v-sheet>
   </v-container>
+  <Footer />
 </template>
 
 <script src="./index.js"></script>
@@ -126,4 +129,26 @@
 .v-data-table-footer__items-per-page .v-select {
   min-width: 8rem;
 }
+
+
+.v-data-table thead {
+  background-color: rgba(255, 255, 255, 0.85) !important;
+}
+
+.v-data-table tbody tr {
+  background-color: rgba(255, 255, 255, 0.85) !important;
+}
+
+v-theme--dark .v-data-table {
+  background-color: rgba(30, 30, 30, 0.85) !important;
+}
+
+.v-theme--dark .v-data-table thead {
+  background-color: rgba(30, 30, 30, 0.85) !important;
+}
+
+.v-theme--dark .v-data-table tbody tr {
+  background-color: rgba(30, 30, 30, 0.85) !important;
+}
+
 </style>
