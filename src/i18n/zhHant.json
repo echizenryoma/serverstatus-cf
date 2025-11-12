@@ -3,8 +3,7 @@
     "title": "伺服器狀態",
     "footer": {
       "poweredBy": "℗ 由{influxDb}、{cloudflarePage}、{vuetify}驅動",
-      "copyright": "版權所有 © {year} 由{author}設計",
-      "version": "版本"
+      "copyright": "版權所有 © {year} 由{author}設計"
     }
   },
   "server": {
