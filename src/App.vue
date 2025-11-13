@@ -19,6 +19,12 @@
   background-attachment: fixed;
   background-position: center;
   min-height: 100vh;
-  z-index: -1;
+  z-index: 0;
+}
+
+@media (max-width: 768px) {
+  .global-bg {
+    background-image: none;
+  }
 }
 </style>
