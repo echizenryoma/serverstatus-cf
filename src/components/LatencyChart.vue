@@ -53,8 +53,7 @@ export default {
           mode: theme.global.current.value.dark ? 'dark' : 'light'
         },
         stroke: {
-          width: 2,
-          curve: 'smooth'
+          width: 2
         },
         xaxis: {
           type: 'datetime',
