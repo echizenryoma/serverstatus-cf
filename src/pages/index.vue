@@ -1,5 +1,5 @@
 <template>
-  <v-container :fluid="$vuetify.display.lgAndDown" :class="{ 'container-width': !$vuetify.display.lgAndDown }">
+  <v-container fluid style="max-width: 120em;">
     <v-row align="center" justify="space-between" no-gutters>
       <v-col cols="auto" class="d-flex align-center">
         <v-card-title class="text-h4 text-left mr-2">{{ $t('app.title') }}</v-card-title>
@@ -122,10 +122,6 @@
 <script src="./index.js"></script>
 
 <style>
-.container-width {
-  width: 112em;
-}
-
 .v-data-table-footer__items-per-page .v-select {
   min-width: 8rem;
 }
