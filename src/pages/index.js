@@ -34,7 +34,7 @@ export default {
       refreshInterval: null,
       refreshIntervalMs: 1000,
       fastFetchCountDown: 0,
-      fastFetchMaxCount: 60,
+      fastFetchMaxCount: 20,
       speedUnit: 'bit',
       maxHistoryPoints: 60,
       showPingLatency: false,
