@@ -496,7 +496,7 @@ export default {
       view.traffic_1m_sent = bytes_sent_1m;
 
       const totalTraffic = currentTraffic.bytes_recv + currentTraffic.bytes_sent;
-      view.traffic_detail = `${formatSize(currentTraffic.bytes_recv)} / ${formatSize(currentTraffic.bytes_sent)} / ${formatSize(view.traffic_quota)} / ${formatSize(totalTraffic)}`;
+      view.traffic_detail = `${formatSize(currentTraffic.bytes_recv)} / ${formatSize(currentTraffic.bytes_sent)} / ${formatSize(totalTraffic)}`;
       const bytes_total_1m = bytes_recv_1m + bytes_sent_1m;
       view.monthly_traffic_detail = `${formatSize(bytes_recv_1m)} / ${formatSize(bytes_sent_1m)} / ${formatSize(view.traffic_quota)} / ${formatSize(bytes_total_1m)}`;
       if (view.traffic_quota > 0) {
