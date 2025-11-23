@@ -498,9 +498,10 @@ export default {
       const totalTraffic = currentTraffic.bytes_recv + currentTraffic.bytes_sent;
       view.traffic_detail = `${formatSize(currentTraffic.bytes_recv)} / ${formatSize(currentTraffic.bytes_sent)} / ${formatSize(totalTraffic)}`;
       const bytes_total_1m = bytes_recv_1m + bytes_sent_1m;
-      view.monthly_traffic_detail = `${formatSize(view.traffic_quota)} / ${formatSize(bytes_total_1m)}`;
       if (view.traffic_quota > 0) {
-        view.monthly_traffic_detail += `(${Math.round(bytes_total_1m / view.traffic_quota * 100)}%)`;
+        view.monthly_traffic_detail = `${formatSize(bytes_total_1m)} (${Math.round(bytes_total_1m / view.traffic_quota * 100)}%) / ${formatSize(view.traffic_quota)}`;
+      } else {
+        view.monthly_traffic_detail = `${formatSize(bytes_total_1m)} / ${formatSize(view.traffic_quota)}`;
       }
     },
     updatePingView(ping, view) {
