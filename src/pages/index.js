@@ -288,6 +288,7 @@ export default {
         traffic_1d_sent: 0,
         traffic_1m_recv: 0,
         traffic_1m_sent: 0,
+        traffic_quota: 0,
         load_detail: '-',
         cpu_cores: 0,
         cpu_detail: '-',
@@ -335,6 +336,7 @@ export default {
       view.network_detail = `${formatSpeed(info.down_mbps / 8.0 * 1000 * 1000, this.speedUnit === 'bit')} / ${formatSpeed(info.up_mbps / 8.0 * 1000 * 1000, this.speedUnit === 'bit')}`;
       view.cpu_module = info.cpu;
       view.kernel = info.kernel;
+      view.traffic_quota = info.traffic_quota_gb * 1000 * 1000 * 1000;
     },
     updateCpuView(cpu, view) {
       if (!cpu) return;
@@ -493,8 +495,13 @@ export default {
       view.traffic_1m_recv = bytes_recv_1m;
       view.traffic_1m_sent = bytes_sent_1m;
 
-      view.traffic_detail = `${formatSize(currentTraffic.bytes_recv)} / ${formatSize(currentTraffic.bytes_sent)} / ${formatSize(currentTraffic.bytes_recv + currentTraffic.bytes_sent)}`;
-      view.monthly_traffic_detail = `${formatSize(bytes_recv_1m)} / ${formatSize(bytes_sent_1m)} / ${formatSize(bytes_recv_1m + bytes_sent_1m)}`;
+      const totalTraffic = currentTraffic.bytes_recv + currentTraffic.bytes_sent;
+      view.traffic_detail = `${formatSize(currentTraffic.bytes_recv)} / ${formatSize(currentTraffic.bytes_sent)} / ${formatSize(view.traffic_quota)} / ${formatSize(totalTraffic)}`;
+      const bytes_total_1m = bytes_recv_1m + bytes_sent_1m;
+      view.monthly_traffic_detail = `${formatSize(bytes_recv_1m)} / ${formatSize(bytes_sent_1m)} / ${formatSize(view.traffic_quota)} / ${formatSize(bytes_total_1m)}`;
+      if (view.traffic_quota > 0) {
+        view.monthly_traffic_detail += `(${Math.round(bytes_total_1m / view.traffic_quota * 100)}%)`;
+      }
     },
     updatePingView(ping, view) {
       if (!ping) return;
