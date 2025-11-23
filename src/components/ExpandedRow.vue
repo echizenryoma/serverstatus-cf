@@ -14,13 +14,16 @@
             <div><strong>{{ $t('server.details.disk') }}:</strong> {{ item.disk_detail }}</div>
             <div><strong>{{ $t('server.details.network') }}:</strong> {{ item.network_detail }}</div>
             <div><strong>{{ $t('server.details.traffic') }}:</strong> {{ item.traffic_detail }}</div>
+            <div><strong>{{ showEstimatedMonthlyTraffic ? $t('server.details.estimatedMonthlyTraffic') :
+              $t('server.details.monthlyTraffic') }}:</strong> {{ item.monthly_traffic_detail }}</div>
             <div><strong>{{ $t('server.details.ipv4Loss') }}:</strong> {{ item.lossv4_detail }}</div>
             <div><strong>{{ $t('server.details.ipv4Ping') }}:</strong> {{ item.pingv4_detail }}</div>
             <div><strong>{{ $t('server.details.ipv6Loss') }}:</strong> {{ item.lossv6_detail }}</div>
             <div><strong>{{ $t('server.details.ipv6Ping') }}:</strong> {{ item.pingv6_detail }}</div>
           </v-col>
           <v-col cols="4">
-            <SpeedChart :series="item.chart.speed" :speed-unit="speedUnit" :title="$t('server.details.speedChartTitle')" />
+            <SpeedChart :series="item.chart.speed" :speed-unit="speedUnit"
+              :title="$t('server.details.speedChartTitle')" />
           </v-col>
           <v-col cols="4">
             <LatencyChart :series="item.chart.latency" :title="$t('server.details.latencyChartTitle')" />
@@ -41,6 +44,10 @@ export default {
     SpeedChart
   },
   props: {
+    showEstimatedMonthlyTraffic: {
+      type: Boolean,
+      required: true
+    },
     item: {
       type: Object,
       required: true

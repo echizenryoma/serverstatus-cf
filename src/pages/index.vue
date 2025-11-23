@@ -112,7 +112,8 @@
         </v-sheet>
       </template>
       <template v-slot:expanded-row="{ columns, item }">
-        <ExpandedRow :columns="columns" :item="item" :speed-unit="speedUnit" />
+        <ExpandedRow :show-estimated-monthly-traffic="showEstimatedMonthlyTraffic" :columns="columns" :item="item"
+          :speed-unit="speedUnit" />
       </template>
     </v-data-table>
   </v-container>

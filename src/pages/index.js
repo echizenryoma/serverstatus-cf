@@ -296,6 +296,7 @@ export default {
         disk_detail: '-',
         network_detail: '-',
         traffic_detail: '-',
+        monthly_traffic_detail: '-',
         ping_cm: 850,
         ping_ct: 850,
         ping_cu: 850,
@@ -492,7 +493,8 @@ export default {
       view.traffic_1m_recv = bytes_recv_1m;
       view.traffic_1m_sent = bytes_sent_1m;
 
-      view.traffic_detail = `${formatSize(currentTraffic.bytes_recv)} / ${formatSize(currentTraffic.bytes_sent)}`;
+      view.traffic_detail = `${formatSize(currentTraffic.bytes_recv)} / ${formatSize(currentTraffic.bytes_sent)} / ${formatSize(currentTraffic.bytes_recv + currentTraffic.bytes_sent)}`;
+      view.monthly_traffic_detail = `${formatSize(bytes_recv_1m)} / ${formatSize(bytes_sent_1m)} / ${formatSize(bytes_recv_1m + bytes_sent_1m)}`;
     },
     updatePingView(ping, view) {
       if (!ping) return;
