@@ -35,7 +35,6 @@
       "load": "System Load(1/5/15min)",
       "kernel": "Kernel",
       "cpu": "CPU",
-      "cpuCores": "CPU cores",
       "cpuUsage": "CPU Usage(System/User/Steal)",
       "memory": "Memory(Used/Total)",
       "swap": "Swap(Cached/Total)",
