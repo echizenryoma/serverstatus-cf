@@ -5,11 +5,11 @@
         <v-card-title class="text-h4 text-left mr-2">{{ $t('app.title') }}</v-card-title>
       </v-col>
 
-      <v-col cols="4" class="d-flex align-center">
-        <v-text-field v-model="search" prepend-inner-icon="mdi-magnify" class="mr-2" />
+      <v-col cols="4" class="d-flex align-center align-self-center">
+        <v-text-field v-model="search" prepend-inner-icon="mdi-magnify" class="mr-2" hide-details />
       </v-col>
 
-      <v-col cols="auto" class="d-flex align-center">
+      <v-col cols="auto" class="d-flex align-center align-self-center">
         <v-select v-model="$i18n.locale" :items="languageOptions" item-title="text" item-value="value"
           hide-details="auto" style="min-width: 8em" @update:modelValue="toggleLanguageChange" class="mr-2"></v-select>
         <v-btn @click="toggleSpeedUnit" icon rounded class="mr-2"
@@ -150,13 +150,13 @@
 }
 
 .frosted-glass {
-  background-color: rgba(255, 255, 255, 0.5) !important;
+  background-color: rgba(255, 255, 255, 0.64) !important;
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
   border-radius: 16px;
 }
 
 .v-theme--dark .frosted-glass {
-  background-color: rgba(33, 33, 33, 0.5) !important;
+  background-color: rgba(30, 30, 30, 0.64) !important;
 }
 </style>
