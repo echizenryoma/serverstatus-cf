@@ -136,26 +136,17 @@
   overflow: hidden;
 }
 
+.frosted-glass,
 .v-data-table,
 .v-data-table thead,
 .v-data-table tbody tr {
   background-color: rgba(255, 255, 255, 0.64) !important;
 }
 
+.v-theme--dark .frosted-glass,
 .v-theme--dark .v-data-table,
 .v-theme--dark .v-data-table thead,
 .v-theme--dark .v-data-table tbody tr {
-  background-color: rgba(30, 30, 30, 0.64) !important;
-}
-
-.frosted-glass {
-  background-color: rgba(255, 255, 255, 0.64) !important;
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  border-radius: 16px;
-}
-
-.v-theme--dark .frosted-glass {
   background-color: rgba(30, 30, 30, 0.64) !important;
 }
 </style>
