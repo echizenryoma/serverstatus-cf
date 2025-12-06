@@ -117,7 +117,6 @@
       </template>
     </v-data-table>
   </v-container>
-  <Footer />
 </template>
 
 <script src="./index.js"></script>

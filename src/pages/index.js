@@ -6,13 +6,11 @@ import 'flag-icons/css/flag-icons.min.css';
 import { useHead } from '@vueuse/head';
 import { computed } from 'vue';
 import { useI18n } from 'vue-i18n';
-import Footer from '@/components/Footer.vue';
 import ExpandedRow from '@/components/ExpandedRow.vue';
 import { languageOptions } from "../i18n";
 
 export default {
   components: {
-    Footer,
     ExpandedRow
   },
   setup() {
