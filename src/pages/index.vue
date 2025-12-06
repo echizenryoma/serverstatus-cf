@@ -126,12 +126,8 @@
   min-width: 8rem;
 }
 
+.frosted-glass,
 .frosted-table {
-  border-radius: 16px;
-  overflow: hidden;
-}
-
-.v-theme--dark .frosted-table {
   border-radius: 16px;
   overflow: hidden;
 }
