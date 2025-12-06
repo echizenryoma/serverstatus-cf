@@ -1,6 +1,6 @@
 <template>
   <v-container fluid style="max-width: 120em;">
-    <v-row align="center" justify="space-between" no-gutters>
+    <v-row align="center" justify="space-between" no-gutters class="frosted-glass mb-4 pa-2">
       <v-col cols="auto" class="d-flex align-center">
         <v-card-title class="text-h4 text-left mr-2">{{ $t('app.title') }}</v-card-title>
       </v-col>
@@ -147,5 +147,16 @@
 .v-theme--dark .v-data-table thead,
 .v-theme--dark .v-data-table tbody tr {
   background-color: rgba(30, 30, 30, 0.64) !important;
+}
+
+.frosted-glass {
+  background-color: rgba(255, 255, 255, 0.5) !important;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-radius: 16px;
+}
+
+.v-theme--dark .frosted-glass {
+  background-color: rgba(33, 33, 33, 0.5) !important;
 }
 </style>
