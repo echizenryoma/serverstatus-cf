@@ -34,14 +34,22 @@
         <span :class="'fi fi-' + getFlags(item.location)"></span>
       </template>
       <template v-slot:item.ipv4="{ item }">
-        <v-icon :color="getNetProtoColor(item.ipv4)" class="mr-1">
-          {{ getNetProtoIcon(item.ipv4) }}
-        </v-icon>
+        <v-tooltip location="top" text="NAT" :disabled="item.ipv4 !== 'nat'">
+          <template v-slot:activator="{ props }">
+            <v-icon v-bind="props" :color="getNetProtoColor(item.ipv4)" class="mr-1">
+              {{ getNetProtoIcon(item.ipv4) }}
+            </v-icon>
+          </template>
+        </v-tooltip>
       </template>
       <template v-slot:item.ipv6="{ item }">
-        <v-icon :color="getNetProtoColor(item.ipv6)" class="mr-1">
-          {{ getNetProtoIcon(item.ipv6) }}
-        </v-icon>
+        <v-tooltip location="top" text="NAT" :disabled="item.ipv6 !== 'nat'">
+          <template v-slot:activator="{ props }">
+            <v-icon v-bind="props" :color="getNetProtoColor(item.ipv6)" class="mr-1">
+              {{ getNetProtoIcon(item.ipv6) }}
+            </v-icon>
+          </template>
+        </v-tooltip>
       </template>
 
       <template v-slot:item.net_recv="{ item }">
