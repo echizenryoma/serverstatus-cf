@@ -15,7 +15,7 @@ import Footer from './components/Footer.vue';
 
 <style>
 .global-bg {
-  background-image: url('@/assets/background.jpg');
+  background-image: url('@/assets/background.webp');
   background-size: cover;
   background-attachment: fixed;
   background-position: center;

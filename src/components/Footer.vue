@@ -22,7 +22,7 @@
       </v-col>
       <v-col class="d-flex justify-center">
         <v-avatar size="42">
-          <v-img src="@/assets/author.png" alt="作者"></v-img>
+          <v-img src="@/assets/author.webp" alt="作者"></v-img>
         </v-avatar>
       </v-col>
   </v-footer>
