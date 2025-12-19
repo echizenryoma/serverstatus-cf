@@ -14,6 +14,12 @@ import App from './App.vue'
 import { createApp } from 'vue'
 import { createHead } from '@vueuse/head'
 
+import '@fontsource/roboto/400.css'
+import '@fontsource/roboto/500.css'
+import '@fontsource/roboto/700.css'
+
+import '@mdi/font/css/materialdesignicons.css'
+
 // Styles
 import 'unfonts.css'
 
