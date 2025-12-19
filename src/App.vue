@@ -18,7 +18,7 @@ import Footer from './components/Footer.vue';
   background-image: url('@/assets/background.webp');
   background-size: cover;
   background-attachment: fixed;
-  background-position: center;
+  background-position: top;
   min-height: 100vh;
   z-index: 0;
 }
