@@ -54,10 +54,8 @@
   "actions": {
     "refresh": "Refresh",
     "pause": "Pause",
-    "speedUnit": {
-      "switchToByte": "Switch to Byte",
-      "switchToBit": "Switch to bit"
-    }
+    "speedUnitByte": "Speed units: byte",
+    "speedUnitBit": "Speed units: bit"
   },
   "units": {
     "day": "d"

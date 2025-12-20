@@ -9,10 +9,10 @@
   "server": {
     "title": {
       "node": "節點",
-      "uptime": "在線",
+      "uptime": "運行",
       "location": "位置",
       "load": "負載",
-      "networkStack": "協議棧",
+      "networkStack": "協定堆疊",
       "ipv4": "IPv4",
       "ipv6": "IPv6",
       "speed": "網速",
@@ -24,7 +24,7 @@
       "estimatedMonthlyTraffic": "預計全月流量",
       "cpu": "CPU",
       "memory": "記憶體",
-      "disk": "硬盤",
+      "disk": "硬碟",
       "latency": "延遲",
       "loss": "丟包率",
       "cm": "移動",
@@ -33,13 +33,13 @@
     },
     "details": {
       "load": "系統負載(1/5/15)",
-      "kernel": "內核",
+      "kernel": "核心",
       "cpu": "CPU",
       "cpuUsage": "CPU使用率(系統/用戶/竊取)",
       "memory": "記憶體(已使用/總共)",
-      "swap": "交換空間(已緩存/總共)",
-      "disk": "硬盤(已使用/總共)",
-      "network": "網絡(接收/發送)",
+      "swap": "置換空間(已緩存/總共)",
+      "disk": "硬碟(已使用/總共)",
+      "network": "網路(接收/發送)",
       "traffic": "流量(接收/發送/總計)",
       "monthlyTraffic": "本月流量(已使用/限額)",
       "estimatedMonthlyTraffic": "預計全月流量(使用/限額)",
@@ -54,10 +54,8 @@
   "actions": {
     "refresh": "刷新",
     "pause": "暫停",
-    "speedUnit": {
-      "switchToByte": "切換到字節(B)",
-      "switchToBit": "切換到位(bit)"
-    }
+    "speedUnitByte": "網速單位：位元組(B)",
+    "speedUnitBit": "網速單位：位元(bit)"
   },
   "units": {
     "day": "天"

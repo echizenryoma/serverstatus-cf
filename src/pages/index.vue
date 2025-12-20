@@ -13,7 +13,7 @@
         <v-select v-model="$i18n.locale" :items="languageOptions" item-title="text" item-value="value"
           hide-details="auto" style="min-width: 8em" @update:modelValue="toggleLanguageChange" class="mr-2"></v-select>
         <v-tooltip location="bottom"
-          :text="speedUnit === 'bit' ? $t('actions.speedUnit.switchToByte') : $t('actions.speedUnit.switchToBit')">
+          :text="speedUnit === 'bit' ? $t('actions.speedUnitBit') : $t('actions.speedUnitByte')">
           <template v-slot:activator="{ props }">
             <v-btn v-bind="props" @click="toggleSpeedUnit" icon rounded class="mr-2">
               <v-icon>{{ speedUnit === 'bit' ? 'mdi-speedometer' : 'mdi-chip' }}</v-icon>

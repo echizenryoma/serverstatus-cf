@@ -54,10 +54,8 @@
   "actions": {
     "refresh": "刷新",
     "pause": "暂停",
-    "speedUnit": {
-      "switchToByte": "切换到字节(B)",
-      "switchToBit": "切换到位(bit)"
-    }
+    "speedUnitByte": "网速单位：字节(B)",
+    "speedUnitBit": "网速单位：位(bit)"
   },
   "units": {
     "day": "天"
