@@ -33,7 +33,7 @@ export default {
       refreshIntervalMs: 1000,
       fastFetchCountDown: 0,
       fastFetchMaxCount: 20,
-      speedUnit: 'bit',
+      speedUnit: 'byte',
       maxHistoryPoints: 60,
       showPingLatency: false,
       showEstimatedDailyTraffic: false,
@@ -654,7 +654,7 @@ export default {
     }
 
     const savedSpeedUnit = this.getCookie('speedUnit');
-    if (savedSpeedUnit && (savedSpeedUnit === 'bit' || savedSpeedUnit === 'byte')) {
+    if (['bit', 'byte'].includes(savedSpeedUnit)) {
       this.speedUnit = savedSpeedUnit;
     }
 
