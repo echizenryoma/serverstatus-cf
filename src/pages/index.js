@@ -70,7 +70,7 @@ export default {
     },
     headers() {
       return [
-        { title: this.$t('server.title.node'), key: "host", align: 'center', minWidth: '8em', headerProps: { style: 'font-weight: bold;' } },
+        { title: this.$t('server.title.node'), key: "host", align: 'center', minWidth: '8em', fixed: true, headerProps: { style: 'font-weight: bold;' } },
         { title: this.$t('server.title.uptime'), key: "uptime", align: 'center', minWidth: '6em', headerProps: { style: 'font-weight: bold;' } },
         {
           title: this.$t('server.title.networkStack'),
