@@ -1,5 +1,5 @@
 <template>
-  <v-card class="mb-4" v-if="series && series.length">
+  <v-card class="mb-4 rounded-xl" v-if="series && series.length">
     <v-card-title>{{ title }}</v-card-title>
     <v-card-text>
       <VueApexCharts type="line" height="200" :options="chartOptions" :series="series">
