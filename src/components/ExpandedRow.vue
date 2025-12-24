@@ -1,7 +1,7 @@
 <template>
   <tr>
     <td :colspan="columns.length">
-      <v-card flat class="pa-3">
+      <v-card flat class="pa-3 rounded-xl">
         <v-row>
           <v-col cols="4">
             <div><strong>{{ $t('server.details.kernel') }}:</strong> {{ item.kernel }}</div>
