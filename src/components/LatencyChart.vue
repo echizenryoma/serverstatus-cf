@@ -86,10 +86,10 @@ export default {
 
 <style scoped>
 .v-card {
-  background-color: rgba(255, 255, 255, 0.48) !important;
+  background-color: rgba(255, 255, 255, 0.64) !important;
 }
 
 .v-theme--dark .v-card {
-  background-color: rgba(30, 30, 30, 0.48) !important;
+  background-color: rgba(30, 30, 30, 0.64) !important;
 }
 </style>
