@@ -38,6 +38,7 @@ export default {
       return {
         chart: {
           id: 'speed-chart',
+          background: 'transparent',
           animations: {
             enabled: false
           },
@@ -86,3 +87,13 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+.v-card {
+  background-color: rgba(255, 255, 255, 0.48) !important;
+}
+
+.v-theme--dark .v-card {
+  background-color: rgba(30, 30, 30, 0.48) !important;
+}
+</style>
