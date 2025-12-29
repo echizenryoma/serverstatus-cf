@@ -16,8 +16,8 @@ from(bucket: "server")
   |> range(start: -5s)
   |> filter(fn: (r) => r["_measurement"] == "disk")
   |> filter(fn: (r) =>
-    r["_field"] == "used" or
-    r["_field"] == "total"
+    (r["_field"] == "used" or r["_field"] == "total")
+    and (r["path"] == "/" or r["path"] == "/opt")
   )
   |> last()
   |> group(columns: ["_field", "host"])
