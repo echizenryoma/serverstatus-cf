@@ -20,9 +20,9 @@
     "luxon": "^3.7.2",
     "papaparse": "^5.5.3",
     "vue": "^3.5.26",
-    "vue-i18n": "^11.2.7",
+    "vue-i18n": "^11.2.8",
     "vue3-apexcharts": "^1.10.0",
-    "vuetify": "^3.11.4"
+    "vuetify": "^3.11.6"
   },
   "devDependencies": {
     "@mdi/font": "^7.4.47",
@@ -33,7 +33,7 @@
     "svg-to-ico": "^1.0.17",
     "unplugin-fonts": "^1.4.0",
     "unplugin-vue-components": "^30.0.0",
-    "unplugin-vue-router": "^0.19.1",
+    "unplugin-vue-router": "^0.19.2",
     "vite": "^7.3.0",
     "vite-plugin-vuetify": "^2.1.2",
     "vue-router": "^4.6.4"
