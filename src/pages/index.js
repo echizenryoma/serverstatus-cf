@@ -38,7 +38,7 @@ export default {
       showPingLatency: false,
       showEstimatedDailyTraffic: false,
       showEstimatedMonthlyTraffic: false,
-      searchKeywords: ['Intel', 'AMD', 'cn', 'hk', 'jp', 'us', 'sg'],
+      searchKeywords: ['iepl', 'nat', 'cn', 'hk', 'jp', 'sg', 'us'],
       search: '',
     }
   },
