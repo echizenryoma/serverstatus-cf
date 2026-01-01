@@ -38,6 +38,7 @@ export default {
       showPingLatency: false,
       showEstimatedDailyTraffic: false,
       showEstimatedMonthlyTraffic: false,
+      searchKeywords: ['Intel', 'AMD', 'cn', 'hk', 'jp', 'us', 'sg'],
       search: '',
     }
   },
