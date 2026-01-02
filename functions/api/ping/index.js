@@ -13,7 +13,7 @@ export async function onRequest({ request, env }) {
       const query_url = new URL(`https://${influxdb_host}/api/v2/query?org=${influxdb_org}&t=${Date.now()}`);
       const influx_ql = `
 ping = from(bucket: "server")
-  |> range(start: -10s)
+  |> range(start: -20s)
   |> filter(fn: (r) => r["_measurement"] == "ping")
   |> filter(fn: (r) => r["_field"] == "average_response_ms")
   |> group(columns: ["_field", "host", "url"])
