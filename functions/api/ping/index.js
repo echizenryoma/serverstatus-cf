@@ -19,12 +19,12 @@ ping = from(bucket: "server")
   |> group(columns: ["_field", "host", "url"])
   |> last()
   |> pivot(rowKey:["host"], columnKey: ["url"], valueColumn: "_value")
-  |> fill(column: "cd.ct.rdbg.net", value: 850.0)
-  |> fill(column: "cd.cm.rdbg.net", value: 850.0)
-  |> fill(column: "cd.cu.rdbg.net", value: 850.0)
-  |> fill(column: "6.cd.ct.rdbg.net", value: 850.0)
-  |> fill(column: "6.cd.cm.rdbg.net", value: 850.0)
-  |> fill(column: "6.cd.cu.rdbg.net", value: 850.0)
+  |> fill(column: "cd.ct.rdbg.net", value: 500.0)
+  |> fill(column: "cd.cm.rdbg.net", value: 500.0)
+  |> fill(column: "cd.cu.rdbg.net", value: 500.0)
+  |> fill(column: "6.cd.ct.rdbg.net", value: 500.0)
+  |> fill(column: "6.cd.cm.rdbg.net", value: 500.0)
+  |> fill(column: "6.cd.cu.rdbg.net", value: 500.0)
   |> rename(columns: {
       "6.cd.ct.rdbg.net": "ping_ctv6",
       "6.cd.cm.rdbg.net": "ping_cmv6",
