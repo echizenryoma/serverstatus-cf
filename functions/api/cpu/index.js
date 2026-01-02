@@ -14,7 +14,7 @@ export async function onRequest({ request, env }) {
       const query_url = new URL(`https://${influxdb_host}/api/v2/query?org=${influxdb_org}&t=${Date.now()}`);
       const influx_ql = `
 cpu = from(bucket: "server")
-  |> range(start: -5s)
+  |> range(start: -10s)
   |> filter(fn: (r) => r["_measurement"] == "cpu")
   |> filter(fn: (r) =>
     r["_field"] == "usage_steal" or
@@ -27,7 +27,7 @@ cpu = from(bucket: "server")
   |> keep(columns: ["host", "usage_system", "usage_user", "usage_steal"])
 
 system = from(bucket: "server")
-  |> range(start: -5s)
+  |> range(start: -10s)
   |> filter(fn: (r) => r["_measurement"] == "system")
   |> filter(fn: (r) =>
     r["_field"] == "uptime" or
