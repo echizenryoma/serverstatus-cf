@@ -28,7 +28,7 @@ export function formatSpeed(speed, bits = true, options = {}) {
 }
 
 export function formatLatency(latency_ms) {
-  return `${Math.round(latency_ms ?? 0)} ms`;
+  return `${Math.min(Math.round(latency_ms ?? 0), 500)} ms`;
 }
 
 export function formatSeconds(seconds, options = {}) {
