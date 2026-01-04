@@ -507,13 +507,13 @@ export default {
       if (!ping) return;
       if (view.ipv6 === 'yes') {
         if (this.showPingLatency) {
-          view.ping_cm = Math.round(ping.ping_cmv6);
-          view.ping_ct = Math.round(ping.ping_ctv6);
-          view.ping_cu = Math.round(ping.ping_cuv6);
+          view.ping_cm = Math.round(Math.min(ping.ping_cmv6, 500));
+          view.ping_ct = Math.round(Math.min(ping.ping_ctv6, 500));
+          view.ping_cu = Math.round(Math.min(ping.ping_cuv6, 500));
         } else {
-          view.ping_cm = Math.round(ping.loss_cmv6);
-          view.ping_ct = Math.round(ping.loss_ctv6);
-          view.ping_cu = Math.round(ping.loss_cuv6);
+          view.ping_cm = Math.round(Math.min(ping.loss_cmv6, 100));
+          view.ping_ct = Math.round(Math.min(ping.loss_ctv6, 100));
+          view.ping_cu = Math.round(Math.min(ping.loss_cuv6, 100));
         }
 
         view.lossv6_detail = `${Math.round(ping.loss_cmv6)}% / ${Math.round(ping.loss_ctv6)}% / ${Math.round(ping.loss_cuv6)}%`;
@@ -524,13 +524,13 @@ export default {
       }
       if (view.ipv4 === 'yes') {
         if (this.showPingLatency) {
-          view.ping_cm = Math.round(ping.ping_cmv4);
-          view.ping_ct = Math.round(ping.ping_ctv4);
-          view.ping_cu = Math.round(ping.ping_cuv4);
+          view.ping_cm = Math.round(Math.min(ping.ping_cmv4, 500));
+          view.ping_ct = Math.round(Math.min(ping.ping_ctv4, 500));
+          view.ping_cu = Math.round(Math.min(ping.ping_cuv4, 500));
         } else {
-          view.ping_cm = Math.round(ping.loss_cmv4);
-          view.ping_ct = Math.round(ping.loss_ctv4);
-          view.ping_cu = Math.round(ping.loss_cuv4);
+          view.ping_cm = Math.round(Math.min(ping.loss_cmv4, 100));
+          view.ping_ct = Math.round(Math.min(ping.loss_ctv4, 100));
+          view.ping_cu = Math.round(Math.min(ping.loss_cuv4, 100));
         }
 
         view.lossv4_detail = `${Math.round(ping.loss_cmv4)}% / ${Math.round(ping.loss_ctv4)}% / ${Math.round(ping.loss_cuv4)}%`;
