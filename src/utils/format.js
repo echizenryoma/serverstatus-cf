@@ -28,7 +28,11 @@ export function formatSpeed(speed, bits = true, options = {}) {
 }
 
 export function formatLatency(latency_ms) {
-  return `${Math.min(Math.round(latency_ms ?? 0), 500)} ms`;
+  return `${Math.round(latency_ms ?? 0)} ms`;
+}
+
+export function formatLoss(loss) {
+  return `${Math.min(100, Math.round(loss ?? 0))} %`;
 }
 
 export function formatSeconds(seconds, options = {}) {

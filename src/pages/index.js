@@ -1,6 +1,6 @@
 import axios from "axios";
 import Papa from "papaparse";
-import { formatSize, formatSpeed, formatSeconds, formatLatency } from '@/utils/format';
+import { formatSize, formatSpeed, formatSeconds, formatLatency, formatLoss } from '@/utils/format';
 import { parseDuration } from 'enhanced-ms';
 import 'flag-icons/css/flag-icons.min.css';
 import { useHead } from '@vueuse/head';
@@ -141,6 +141,7 @@ export default {
     formatSize,
     formatSeconds,
     formatLatency,
+    formatLoss,
     toggleExpand(_, { item }) {
       const index = this.expandedRows.indexOf(item.host);
       if (index > -1) {
