@@ -506,36 +506,50 @@ export default {
     },
     updatePingView(ping, view) {
       if (!ping) return;
+      ping.ping_cmv6 = Math.min(500, Math.round(ping.ping_cmv6));
+      ping.ping_ctv6 = Math.min(500, Math.round(ping.ping_ctv6));
+      ping.ping_cuv6 = Math.min(500, Math.round(ping.ping_cuv6));
+      ping.ping_cmv4 = Math.min(500, Math.round(ping.ping_cmv4));
+      ping.ping_ctv4 = Math.min(500, Math.round(ping.ping_ctv4));
+      ping.ping_cuv4 = Math.min(500, Math.round(ping.ping_cuv4));
+
+      ping.loss_cmv6 = Math.min(100, Math.round(ping.loss_cmv6));
+      ping.loss_ctv6 = Math.min(100, Math.round(ping.loss_ctv6));
+      ping.loss_cuv6 = Math.min(100, Math.round(ping.loss_cuv6));
+      ping.loss_cmv4 = Math.min(100, Math.round(ping.loss_cmv4));
+      ping.loss_ctv4 = Math.min(100, Math.round(ping.loss_ctv4));
+      ping.loss_cuv4 = Math.min(100, Math.round(ping.loss_cuv4));
+
       if (view.ipv6 === 'yes') {
         if (this.showPingLatency) {
-          view.ping_cm = Math.round(Math.min(ping.ping_cmv6, 500));
-          view.ping_ct = Math.round(Math.min(ping.ping_ctv6, 500));
-          view.ping_cu = Math.round(Math.min(ping.ping_cuv6, 500));
+          view.ping_cm = ping.ping_cmv6;
+          view.ping_ct = ping.ping_ctv6;
+          view.ping_cu = ping.ping_cuv6;
         } else {
-          view.ping_cm = Math.round(Math.min(ping.loss_cmv6, 100));
-          view.ping_ct = Math.round(Math.min(ping.loss_ctv6, 100));
-          view.ping_cu = Math.round(Math.min(ping.loss_cuv6, 100));
+          view.ping_cm = ping.loss_cmv6;
+          view.ping_ct = ping.loss_ctv6;
+          view.ping_cu = ping.loss_cuv6;
         }
 
-        view.lossv6_detail = `${Math.round(ping.loss_cmv6)}% / ${Math.round(ping.loss_ctv6)}% / ${Math.round(ping.loss_cuv6)}%`;
-        view.pingv6_detail = `${Math.round(ping.ping_cmv6)} ms / ${Math.round(ping.ping_ctv6)} ms / ${Math.round(ping.ping_cuv6)} ms`;
+        view.lossv6_detail = `${ping.loss_cmv6}% / ${ping.loss_ctv6}% / ${ping.loss_cuv6}%`;
+        view.pingv6_detail = `${ping.ping_cmv6} ms / ${ping.ping_ctv6} ms / ${ping.ping_cuv6} ms`;
         if (view.ipv4 !== 'yes') {
           this.appendLatencyChart(view, ping, true);
         }
       }
       if (view.ipv4 === 'yes') {
         if (this.showPingLatency) {
-          view.ping_cm = Math.round(Math.min(ping.ping_cmv4, 500));
-          view.ping_ct = Math.round(Math.min(ping.ping_ctv4, 500));
-          view.ping_cu = Math.round(Math.min(ping.ping_cuv4, 500));
+          view.ping_cm = ping.ping_cmv4;
+          view.ping_ct = ping.ping_ctv4;
+          view.ping_cu = ping.ping_cuv4;
         } else {
-          view.ping_cm = Math.round(Math.min(ping.loss_cmv4, 100));
-          view.ping_ct = Math.round(Math.min(ping.loss_ctv4, 100));
-          view.ping_cu = Math.round(Math.min(ping.loss_cuv4, 100));
+          view.ping_cm = ping.loss_cmv4;
+          view.ping_ct = ping.loss_ctv4;
+          view.ping_cu = ping.loss_cuv4;
         }
 
-        view.lossv4_detail = `${Math.round(ping.loss_cmv4)}% / ${Math.round(ping.loss_ctv4)}% / ${Math.round(ping.loss_cuv4)}%`;
-        view.pingv4_detail = `${Math.round(ping.ping_cmv4)} ms / ${Math.round(ping.ping_ctv4)} ms / ${Math.round(ping.ping_cuv4)} ms`;
+        view.lossv4_detail = `${ping.loss_cmv4}% / ${ping.loss_ctv4}% / ${ping.loss_cuv4}%`;
+        view.pingv4_detail = `${ping.ping_cmv4} ms / ${ping.ping_ctv4} ms / ${ping.ping_cuv4} ms`;
 
         this.appendLatencyChart(view, ping, false);
       }
