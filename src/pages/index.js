@@ -29,10 +29,19 @@ export default {
       expandedRows: [],
       db: [],
       viewData: [],
-      refreshInterval: null,
+      refreshTimer: null,
       refreshIntervalMs: 1000,
-      fastFetchCountDown: 0,
-      fastFetchMaxCount: 20,
+      apiConfigs: [
+        { key: 'cpu', url: '/api/cpu', intervalMs: 1000, lastFetch: 0 },
+        { key: 'net', url: '/api/net', intervalMs: 1000, lastFetch: 0 },
+        { key: 'ping', url: '/api/ping', intervalMs: 1000, lastFetch: 0 },
+        { key: 'info', url: '/api/info', intervalMs: 1000, lastFetch: 0 },
+        { key: 'mem', url: '/api/mem', intervalMs: 10000, lastFetch: 0 },
+        { key: 'disk', url: '/api/disk', intervalMs: 10000, lastFetch: 0 },
+        { key: 'traffic', url: '/api/traffic', intervalMs: 10000, lastFetch: 0 },
+        { key: 'traffic_1d', url: '/api/traffic/last-day', intervalMs: 60000, lastFetch: 0 },
+        { key: 'traffic_1m', url: '/api/traffic/last-month', intervalMs: 60000, lastFetch: 0 },
+      ],
       speedUnit: 'byte',
       maxHistoryPoints: 60,
       showPingLatency: false,
@@ -563,33 +572,41 @@ export default {
     },
     async fetchData() {
       const baseUrl = import.meta.env.VITE_API_BASE_URL || '';
-      let urls = [
-        `${baseUrl}/api/cpu`,
-        `${baseUrl}/api/net`,
-        `${baseUrl}/api/ping`,
+      const now = Date.now();
 
-        `${baseUrl}/api/info`,
-        `${baseUrl}/api/mem`,
-        `${baseUrl}/api/disk`,
-        `${baseUrl}/api/traffic`,
-        `${baseUrl}/api/traffic/last-day`,
-        `${baseUrl}/api/traffic/last-month`,
-      ];
-      this.fastFetchCountDown--;
-      if (this.fastFetchCountDown >= 0) {
-        urls.splice(3);
-      }
+      const pendingRequests = this.apiConfigs.filter(config =>
+        (now - config.lastFetch) >= config.intervalMs
+      ).map(config => {
+        return axios.get(`${baseUrl}${config.url}`)
+          .then(res => ({ key: config.key, res }))
+          .catch(e => {
+            console.error(`Fetch failed for ${config.url}`, e);
+            return { key: config.key, res: null };
+          });
+      });
+
+      if (pendingRequests.length === 0) return;
+
       try {
-        const requests = urls.map((url) => axios.get(url));
-        const responses = await axios.all(requests);
-        const dataMap = new Map(this.db.map(row => [row.host, row]));
-        responses.forEach((res, index) => {
-          if (!res || !res.data) {
-            console.error(`No data received from ${urls[index]}`);
-            return;
+        const results = await Promise.all(pendingRequests);
+
+        // Update lastFetch for successful (or attempted) requests
+        results.forEach(({ key }) => {
+          const config = this.apiConfigs.find(c => c.key === key);
+          if (config) {
+            config.lastFetch = now; // Update timestamp regardless of success to avoid spamming failed requests? Or maybe only on success?
+            // Original code didn't retry immediately on failure (interval logic applies), so updating here is fine to respect the interval.
           }
+        });
+
+        const dataMap = new Map(this.db.map(row => [row.host, row]));
+
+        results.forEach(({ key, res }) => {
+          if (!res || !res.data) return;
+
           const csvText = res.data;
           const parsed = Papa.parse(csvText, { header: true, dynamicTyping: true });
+
           parsed.data.filter(
             (row) => row.host && row.host.trim() !== ""
           ).forEach((row) => {
@@ -600,56 +617,24 @@ export default {
               });
             }
             const item = dataMap.get(host);
-            switch (index) {
-              case 0:
-                item.cpu = row;
-                break;
-              case 1:
-                item.net = row;
-                break;
-              case 2:
-                item.ping = row;
-                break;
-
-              case 3:
-                item.info = row;
-                break;
-              case 4:
-                item.mem = row;
-                break;
-              case 5:
-                item.disk = row;
-                break;
-              case 6:
-                item.traffic = row;
-                break;
-              case 7:
-                item.traffic_1d = row;
-                break;
-              case 8:
-                item.traffic_1m = row;
-                break;
-            }
+            item[key] = row;
           });
         });
+
         this.db = Array.from(dataMap.values());
         this.updateViewData();
-        if (this.fastFetchCountDown < 0) {
-          this.fastFetchCountDown = this.fastFetchMaxCount;
-        }
       } catch (e) {
-        console.error("get failed: ", e);
-        this.fastFetchCountDown = 0;
+        console.error("fetchData error: ", e);
       }
     },
     stopRefresh() {
       this.isRefreshEnabled = !this.isRefreshEnabled;
       if (this.isRefreshEnabled) {
-        this.refreshInterval = setInterval(() => {
+        this.refreshTimer = setInterval(() => {
           this.fetchData();
         }, this.refreshIntervalMs);
       } else {
-        clearInterval(this.refreshInterval);
+        clearInterval(this.refreshTimer);
       }
     },
     getCookie(name) {
@@ -676,7 +661,7 @@ export default {
 
     this.fetchData();
     if (this.isRefreshEnabled) {
-      this.refreshInterval = setInterval(() => {
+      this.refreshTimer = setInterval(() => {
         this.fetchData();
       }, this.refreshIntervalMs);
     }
@@ -691,7 +676,7 @@ export default {
     }
   },
   beforeUnmount() {
-    clearInterval(this.refreshInterval);
+    clearInterval(this.refreshTimer);
     if (this.themeMediaQuery) {
       this.themeMediaQuery.removeEventListener('change', themeChangeHandler);
     }
