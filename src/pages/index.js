@@ -589,20 +589,14 @@ export default {
 
       try {
         const results = await Promise.all(pendingRequests);
-
-        // Update lastFetch for successful (or attempted) requests
-        results.forEach(({ key }) => {
-          const config = this.apiConfigs.find(c => c.key === key);
-          if (config) {
-            config.lastFetch = now; // Update timestamp regardless of success to avoid spamming failed requests? Or maybe only on success?
-            // Original code didn't retry immediately on failure (interval logic applies), so updating here is fine to respect the interval.
-          }
-        });
-
         const dataMap = new Map(this.db.map(row => [row.host, row]));
 
         results.forEach(({ key, res }) => {
           if (!res || !res.data) return;
+
+          const config = this.apiConfigs.find(c => c.key === key);
+          if (!config) return;
+          config.lastFetch = now;
 
           const csvText = res.data;
           const parsed = Papa.parse(csvText, { header: true, dynamicTyping: true });
