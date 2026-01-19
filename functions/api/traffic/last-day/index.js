@@ -1,13 +1,6 @@
-export async function onRequest({ request, env }) {
-  const influxdb_host = env.INFLUXDB_HOST;
-  const influxdb_token = env.INFLUXDB_TOKEN;
-  const influxdb_org = env.INFLUXDB_ORG;
-  const corsHeaders = {
-    "Access-Control-Allow-Origin": "*",
-    "Access-Control-Allow-Methods": "GET,POST,PUT,DELETE,OPTIONS",
-    "Access-Control-Allow-Headers": "Content-Type, Authorization",
-  };
+import { queryInflux } from "../../../utils";
 
+export async function onRequest({ request, env }) {
   if (request.method === 'GET') {
     try {
       const now = new Date();
@@ -23,8 +16,7 @@ export async function onRequest({ request, env }) {
       console.log("start: ", start.toISOString());
       console.log("stop: ", stop.toISOString());
 
-      const query_url = new URL(`https://${influxdb_host}/api/v2/query?org=${influxdb_org}`);
-      const influx_ql = `
+      const influxQl = `
 from(bucket: "history")
   |> range(start: ${start.toISOString()}, stop: ${stop.toISOString()})
   |> filter(fn: (r) => r["_measurement"] == "net")
@@ -35,21 +27,7 @@ from(bucket: "history")
   |> pivot(rowKey:["host"], columnKey: ["_field"], valueColumn: "_value")
   |> keep(columns: ["host", "bytes_recv", "bytes_sent"])
 `
-      const response = await fetch(query_url, {
-        method: 'POST',
-        headers: {
-          'Authorization': `Token ${influxdb_token}`,
-          'Content-Type': 'application/vnd.flux',
-        },
-        body: influx_ql,
-      });
-      if (!response.ok) throw new Error(`fetch CSV failed: ${response.status} ${response.statusText}`);
-      const csvText = await response.text();
-      const headers = corsHeaders;
-      headers['Content-Type'] = 'text/csv';
-      return new Response(csvText, {
-        headers: headers,
-      });
+      return await queryInflux(env, influxQl);
     } catch (error) {
       return new Response('Internal Server Error', { status: 500 });
     }
