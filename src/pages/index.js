@@ -458,8 +458,8 @@ export default {
       if (!currentTraffic) return;
 
       const now = new Date();
-      const startInDay = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate()));
-      const startInMonth = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), 1));
+      const startInDay = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(), 0, 5, 0, 0));
+      const startInMonth = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), 1, 0, 5, 0, 0));
 
       let bytes_recv_1d = 0;
       let bytes_sent_1d = 0;
