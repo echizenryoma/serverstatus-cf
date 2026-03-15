@@ -30,6 +30,10 @@ export default {
     title: {
       type: String,
       required: true
+    },
+    chartId: {
+      type: String,
+      default: 'speed-chart'
     }
   },
   computed: {
@@ -37,7 +41,7 @@ export default {
       const theme = useTheme();
       return {
         chart: {
-          id: 'speed-chart',
+          id: this.chartId,
           background: 'transparent',
           animations: {
             enabled: false

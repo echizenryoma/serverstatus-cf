@@ -22,11 +22,12 @@
             <div><strong>{{ $t('server.details.ipv6Ping') }}:</strong> {{ item.pingv6_detail }}</div>
           </v-col>
           <v-col cols="4">
-            <SpeedChart :series="item.chart.speed" :speed-unit="speedUnit"
+            <SpeedChart :series="item.chart.speed" :speed-unit="speedUnit" :chart-id="'speed-chart-' + item.host"
               :title="$t('server.details.speedChartTitle')" />
           </v-col>
           <v-col cols="4">
-            <LatencyChart :series="item.chart.latency" :title="$t('server.details.latencyChartTitle')" />
+            <LatencyChart :series="item.chart.latency" :chart-id="'latency-chart-' + item.host"
+              :title="$t('server.details.latencyChartTitle')" />
           </v-col>
         </v-row>
       </v-card>

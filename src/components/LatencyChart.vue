@@ -26,6 +26,10 @@ export default {
     title: {
       type: String,
       required: true
+    },
+    chartId: {
+      type: String,
+      default: 'latency-chart'
     }
   },
   computed: {
@@ -33,7 +37,7 @@ export default {
       const theme = useTheme();
       return {
         chart: {
-          id: 'latency-chart',
+          id: this.chartId,
           background: 'transparent',
           animations: {
             enabled: false
