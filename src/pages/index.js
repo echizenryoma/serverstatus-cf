@@ -392,20 +392,18 @@ export default {
       ];
     },
     appendSpeedChart(view, net) {
-      if (view.chart.speed?.length === 0) {
-        view.chart.speed = this.initializeSpeedChart()
-      }
       const now = new Date().getTime();
-      view.chart.speed = [
-        {
-          name: this.$t('server.title.receive'),
-          data: [...(view.chart.speed[0]?.data || []).slice(-this.maxHistoryPoints + 1), [now, net.bytes_recv]]
-        },
-        {
-          name: this.$t('server.title.send'),
-          data: [...(view.chart.speed[1]?.data || []).slice(-this.maxHistoryPoints + 1), [now, net.bytes_sent]]
+      const speedChart = view.chart.speed?.length ? view.chart.speed : this.initializeSpeedChart();
+
+      [net.bytes_recv, net.bytes_sent].forEach((value, index) => {
+        const data = speedChart[index]?.data || [];
+        if (data.length >= this.maxHistoryPoints) {
+          data.shift();
         }
-      ];
+        data.push([now, value]);
+      });
+
+      view.chart.speed = speedChart;
     },
     initializeLatencyChart() {
       const now = new Date().getTime();
@@ -434,24 +432,23 @@ export default {
       ];
     },
     appendLatencyChart(view, ping, ipv6 = false) {
-      if (view.chart.latency?.length === 0) {
-        view.chart.latency = this.initializeLatencyChart()
-      }
       const now = new Date().getTime();
-      view.chart.latency = [
-        {
-          name: this.$t('server.title.cm'),
-          data: [...(view.chart.latency[0]?.data || []).slice(-this.maxHistoryPoints + 1), [now, ipv6 ? ping.ping_cmv6 : ping.ping_cmv4]]
-        },
-        {
-          name: this.$t('server.title.ct'),
-          data: [...(view.chart.latency[1]?.data || []).slice(-this.maxHistoryPoints + 1), [now, ipv6 ? ping.ping_ctv6 : ping.ping_ctv4]]
-        },
-        {
-          name: this.$t('server.title.cu'),
-          data: [...(view.chart.latency[2]?.data || []).slice(-this.maxHistoryPoints + 1), [now, ipv6 ? ping.ping_cuv6 : ping.ping_cuv4]]
-        },
+      const latencyChart = view.chart.latency?.length ? view.chart.latency : this.initializeLatencyChart();
+      const latencyValues = [
+        ipv6 ? ping.ping_cmv6 : ping.ping_cmv4,
+        ipv6 ? ping.ping_ctv6 : ping.ping_ctv4,
+        ipv6 ? ping.ping_cuv6 : ping.ping_cuv4,
       ];
+
+      latencyValues.forEach((value, index) => {
+        const data = latencyChart[index]?.data || [];
+        if (data.length >= this.maxHistoryPoints) {
+          data.shift();
+        }
+        data.push([now, value]);
+      });
+
+      view.chart.latency = latencyChart;
     },
     updateTrafficView(currentTraffic, last1dTraffic, last1mTraffic, view) {
       if (!currentTraffic) return;
