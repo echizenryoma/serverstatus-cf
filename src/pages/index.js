@@ -3,8 +3,7 @@ import Papa from "papaparse";
 import { formatSize, formatSpeed, formatSeconds, formatLatency, formatLoss } from '@/utils/format';
 import { parseDuration } from 'enhanced-ms';
 import 'flag-icons/css/flag-icons.min.css';
-import { useHead } from '@vueuse/head';
-import { computed } from 'vue';
+import { computed, watchEffect } from 'vue';
 import { useI18n } from 'vue-i18n';
 import ExpandedRow from '@/components/ExpandedRow.vue';
 import { languageOptions } from "../i18n";
@@ -16,8 +15,8 @@ export default {
   setup() {
     const { t } = useI18n()
     const title = computed(() => t('app.title'))
-    useHead({
-      title,
+    watchEffect(() => {
+      document.title = title.value;
     })
   },
   data() {
