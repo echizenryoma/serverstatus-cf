@@ -4,9 +4,14 @@
  * Automatic routes for `./src/pages/*.vue`
  */
 
-// Composables
-import { createRouter, createWebHistory } from 'vue-router/auto'
-import { routes } from 'vue-router/auto-routes'
+import { createRouter, createWebHistory } from 'vue-router'
+
+const routes = [
+  {
+    path: '/',
+    component: () => import('@/pages/index.vue'),
+  },
+]
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
