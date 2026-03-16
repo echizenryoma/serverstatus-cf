@@ -19,9 +19,6 @@ import '@fontsource/roboto/700.css'
 
 import '@mdi/font/css/materialdesignicons.css'
 
-// Styles
-import 'unfonts.css'
-
 // i18n
 import i18n from '@/i18n'
 

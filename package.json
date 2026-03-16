@@ -30,7 +30,6 @@
     "eslint-config-vuetify": "^4.3.4",
     "sass-embedded": "^1.98.0",
     "svg-to-ico": "^1.1.0",
-    "unplugin-fonts": "^1.4.0",
     "unplugin-vue-components": "^31.0.0",
     "unplugin-vue-router": "^0.19.2",
     "vite": "^7.3.1",
