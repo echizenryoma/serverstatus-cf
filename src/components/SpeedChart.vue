@@ -36,9 +36,12 @@ export default {
       default: 'speed-chart'
     }
   },
+  setup() {
+    const theme = useTheme();
+    return { theme }
+  },
   computed: {
     chartOptions() {
-      const theme = useTheme();
       return {
         chart: {
           id: this.chartId,
@@ -54,12 +57,12 @@ export default {
           }
         },
         colors: [
-          theme.current.value.colors.primary,
-          theme.current.value.colors.secondary,
-          theme.current.value.colors.success,
+          this.theme.current.value.colors.primary,
+          this.theme.current.value.colors.secondary,
+          this.theme.current.value.colors.success,
         ],
         theme: {
-          mode: theme.global.current.value.dark ? 'dark' : 'light'
+          mode: this.theme.global.name.value === 'dark' ? 'dark' : 'light'
         },
         stroke: {
           width: 2

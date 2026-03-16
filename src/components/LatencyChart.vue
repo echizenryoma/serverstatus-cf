@@ -32,9 +32,12 @@ export default {
       default: 'latency-chart'
     }
   },
+  setup() {
+    const theme = useTheme();
+    return { theme }
+  },
   computed: {
     chartOptions() {
-      const theme = useTheme();
       return {
         chart: {
           id: this.chartId,
@@ -50,12 +53,12 @@ export default {
           }
         },
         colors: [
-          theme.current.value.colors.success,
-          theme.current.value.colors.primary,
-          theme.current.value.colors.error,
+          this.theme.current.value.colors.success,
+          this.theme.current.value.colors.primary,
+          this.theme.current.value.colors.error,
         ],
         theme: {
-          mode: theme.global.current.value.dark ? 'dark' : 'light'
+          mode: this.theme.global.name.value === 'dark' ? 'dark' : 'light'
         },
         stroke: {
           width: 2
