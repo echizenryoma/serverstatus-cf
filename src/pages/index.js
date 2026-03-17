@@ -153,6 +153,17 @@ export default {
     formatSeconds,
     formatLatency,
     formatLoss,
+    applySavedPreferences() {
+      const savedLang = this.getCookie('lang');
+      if (savedLang && this.languageMap.has(savedLang)) {
+        this.$i18n.locale = savedLang;
+      }
+
+      const savedSpeedUnit = this.getCookie('speedUnit');
+      if (['bit', 'byte'].includes(savedSpeedUnit)) {
+        this.speedUnit = savedSpeedUnit;
+      }
+    },
     toggleExpand(_, { item }) {
       const index = this.expandedRows.indexOf(item.host);
       if (index > -1) {
@@ -655,12 +666,38 @@ export default {
     stopRefresh() {
       this.isRefreshEnabled = !this.isRefreshEnabled;
       if (this.isRefreshEnabled) {
-        this.refreshTimer = setInterval(() => {
-          this.fetchData();
-        }, this.refreshIntervalMs);
+        this.startRefreshTimer();
       } else {
-        clearInterval(this.refreshTimer);
+        this.stopRefreshTimer();
       }
+    },
+    startRefreshTimer() {
+      this.stopRefreshTimer();
+      this.refreshTimer = window.setInterval(() => {
+        this.fetchData();
+      }, this.refreshIntervalMs);
+    },
+    stopRefreshTimer() {
+      if (this.refreshTimer !== null) {
+        clearInterval(this.refreshTimer);
+        this.refreshTimer = null;
+      }
+    },
+    updateTheme(mode) {
+      this.darkMode = mode;
+      this.$vuetify.theme.global.name = mode ? 'dark' : 'light';
+    },
+    bindThemePreferenceListener() {
+      if (!window.matchMedia) {
+        return;
+      }
+
+      this.themeMediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+      this.updateTheme(this.themeMediaQuery.matches);
+      this.themeChangeHandler = ({ matches }) => {
+        this.updateTheme(matches);
+      };
+      this.themeMediaQuery.addEventListener('change', this.themeChangeHandler);
     },
     getCookie(name) {
       const value = `; ${document.cookie}`;
@@ -674,34 +711,17 @@ export default {
     },
   },
   mounted() {
-    const savedLang = this.getCookie('lang');
-    if (savedLang && (this.languageMap.has(savedLang))) {
-      this.$i18n.locale = savedLang;
-    }
-
-    const savedSpeedUnit = this.getCookie('speedUnit');
-    if (['bit', 'byte'].includes(savedSpeedUnit)) {
-      this.speedUnit = savedSpeedUnit;
-    }
+    this.applySavedPreferences();
 
     this.fetchData();
     if (this.isRefreshEnabled) {
-      this.refreshTimer = setInterval(() => {
-        this.fetchData();
-      }, this.refreshIntervalMs);
+      this.startRefreshTimer();
     }
 
-    if (window.matchMedia) {
-      this.themeMediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
-      this.themeChangeHandler = (e) => {
-        this.darkMode = e.matches;
-        this.$vuetify.theme.global.name = this.darkMode ? 'dark' : 'light';
-      };
-      this.themeMediaQuery.addEventListener('change', this.themeChangeHandler);
-    }
+    this.bindThemePreferenceListener();
   },
   beforeUnmount() {
-    clearInterval(this.refreshTimer);
+    this.stopRefreshTimer();
     if (this.themeMediaQuery && this.themeChangeHandler) {
       this.themeMediaQuery.removeEventListener('change', this.themeChangeHandler);
     }
