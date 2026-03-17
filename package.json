@@ -13,7 +13,7 @@
     "@fontsource/roboto": "^5.2.10",
     "apexcharts": "^5.3.6",
     "axios": "^1.13.6",
-    "enhanced-ms": "^4.2.0",
+    "enhanced-ms": "^4.3.0",
     "filesize": "^11.0.13",
     "flag-icons": "^7.5.0",
     "luxon": "^3.7.2",
