@@ -506,39 +506,64 @@ export default {
         .map((suffix) => `${metrics[suffix]}${unit}`)
         .join(' / ');
     },
+    getTrafficRangeBoundaries(now = new Date()) {
+      const year = now.getUTCFullYear();
+      const month = now.getUTCMonth();
+      const day = now.getUTCDate();
+
+      return {
+        dayStart: new Date(Date.UTC(year, month, day, 0, 5, 0, 0)),
+        nextDayStart: new Date(Date.UTC(year, month, day + 1)),
+        monthStart: new Date(Date.UTC(year, month, 1, 0, 5, 0, 0)),
+        nextMonthStart: new Date(Date.UTC(year, month + 1, 1)),
+      };
+    },
+    getTrafficViewData(currentTraffic, previousTraffic, uptimeMs, rangeStart, rangeEnd, shouldEstimate) {
+      const traffic = this.calculateTrafficRange(currentTraffic, previousTraffic, uptimeMs, rangeStart);
+      return shouldEstimate
+        ? this.estimateTrafficRange(traffic, rangeStart, rangeEnd)
+        : traffic;
+    },
+    formatQuotaUsageDetail(totalTraffic, quota) {
+      if (quota > 0) {
+        const usage = Math.round(totalTraffic / quota * 100);
+        return `${formatSize(totalTraffic)} (${usage}%) / ${formatSize(quota)}`;
+      }
+
+      return `${formatSize(totalTraffic)} / ${formatSize(quota)}`;
+    },
     updateTrafficView(currentTraffic, last1dTraffic, last1mTraffic, view) {
       if (!currentTraffic) return;
 
-      const now = new Date();
-      const startInDay = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(), 0, 5, 0, 0));
-      const startInMonth = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), 1, 0, 5, 0, 0));
-
       const uptimeMs = view.uptime * 1000;
-      let dailyTraffic = this.calculateTrafficRange(currentTraffic, last1dTraffic, uptimeMs, startInDay);
-      if (this.showEstimatedDailyTraffic) {
-        const startInNextDay = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate() + 1));
-        dailyTraffic = this.estimateTrafficRange(dailyTraffic, startInDay, startInNextDay);
-      }
+      const { dayStart, nextDayStart, monthStart, nextMonthStart } = this.getTrafficRangeBoundaries();
+      const dailyTraffic = this.getTrafficViewData(
+        currentTraffic,
+        last1dTraffic,
+        uptimeMs,
+        dayStart,
+        nextDayStart,
+        this.showEstimatedDailyTraffic,
+      );
       view.traffic_1d_recv = dailyTraffic.recv;
       view.traffic_1d_sent = dailyTraffic.sent;
 
-      let monthlyTraffic = this.calculateTrafficRange(currentTraffic, last1mTraffic, uptimeMs, startInMonth);
-      if (this.showEstimatedMonthlyTraffic) {
-        const startInNextMonth = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth() + 1, 1));
-        monthlyTraffic = this.estimateTrafficRange(monthlyTraffic, startInMonth, startInNextMonth);
-      }
+      const monthlyTraffic = this.getTrafficViewData(
+        currentTraffic,
+        last1mTraffic,
+        uptimeMs,
+        monthStart,
+        nextMonthStart,
+        this.showEstimatedMonthlyTraffic,
+      );
 
       view.traffic_1m_recv = monthlyTraffic.recv;
       view.traffic_1m_sent = monthlyTraffic.sent;
 
       const totalTraffic = currentTraffic.bytes_recv + currentTraffic.bytes_sent;
       view.traffic_detail = `${formatSize(currentTraffic.bytes_recv)} / ${formatSize(currentTraffic.bytes_sent)} / ${formatSize(totalTraffic)}`;
-      const bytes_total_1m = monthlyTraffic.recv + monthlyTraffic.sent;
-      if (view.traffic_quota > 0) {
-        view.monthly_traffic_detail = `${formatSize(bytes_total_1m)} (${Math.round(bytes_total_1m / view.traffic_quota * 100)}%) / ${formatSize(view.traffic_quota)}`;
-      } else {
-        view.monthly_traffic_detail = `${formatSize(bytes_total_1m)} / ${formatSize(view.traffic_quota)}`;
-      }
+      const monthlyTotalTraffic = monthlyTraffic.recv + monthlyTraffic.sent;
+      view.monthly_traffic_detail = this.formatQuotaUsageDetail(monthlyTotalTraffic, view.traffic_quota);
     },
     updatePingView(ping, view) {
       if (!ping) return;
