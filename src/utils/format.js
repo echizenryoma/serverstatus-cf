@@ -1,6 +1,8 @@
 import { filesize } from "filesize";
 import { ms, parseDuration } from 'enhanced-ms';
 
+const ONE_DAY_IN_MS = parseDuration('1d');
+
 export function formatSize(size, options = {}) {
   if (isNaN(size)) {
     return '-';
@@ -41,7 +43,7 @@ export function formatSeconds(seconds, options = {}) {
   }
   const d = seconds * 1000;
   var formatDuration = "-";
-  if (d < parseDuration('1d')) {
+  if (d < ONE_DAY_IN_MS) {
     options.includedUnits = options.includedUnits || ['hour', 'minute', 'second'];
     options.unitSeparator = options.unitSeparator || ':';
     options.hideUnitNames = options.hideUnitNames || true;

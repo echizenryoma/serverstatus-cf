@@ -1,6 +1,15 @@
 import axios from "axios";
 import Papa from "papaparse";
 import { formatSize, formatSpeed, formatSeconds, formatLatency, formatLoss } from '@/utils/format';
+import {
+  getCPUColor,
+  getDiskColor,
+  getLatencyColor,
+  getLossColor,
+  getMemoryColor,
+  getNetProtoColor,
+  getNetProtoIcon,
+} from '@/utils/ui';
 import { parseDuration } from 'enhanced-ms';
 import 'flag-icons/css/flag-icons.min.css';
 import { computed, watchEffect } from 'vue';
@@ -153,6 +162,13 @@ export default {
     formatSeconds,
     formatLatency,
     formatLoss,
+    getNetProtoColor,
+    getNetProtoIcon,
+    getLossColor,
+    getLatencyColor,
+    getCPUColor,
+    getMemoryColor,
+    getDiskColor,
     applySavedPreferences() {
       const savedLang = this.getCookie('lang');
       if (savedLang && this.languageMap.has(savedLang)) {
@@ -204,80 +220,6 @@ export default {
       if (now - startInMonth >= 60 * 1000) {
         this.showEstimatedMonthlyTraffic = !this.showEstimatedMonthlyTraffic;
         this.updateViewData();
-      }
-    },
-    getNetProtoColor(value) {
-      switch (value) {
-        case 'yes':
-          return 'success';
-        case 'nat':
-          return 'warning';
-        case 'no':
-          return 'error';
-        default:
-          return 'info';
-      }
-    },
-    getNetProtoIcon(value) {
-      switch (value) {
-        case 'yes':
-          return 'mdi-checkbox-marked-outline';
-        case 'nat':
-          return 'mdi-alert-box-outline';
-        case 'no':
-          return 'mdi-close-box-outline';
-        default:
-          return 'mdi-help-box-outline';
-      }
-    },
-    getLossColor(value) {
-      switch (true) {
-        case value < 20:
-          return 'success';
-        case value > 50:
-          return 'error';
-        default:
-          return 'warning';
-      }
-    },
-    getLatencyColor(value) {
-      switch (true) {
-        case value <= 125:
-          return 'success';
-        case value <= 250:
-          return 'warning';
-        default:
-          return 'error';
-      }
-    },
-    getCPUColor(value) {
-      switch (true) {
-        case value > 80:
-          return 'error';
-        case value > 50:
-          return 'warning';
-        default:
-          return 'indigo';
-      }
-    },
-    getMemoryColor(value) {
-      switch (true) {
-        case value > 80:
-          return 'error';
-        case value > 60:
-          return 'warning';
-        default:
-          return 'primary';
-      }
-    },
-    getDiskColor(value) {
-      switch (true) {
-        case value > 90:
-          return 'error';
-        case value > 75:
-          return 'warning';
-        default:
-          return 'secondary';
       }
     },
     getFlags(location) {
