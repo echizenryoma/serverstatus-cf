@@ -31,6 +31,7 @@ export default {
       db: [],
       viewData: [],
       refreshTimer: null,
+      themeChangeHandler: null,
       refreshIntervalMs: 1000,
       apiConfigs: [
         { key: 'cpu', url: '/api/cpu', intervalMs: 1000, lastFetch: 0 },
@@ -692,17 +693,17 @@ export default {
 
     if (window.matchMedia) {
       this.themeMediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
-      const themeChangeHandler = (e) => {
+      this.themeChangeHandler = (e) => {
         this.darkMode = e.matches;
         this.$vuetify.theme.global.name = this.darkMode ? 'dark' : 'light';
       };
-      this.themeMediaQuery.addEventListener('change', themeChangeHandler);
+      this.themeMediaQuery.addEventListener('change', this.themeChangeHandler);
     }
   },
   beforeUnmount() {
     clearInterval(this.refreshTimer);
-    if (this.themeMediaQuery) {
-      this.themeMediaQuery.removeEventListener('change', themeChangeHandler);
+    if (this.themeMediaQuery && this.themeChangeHandler) {
+      this.themeMediaQuery.removeEventListener('change', this.themeChangeHandler);
     }
   },
 }
