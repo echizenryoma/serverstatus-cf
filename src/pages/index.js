@@ -8,6 +8,8 @@ import { useI18n } from 'vue-i18n';
 import ExpandedRow from '@/components/ExpandedRow.vue';
 import { languageOptions } from "../i18n";
 
+const PING_METRIC_SUFFIXES = ['cm', 'ct', 'cu'];
+
 export default {
   components: {
     ExpandedRow
@@ -450,6 +452,60 @@ export default {
 
       view.chart.latency = latencyChart;
     },
+    calculateTrafficRange(currentTraffic, previousTraffic, uptimeMs, rangeStart) {
+      const elapsedMs = Date.now() - rangeStart.getTime();
+      const hasSnapshot = previousTraffic && uptimeMs > elapsedMs;
+
+      if (hasSnapshot) {
+        return {
+          recv: Math.max(0, currentTraffic.bytes_recv - (previousTraffic.bytes_recv || 0)),
+          sent: Math.max(0, currentTraffic.bytes_sent - (previousTraffic.bytes_sent || 0)),
+        };
+      }
+
+      if (uptimeMs <= 0) {
+        return { recv: 0, sent: 0 };
+      }
+
+      const rate = elapsedMs / uptimeMs;
+      return {
+        recv: Math.max(0, currentTraffic.bytes_recv * rate),
+        sent: Math.max(0, currentTraffic.bytes_sent * rate),
+      };
+    },
+    estimateTrafficRange(traffic, rangeStart, rangeEnd) {
+      const elapsedMs = Date.now() - rangeStart.getTime();
+      if (elapsedMs < 60 * 1000) {
+        return traffic;
+      }
+
+      const rate = (rangeEnd.getTime() - rangeStart.getTime()) / elapsedMs;
+      return {
+        recv: traffic.recv * rate,
+        sent: traffic.sent * rate,
+      };
+    },
+    normalizePingMetric(value, max) {
+      return Math.min(max, Math.round(value || 0));
+    },
+    getPingMetrics(ping, version) {
+      return PING_METRIC_SUFFIXES.reduce((metrics, suffix) => {
+        metrics.ping[suffix] = this.normalizePingMetric(ping[`ping_${suffix}${version}`], 500);
+        metrics.loss[suffix] = this.normalizePingMetric(ping[`loss_${suffix}${version}`], 100);
+        return metrics;
+      }, { ping: {}, loss: {} });
+    },
+    applyPingMetricsToView(view, metrics) {
+      const metricType = this.showPingLatency ? 'ping' : 'loss';
+      view.ping_cm = metrics[metricType].cm;
+      view.ping_ct = metrics[metricType].ct;
+      view.ping_cu = metrics[metricType].cu;
+    },
+    formatPingDetail(metrics, unit = '') {
+      return PING_METRIC_SUFFIXES
+        .map((suffix) => `${metrics[suffix]}${unit}`)
+        .join(' / ');
+    },
     updateTrafficView(currentTraffic, last1dTraffic, last1mTraffic, view) {
       if (!currentTraffic) return;
 
@@ -457,52 +513,27 @@ export default {
       const startInDay = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(), 0, 5, 0, 0));
       const startInMonth = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), 1, 0, 5, 0, 0));
 
-      let bytes_recv_1d = 0;
-      let bytes_sent_1d = 0;
-      if (last1dTraffic && view.uptime * 1000 > (now - startInDay)) {
-        bytes_recv_1d = Math.max(0, currentTraffic.bytes_recv - (last1dTraffic.bytes_recv || 0));
-        bytes_sent_1d = Math.max(0, currentTraffic.bytes_sent - (last1dTraffic.bytes_sent || 0));
-      } else {
-        const rate = (now - startInDay) / (view.uptime * 1000);
-        bytes_recv_1d = Math.max(0, currentTraffic.bytes_recv * rate);
-        bytes_sent_1d = Math.max(0, currentTraffic.bytes_sent * rate);
-      }
+      const uptimeMs = view.uptime * 1000;
+      let dailyTraffic = this.calculateTrafficRange(currentTraffic, last1dTraffic, uptimeMs, startInDay);
       if (this.showEstimatedDailyTraffic) {
         const startInNextDay = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate() + 1));
-        if (now - startInDay >= 60 * 1000) {
-          const rate = (startInNextDay - startInDay) / (now - startInDay);
-          bytes_recv_1d = bytes_recv_1d * rate;
-          bytes_sent_1d = bytes_sent_1d * rate;
-        }
+        dailyTraffic = this.estimateTrafficRange(dailyTraffic, startInDay, startInNextDay);
       }
-      view.traffic_1d_recv = bytes_recv_1d;
-      view.traffic_1d_sent = bytes_sent_1d;
+      view.traffic_1d_recv = dailyTraffic.recv;
+      view.traffic_1d_sent = dailyTraffic.sent;
 
-      let bytes_recv_1m = 0;
-      let bytes_sent_1m = 0;
-      if (last1mTraffic && view.uptime * 1000 > (now - startInMonth)) {
-        bytes_recv_1m = Math.max(0, currentTraffic.bytes_recv - (last1mTraffic.bytes_recv || 0));
-        bytes_sent_1m = Math.max(0, currentTraffic.bytes_sent - (last1mTraffic.bytes_sent || 0));
-      } else {
-        const rate = (now - startInMonth) / (view.uptime * 1000);
-        bytes_recv_1m = Math.max(0, currentTraffic.bytes_recv * rate);
-        bytes_sent_1m = Math.max(0, currentTraffic.bytes_sent * rate);
-      }
+      let monthlyTraffic = this.calculateTrafficRange(currentTraffic, last1mTraffic, uptimeMs, startInMonth);
       if (this.showEstimatedMonthlyTraffic) {
         const startInNextMonth = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth() + 1, 1));
-        if (now - startInMonth >= 60 * 1000) {
-          const rate = (startInNextMonth - startInMonth) / (now - startInMonth);
-          bytes_recv_1m = bytes_recv_1m * rate;
-          bytes_sent_1m = bytes_sent_1m * rate;
-        }
+        monthlyTraffic = this.estimateTrafficRange(monthlyTraffic, startInMonth, startInNextMonth);
       }
 
-      view.traffic_1m_recv = bytes_recv_1m;
-      view.traffic_1m_sent = bytes_sent_1m;
+      view.traffic_1m_recv = monthlyTraffic.recv;
+      view.traffic_1m_sent = monthlyTraffic.sent;
 
       const totalTraffic = currentTraffic.bytes_recv + currentTraffic.bytes_sent;
       view.traffic_detail = `${formatSize(currentTraffic.bytes_recv)} / ${formatSize(currentTraffic.bytes_sent)} / ${formatSize(totalTraffic)}`;
-      const bytes_total_1m = bytes_recv_1m + bytes_sent_1m;
+      const bytes_total_1m = monthlyTraffic.recv + monthlyTraffic.sent;
       if (view.traffic_quota > 0) {
         view.monthly_traffic_detail = `${formatSize(bytes_total_1m)} (${Math.round(bytes_total_1m / view.traffic_quota * 100)}%) / ${formatSize(view.traffic_quota)}`;
       } else {
@@ -511,52 +542,30 @@ export default {
     },
     updatePingView(ping, view) {
       if (!ping) return;
-      ping.ping_cmv6 = Math.min(500, Math.round(ping.ping_cmv6));
-      ping.ping_ctv6 = Math.min(500, Math.round(ping.ping_ctv6));
-      ping.ping_cuv6 = Math.min(500, Math.round(ping.ping_cuv6));
-      ping.ping_cmv4 = Math.min(500, Math.round(ping.ping_cmv4));
-      ping.ping_ctv4 = Math.min(500, Math.round(ping.ping_ctv4));
-      ping.ping_cuv4 = Math.min(500, Math.round(ping.ping_cuv4));
-
-      ping.loss_cmv6 = Math.min(100, Math.round(ping.loss_cmv6));
-      ping.loss_ctv6 = Math.min(100, Math.round(ping.loss_ctv6));
-      ping.loss_cuv6 = Math.min(100, Math.round(ping.loss_cuv6));
-      ping.loss_cmv4 = Math.min(100, Math.round(ping.loss_cmv4));
-      ping.loss_ctv4 = Math.min(100, Math.round(ping.loss_ctv4));
-      ping.loss_cuv4 = Math.min(100, Math.round(ping.loss_cuv4));
+      const ipv6Metrics = this.getPingMetrics(ping, 'v6');
+      const ipv4Metrics = this.getPingMetrics(ping, 'v4');
 
       if (view.ipv6 === 'yes') {
-        if (this.showPingLatency) {
-          view.ping_cm = ping.ping_cmv6;
-          view.ping_ct = ping.ping_ctv6;
-          view.ping_cu = ping.ping_cuv6;
-        } else {
-          view.ping_cm = ping.loss_cmv6;
-          view.ping_ct = ping.loss_ctv6;
-          view.ping_cu = ping.loss_cuv6;
-        }
-
-        view.lossv6_detail = `${ping.loss_cmv6}% / ${ping.loss_ctv6}% / ${ping.loss_cuv6}%`;
-        view.pingv6_detail = `${ping.ping_cmv6} ms / ${ping.ping_ctv6} ms / ${ping.ping_cuv6} ms`;
+        this.applyPingMetricsToView(view, ipv6Metrics);
+        view.lossv6_detail = this.formatPingDetail(ipv6Metrics.loss, '%');
+        view.pingv6_detail = this.formatPingDetail(ipv6Metrics.ping, ' ms');
         if (view.ipv4 !== 'yes') {
-          this.appendLatencyChart(view, ping, true);
+          this.appendLatencyChart(view, {
+            ping_cmv6: ipv6Metrics.ping.cm,
+            ping_ctv6: ipv6Metrics.ping.ct,
+            ping_cuv6: ipv6Metrics.ping.cu,
+          }, true);
         }
       }
       if (view.ipv4 === 'yes') {
-        if (this.showPingLatency) {
-          view.ping_cm = ping.ping_cmv4;
-          view.ping_ct = ping.ping_ctv4;
-          view.ping_cu = ping.ping_cuv4;
-        } else {
-          view.ping_cm = ping.loss_cmv4;
-          view.ping_ct = ping.loss_ctv4;
-          view.ping_cu = ping.loss_cuv4;
-        }
-
-        view.lossv4_detail = `${ping.loss_cmv4}% / ${ping.loss_ctv4}% / ${ping.loss_cuv4}%`;
-        view.pingv4_detail = `${ping.ping_cmv4} ms / ${ping.ping_ctv4} ms / ${ping.ping_cuv4} ms`;
-
-        this.appendLatencyChart(view, ping, false);
+        this.applyPingMetricsToView(view, ipv4Metrics);
+        view.lossv4_detail = this.formatPingDetail(ipv4Metrics.loss, '%');
+        view.pingv4_detail = this.formatPingDetail(ipv4Metrics.ping, ' ms');
+        this.appendLatencyChart(view, {
+          ping_cmv4: ipv4Metrics.ping.cm,
+          ping_ctv4: ipv4Metrics.ping.ct,
+          ping_cuv4: ipv4Metrics.ping.cu,
+        }, false);
       }
     },
     updateViewData() {
