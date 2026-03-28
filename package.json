@@ -12,13 +12,13 @@
   "dependencies": {
     "@fontsource/roboto": "^5.2.10",
     "apexcharts": "^5.3.6",
-    "axios": "^1.13.6",
+    "axios": "^1.14.0",
     "enhanced-ms": "^4.3.0",
     "filesize": "^11.0.14",
     "flag-icons": "^7.5.0",
     "luxon": "^3.7.2",
     "papaparse": "^5.5.3",
-    "vue": "^3.5.30",
+    "vue": "^3.5.31",
     "vue-i18n": "^11.3.0",
     "vue3-apexcharts": "^1.10.0",
     "vuetify": "^3.12.3"
