@@ -14,7 +14,7 @@
     "apexcharts": "^5.3.6",
     "axios": "^1.14.0",
     "enhanced-ms": "^4.3.0",
-    "filesize": "^11.0.14",
+    "filesize": "^11.0.15",
     "flag-icons": "^7.5.0",
     "luxon": "^3.7.2",
     "papaparse": "^5.5.3",
