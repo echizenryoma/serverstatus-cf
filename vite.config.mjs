@@ -13,6 +13,11 @@ import pkg from './package.json'
 export default defineConfig({
   build: {
     chunkSizeWarningLimit: 2000, // in kB
+    rolldownOptions: {
+      checks: {
+        pluginTimings: false,
+      },
+    },
   },
   plugins: [
     Vue({
