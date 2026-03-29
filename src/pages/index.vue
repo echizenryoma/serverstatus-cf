@@ -6,7 +6,7 @@
       </v-col>
 
       <v-col cols="4" class="d-flex align-center align-self-center">
-        <v-text-field v-model="search" prepend-inner-icon="mdi-magnify" class="mr-2" hide-details>
+        <v-text-field v-model="search" prepend-inner-icon="mdi-magnify" class="mr-2" hide-details clearable>
           <template v-slot:append-inner>
             <div class="d-none d-md-flex align-center">
               <v-chip v-for="keyword in searchKeywords" :key="keyword" size="x-small" label class="mr-1 cursor-pointer"
