@@ -5,7 +5,7 @@
         <v-card-title class="text-h4 text-left mr-2">{{ $t('app.title') }}</v-card-title>
       </v-col>
 
-      <v-col cols="4" class="d-flex align-center align-self-center">
+      <v-col cols="4" class="d-flex align-center align-self-center" style="min-width: 12em;">
         <v-text-field v-model="search" prepend-inner-icon="mdi-magnify" class="mr-2" hide-details clearable>
           <template v-slot:append-inner>
             <div class="d-none d-md-flex align-center">
@@ -39,8 +39,8 @@
     </v-row>
 
     <!-- Overview Stats Bar -->
-    <v-row no-gutters class="mb-4" style="gap: 16px;">
-      <v-col>
+    <v-row no-gutters class="mb-4 ga-4 flex-wrap">
+      <v-col style="min-width: 8em;">
         <v-card class="frosted-glass pa-3 fill-height" flat>
           <div class="d-flex align-center mb-1">
             <v-icon size="18" color="primary" class="mr-2">mdi-clock-outline</v-icon>
@@ -50,7 +50,7 @@
           <div class="text-h8 font-weight-bold">{{ currentTime }}</div>
         </v-card>
       </v-col>
-      <v-col>
+      <v-col style="min-width: 8em;">
         <v-card class="frosted-glass pa-3 fill-height" flat>
           <div class="d-flex align-center mb-1">
             <v-icon size="18" color="success" class="mr-2">mdi-server</v-icon>
@@ -63,7 +63,7 @@
           <v-progress-linear :model-value="onlinePercent" color="success" rounded height="6"></v-progress-linear>
         </v-card>
       </v-col>
-      <v-col>
+      <v-col style="min-width: 8em;">
         <v-card class="frosted-glass pa-3 fill-height" flat>
           <div class="d-flex align-center mb-1">
             <v-icon size="18" color="info" class="mr-2">mdi-earth</v-icon>
@@ -72,7 +72,7 @@
           <div class="text-h8 font-weight-bold">{{ uniqueRegions }}</div>
         </v-card>
       </v-col>
-      <v-col>
+      <v-col style="min-width: 8em;">
         <v-card class="frosted-glass pa-3 fill-height" flat>
           <div class="d-flex align-center mb-1">
             <v-icon size="18" color="warning" class="mr-2">mdi-swap-vertical</v-icon>
@@ -88,7 +88,7 @@
           </div>
         </v-card>
       </v-col>
-      <v-col>
+      <v-col style="min-width: 12em;">
         <v-card class="frosted-glass pa-3 fill-height" flat>
           <div class="d-flex align-center mb-1">
             <v-icon size="18" color="error" class="mr-2">mdi-speedometer</v-icon>

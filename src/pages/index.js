@@ -229,6 +229,7 @@ export default {
       this.$vuetify.locale.current = lang
       this.setCookie('lang', lang);
       this.updateViewData();
+      this.updateClock();
     },
     toggleSpeedUnit() {
       this.speedUnit = this.speedUnit === 'bit' ? 'byte' : 'bit';
@@ -686,7 +687,11 @@ export default {
     },
     updateClock() {
       const now = new Date();
-      this.currentDate = now.toLocaleDateString(this.$i18n.locale, { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+      const isSmallScreen = this.$vuetify.display.smAndDown;
+      this.currentDate = now.toLocaleDateString(this.$i18n.locale, isSmallScreen
+        ? { year: 'numeric', month: 'short', day: 'numeric' }
+        : { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }
+      );
       this.currentTime = now.toLocaleTimeString(this.$i18n.locale);
     },
   },
