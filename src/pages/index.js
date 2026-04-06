@@ -69,35 +69,41 @@ export default {
     title() {
       return this.$t('app.title');
     },
-    onlineCount() {
-      return this.viewData.filter(item => item.uptime > 0).length;
-    },
-    totalCount() {
-      return this.viewData.length;
-    },
-    onlinePercent() {
-      if (this.totalCount === 0) return 0;
-      return Math.round(this.onlineCount / this.totalCount * 100);
-    },
-    uniqueRegions() {
+    overviewStats() {
+      const totalCount = this.viewData.length;
+      const onlineCount = this.viewData.filter(item => item.uptime > 0).length;
+      const onlinePercent = totalCount === 0 ? 0 : Math.round(onlineCount / totalCount * 100);
+      
       const regions = new Set(this.viewData.map(item => item.location).filter(loc => loc && loc !== 'un'));
-      return regions.size;
+      const uniqueRegions = regions.size;
+
+      const trafficRecv = this.viewData.reduce((sum, item) => sum + (item.traffic_1m_recv || 0), 0);
+      const trafficSent = this.viewData.reduce((sum, item) => sum + (item.traffic_1m_sent || 0), 0);
+      const totalTrafficRecv = formatSize(trafficRecv);
+      const totalTrafficSent = formatSize(trafficSent);
+
+      const speedRecv = this.viewData.reduce((sum, item) => sum + (item.net_recv || 0), 0);
+      const speedSent = this.viewData.reduce((sum, item) => sum + (item.net_sent || 0), 0);
+      const totalSpeedRecv = formatSpeed(speedRecv, this.speedUnit === 'bit');
+      const totalSpeedSent = formatSpeed(speedSent, this.speedUnit === 'bit');
+
+      return {
+        onlineCount,
+        totalCount,
+        onlinePercent,
+        uniqueRegions,
+        totalTrafficRecv,
+        totalTrafficSent,
+        totalSpeedRecv,
+        totalSpeedSent
+      };
     },
-    totalTrafficRecv() {
-      const total = this.viewData.reduce((sum, item) => sum + (item.traffic_1m_recv || 0), 0);
-      return formatSize(total);
-    },
-    totalTrafficSent() {
-      const total = this.viewData.reduce((sum, item) => sum + (item.traffic_1m_sent || 0), 0);
-      return formatSize(total);
-    },
-    totalSpeedRecv() {
-      const total = this.viewData.reduce((sum, item) => sum + (item.net_recv || 0), 0);
-      return formatSpeed(total, this.speedUnit === 'bit');
-    },
-    totalSpeedSent() {
-      const total = this.viewData.reduce((sum, item) => sum + (item.net_sent || 0), 0);
-      return formatSpeed(total, this.speedUnit === 'bit');
+    overview() {
+      return {
+        currentDate: this.currentDate,
+        currentTime: this.currentTime,
+        ...this.overviewStats
+      };
     },
     filteredViewData() {
       if (!this.search) {

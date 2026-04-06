@@ -46,8 +46,8 @@
             <v-icon size="18" color="primary" class="mr-2">mdi-clock-outline</v-icon>
             <span class="text-h7 font-weight-bold">{{ $t('overview.currentTime') }}</span>
           </div>
-          <div class="text-h8">{{ currentDate }}</div>
-          <div class="text-h8">{{ currentTime }}</div>
+          <div class="text-h8">{{ overview.currentDate }}</div>
+          <div class="text-h8">{{ overview.currentTime }}</div>
         </v-card>
       </v-col>
       <v-col style="min-width: 8em;">
@@ -57,10 +57,10 @@
             <span class="text-h7 font-weight-bold">{{ $t('overview.online') }}</span>
           </div>
           <div class="d-flex align-center justify-space-between mb-1">
-            <span class="text-h8">{{ onlineCount }}/{{ totalCount }}</span>
-            <span class="text-h8">{{ onlinePercent }}%</span>
+            <span class="text-h8">{{ overview.onlineCount }}/{{ overview.totalCount }}</span>
+            <span class="text-h8">{{ overview.onlinePercent }}%</span>
           </div>
-          <v-progress-linear :model-value="onlinePercent" color="success" rounded height="6"></v-progress-linear>
+          <v-progress-linear :model-value="overview.onlinePercent" color="success" rounded height="6"></v-progress-linear>
         </v-card>
       </v-col>
       <v-col style="min-width: 8em;">
@@ -69,7 +69,7 @@
             <v-icon size="18" color="info" class="mr-2">mdi-earth</v-icon>
             <span class="text-h7 font-weight-bold">{{ $t('overview.regions') }}</span>
           </div>
-          <div class="text-h8">{{ uniqueRegions }}</div>
+          <div class="text-h8">{{ overview.uniqueRegions }}</div>
         </v-card>
       </v-col>
       <v-col style="min-width: 8em;">
@@ -80,11 +80,11 @@
           </div>
           <div class="text-h8 d-flex align-center">
             <v-icon class="mr-1">mdi-arrow-up</v-icon>
-            <span>{{ totalTrafficSent }}</span>
+            <span>{{ overview.totalTrafficSent }}</span>
           </div>
           <div class="text-h8 d-flex align-center">
             <v-icon class="mr-1">mdi-arrow-down</v-icon>
-            <span>{{ totalTrafficRecv }}</span>
+            <span>{{ overview.totalTrafficRecv }}</span>
           </div>
         </v-card>
       </v-col>
@@ -96,11 +96,11 @@
           </div>
           <div class="text-h8 d-flex align-center">
             <v-icon class="mr-1">mdi-arrow-up</v-icon>
-            <span>{{ totalSpeedSent }}</span>
+            <span>{{ overview.totalSpeedSent }}</span>
           </div>
           <div class="text-h8 d-flex align-center">
             <v-icon class="mr-1">mdi-arrow-down</v-icon>
-            <span>{{ totalSpeedRecv }}</span>
+            <span>{{ overview.totalSpeedRecv }}</span>
           </div>
         </v-card>
       </v-col>
