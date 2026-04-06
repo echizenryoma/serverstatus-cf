@@ -2,7 +2,7 @@
   <v-container fluid style="max-width: 120em;">
     <v-row align="center" justify="space-between" no-gutters class="frosted-glass mb-4 pa-2">
       <v-col cols="auto" class="d-flex align-center">
-        <v-card-title class="text-h4 text-left mr-2">{{ $t('app.title') }}</v-card-title>
+        <v-card-title class="text-h4 text-left mr-2 font-weight-bold">{{ $t('app.title') }}</v-card-title>
       </v-col>
 
       <v-col cols="4" class="d-flex align-center align-self-center" style="min-width: 12em;">
@@ -46,8 +46,8 @@
             <v-icon size="18" color="primary" class="mr-2">mdi-clock-outline</v-icon>
             <span class="text-h7 font-weight-bold">{{ $t('overview.currentTime') }}</span>
           </div>
-          <div class="text-h8 font-weight-bold">{{ currentDate }}</div>
-          <div class="text-h8 font-weight-bold">{{ currentTime }}</div>
+          <div class="text-h8">{{ currentDate }}</div>
+          <div class="text-h8">{{ currentTime }}</div>
         </v-card>
       </v-col>
       <v-col style="min-width: 8em;">
@@ -57,8 +57,8 @@
             <span class="text-h7 font-weight-bold">{{ $t('overview.online') }}</span>
           </div>
           <div class="d-flex align-center justify-space-between mb-1">
-            <span class="text-h8 font-weight-bold">{{ onlineCount }}/{{ totalCount }}</span>
-            <span class="text-h8 font-weight-bold">{{ onlinePercent }}%</span>
+            <span class="text-h8">{{ onlineCount }}/{{ totalCount }}</span>
+            <span class="text-h8">{{ onlinePercent }}%</span>
           </div>
           <v-progress-linear :model-value="onlinePercent" color="success" rounded height="6"></v-progress-linear>
         </v-card>
@@ -69,7 +69,7 @@
             <v-icon size="18" color="info" class="mr-2">mdi-earth</v-icon>
             <span class="text-h7 font-weight-bold">{{ $t('overview.regions') }}</span>
           </div>
-          <div class="text-h8 font-weight-bold">{{ uniqueRegions }}</div>
+          <div class="text-h8">{{ uniqueRegions }}</div>
         </v-card>
       </v-col>
       <v-col style="min-width: 8em;">
