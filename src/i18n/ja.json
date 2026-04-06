@@ -1,0 +1,70 @@
+{
+  "app": {
+    "title": "サーバーステータス",
+    "footer": {
+      "poweredBy": "℗ {influxDb}、{cloudflarePage}、{vuetify} によって提供されています",
+      "copyright": "Copyright © {year} Designed by {author}"
+    }
+  },
+  "server": {
+    "title": {
+      "node": "ノード",
+      "uptime": "稼働時間",
+      "location": "場所",
+      "load": "負荷",
+      "networkStack": "ネットワーク",
+      "ipv4": "IPv4",
+      "ipv6": "IPv6",
+      "speed": "ネットワーク速度",
+      "receive": "受信",
+      "send": "送信",
+      "dailyTraffic": "本日のトラフィック",
+      "estimatedDailyTraffic": "予想1日トラフィック",
+      "monthlyTraffic": "今月のトラフィック",
+      "estimatedMonthlyTraffic": "予想月間トラフィック",
+      "cpu": "CPU",
+      "memory": "メモリ",
+      "disk": "ディスク",
+      "latency": "遅延",
+      "loss": "パケットロス",
+      "cm": "China Mobile",
+      "ct": "China Telecom",
+      "cu": "China Unicom"
+    },
+    "details": {
+      "kernel": "カーネル",
+      "load": "システム負荷 (1/5/15分)",
+      "cpu": "CPU",
+      "cpuUsage": "CPU使用率 (システム/ユーザー/I/O待機)",
+      "memory": "メモリ (使用済/全容量)",
+      "swap": "スワップ (キャッシュ済/全容量)",
+      "disk": "ディスク (使用済/全容量)",
+      "network": "ネットワーク (受信/送信)",
+      "traffic": "トラフィック (受信/送信/合計)",
+      "monthlyTraffic": "今月のトラフィック (使用量/制限)",
+      "estimatedMonthlyTraffic": "予想月間トラフィック (使用量/制限)",
+      "ipv4Loss": "IPv4ロス (CM/CT/CU)",
+      "ipv4Ping": "IPv4遅延 (CM/CT/CU)",
+      "ipv6Loss": "IPv6ロス (CM/CT/CU)",
+      "ipv6Ping": "IPv6遅延 (CM/CT/CU)",
+      "speedChartTitle": "ネットワーク速度",
+      "latencyChartTitle": "ネットワーク遅延"
+    }
+  },
+  "actions": {
+    "refresh": "更新",
+    "pause": "一時停止",
+    "speedUnitByte": "速度単位：バイト (B)",
+    "speedUnitBit": "速度単位：ビット (bit)"
+  },
+  "overview": {
+    "currentTime": "現在時刻",
+    "online": "オンラインノード",
+    "regions": "オンラインリージョン",
+    "traffic": "今月のトラフィック",
+    "speed": "ネットワーク速度"
+  },
+  "units": {
+    "day": "日"
+  }
+}
