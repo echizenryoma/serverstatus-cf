@@ -60,7 +60,8 @@
             <span class="text-h8">{{ overview.onlineCount }}/{{ overview.totalCount }}</span>
             <span class="text-h8">{{ overview.onlinePercent }}%</span>
           </div>
-          <v-progress-linear :model-value="overview.onlinePercent" color="success" rounded height="6"></v-progress-linear>
+          <v-progress-linear :model-value="overview.onlinePercent" color="success" rounded
+            height="6"></v-progress-linear>
         </v-card>
       </v-col>
       <v-col style="min-width: 8em;">
@@ -76,7 +77,8 @@
         <v-card class="frosted-glass pa-3 fill-height" flat>
           <div class="d-flex align-center mb-1">
             <v-icon size="18" color="warning" class="mr-2">mdi-swap-vertical</v-icon>
-            <span class="text-h7 font-weight-bold">{{ $t('overview.traffic') }}</span>
+            <span class="text-h7 font-weight-bold">{{ $t(showEstimatedMonthlyTraffic ? 'overview.estimatedTraffic' :
+              'overview.traffic') }}</span>
           </div>
           <div class="text-h8 d-flex align-center">
             <v-icon class="mr-1">mdi-arrow-up</v-icon>

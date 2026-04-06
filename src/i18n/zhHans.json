@@ -61,7 +61,8 @@
     "currentTime": "当前时间",
     "online": "在线节点",
     "regions": "在线地区",
-    "traffic": "本月流量",
+    "traffic": "本月总流量",
+    "estimatedTraffic": "预计全月总流量",
     "speed": "网络速率"
   },
   "units": {

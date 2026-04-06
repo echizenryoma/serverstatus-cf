@@ -61,7 +61,8 @@
     "currentTime": "當前時間",
     "online": "在線節點",
     "regions": "在線地區",
-    "traffic": "本月流量",
+    "traffic": "本月總流量",
+    "estimatedTraffic": "預計全月總流量",
     "speed": "網絡速率"
   },
   "units": {

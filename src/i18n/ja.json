@@ -61,7 +61,8 @@
     "currentTime": "現在時刻",
     "online": "オンラインノード",
     "regions": "オンラインリージョン",
-    "traffic": "今月のトラフィック",
+    "traffic": "今月の総トラフィック",
+    "estimatedTraffic": "予想月間総トラフィック",
     "speed": "ネットワーク速度"
   },
   "units": {

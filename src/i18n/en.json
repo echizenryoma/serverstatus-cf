@@ -61,7 +61,8 @@
     "currentTime": "Current Time",
     "online": "Online Nodes",
     "regions": "Online Regions",
-    "traffic": "Monthly Traffic",
+    "traffic": "Total Monthly Traffic",
+    "estimatedTraffic": "Estimated Monthly Traffic",
     "speed": "Network Speed"
   },
   "units": {
