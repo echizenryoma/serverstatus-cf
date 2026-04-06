@@ -41,6 +41,7 @@ export default {
       viewData: [],
       refreshTimer: null,
       clockTimer: null,
+      currentDate: '',
       currentTime: '',
       themeChangeHandler: null,
       refreshIntervalMs: 1000,
@@ -685,6 +686,7 @@ export default {
     },
     updateClock() {
       const now = new Date();
+      this.currentDate = now.toLocaleDateString(this.$i18n.locale, { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
       this.currentTime = now.toLocaleTimeString(this.$i18n.locale);
     },
   },

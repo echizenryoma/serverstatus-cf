@@ -46,6 +46,7 @@
             <v-icon size="18" color="primary" class="mr-2">mdi-clock-outline</v-icon>
             <span class="text-h7 font-weight-bold">{{ $t('overview.currentTime') }}</span>
           </div>
+          <div class="text-h8 font-weight-bold">{{ currentDate }}</div>
           <div class="text-h8 font-weight-bold">{{ currentTime }}</div>
         </v-card>
       </v-col>
