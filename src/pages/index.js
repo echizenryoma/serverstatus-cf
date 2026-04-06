@@ -692,7 +692,7 @@ export default {
         ? { year: 'numeric', month: 'short', day: 'numeric' }
         : { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }
       );
-      this.currentTime = now.toLocaleTimeString(this.$i18n.locale);
+      this.currentTime = now.toLocaleTimeString(this.$i18n.locale, isSmallScreen ? {} : { timeZoneName: 'short' });
     },
   },
   mounted() {
