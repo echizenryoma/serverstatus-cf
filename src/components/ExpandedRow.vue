@@ -14,8 +14,8 @@
             <div><strong>{{ $t('server.details.disk') }}:</strong> {{ item.disk_detail }}</div>
             <div><strong>{{ $t('server.details.network') }}:</strong> {{ item.network_detail }}</div>
             <div><strong>{{ $t('server.details.traffic') }}:</strong> {{ item.traffic_detail }}</div>
-            <div><strong>{{ showEstimatedMonthlyTraffic ? $t('server.details.estimatedMonthlyTraffic') :
-              $t('server.details.monthlyTraffic') }}:</strong> {{ item.monthly_traffic_detail }}</div>
+            <div><strong>{{ $t(showEstimatedMonthlyTraffic ? 'server.details.estimatedMonthlyTraffic' :
+                'server.details.monthlyTraffic') }}:</strong> {{ item.monthly_traffic_detail }}</div>
             <div><strong>{{ $t('server.details.ipv4Loss') }}:</strong> {{ item.lossv4_detail }}</div>
             <div><strong>{{ $t('server.details.ipv4Ping') }}:</strong> {{ item.pingv4_detail }}</div>
             <div><strong>{{ $t('server.details.ipv6Loss') }}:</strong> {{ item.lossv6_detail }}</div>
