@@ -15,7 +15,7 @@
       "networkStack": "协议栈",
       "ipv4": "IPv4",
       "ipv6": "IPv6",
-      "speed": "网速",
+      "speed": "网络速率",
       "receive": "接收",
       "send": "发送",
       "dailyTraffic": "今日流量",
@@ -25,7 +25,7 @@
       "cpu": "CPU",
       "memory": "内存",
       "disk": "硬盘",
-      "latency": "延迟",
+      "latency": "网络延迟",
       "loss": "丢包率",
       "cm": "移动",
       "ct": "电信",
@@ -47,15 +47,15 @@
       "ipv4Ping": "IPv4延迟(移动/电信/联通)",
       "ipv6Loss": "IPv6丢包率(移动/电信/联通)",
       "ipv6Ping": "IPv6延迟(移动/电信/联通)",
-      "speedChartTitle": "网速",
-      "latencyChartTitle": "延迟"
+      "speedChartTitle": "网络速率",
+      "latencyChartTitle": "网络延迟"
     }
   },
   "actions": {
     "refresh": "刷新",
     "pause": "暂停",
-    "speedUnitByte": "网速单位：字节(B)",
-    "speedUnitBit": "网速单位：位(bit)"
+    "speedUnitByte": "速率单位：字节(B)",
+    "speedUnitBit": "速率单位：位(bit)"
   },
   "units": {
     "day": "天"

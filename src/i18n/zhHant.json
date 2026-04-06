@@ -15,7 +15,7 @@
       "networkStack": "協定堆疊",
       "ipv4": "IPv4",
       "ipv6": "IPv6",
-      "speed": "網速",
+      "speed": "網絡速率",
       "receive": "接收",
       "send": "發送",
       "dailyTraffic": "今日流量",
@@ -25,7 +25,7 @@
       "cpu": "CPU",
       "memory": "記憶體",
       "disk": "硬碟",
-      "latency": "延遲",
+      "latency": "網絡延遲",
       "loss": "丟包率",
       "cm": "移動",
       "ct": "電信",
@@ -47,15 +47,15 @@
       "ipv4Ping": "IPv4延遲(移動/電信/聯通)",
       "ipv6Loss": "IPv6丟包率(移動/電信/聯通)",
       "ipv6Ping": "IPv6延遲(移動/電信/聯通)",
-      "speedChartTitle": "網速",
-      "latencyChartTitle": "延遲"
+      "speedChartTitle": "網絡速率",
+      "latencyChartTitle": "網絡延遲"
     }
   },
   "actions": {
     "refresh": "刷新",
     "pause": "暫停",
-    "speedUnitByte": "網速單位：位元組(B)",
-    "speedUnitBit": "網速單位：位元(bit)"
+    "speedUnitByte": "速率單位：位元組(B)",
+    "speedUnitBit": "速率單位：位元(bit)"
   },
   "units": {
     "day": "天"
