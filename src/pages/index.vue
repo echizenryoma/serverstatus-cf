@@ -37,6 +37,74 @@
         </v-btn>
       </v-col>
     </v-row>
+
+    <!-- Overview Stats Bar -->
+    <v-row no-gutters class="mb-4" style="gap: 16px;">
+      <v-col>
+        <v-card class="frosted-glass pa-3 fill-height" flat>
+          <div class="d-flex align-center mb-1">
+            <v-icon size="18" color="primary" class="mr-2">mdi-clock-outline</v-icon>
+            <span class="text-caption font-weight-bold">{{ $t('overview.currentTime') }}</span>
+          </div>
+          <div class="text-h5 font-weight-bold">{{ currentTime }}</div>
+        </v-card>
+      </v-col>
+      <v-col>
+        <v-card class="frosted-glass pa-3 fill-height" flat>
+          <div class="d-flex align-center mb-1">
+            <v-icon size="18" color="success" class="mr-2">mdi-server</v-icon>
+            <span class="text-caption font-weight-bold">{{ $t('overview.online') }}</span>
+          </div>
+          <div class="d-flex align-center justify-space-between mb-1">
+            <span class="text-h5 font-weight-bold">{{ onlineCount }}/{{ totalCount }}</span>
+            <span class="text-h5 font-weight-bold">{{ onlinePercent }}%</span>
+          </div>
+          <v-progress-linear :model-value="onlinePercent" color="success" rounded height="6"></v-progress-linear>
+        </v-card>
+      </v-col>
+      <v-col>
+        <v-card class="frosted-glass pa-3 fill-height" flat>
+          <div class="d-flex align-center mb-1">
+            <v-icon size="18" color="info" class="mr-2">mdi-earth</v-icon>
+            <span class="text-caption font-weight-bold">{{ $t('overview.regions') }}</span>
+          </div>
+          <div class="text-h5 font-weight-bold">{{ uniqueRegions }}</div>
+        </v-card>
+      </v-col>
+      <v-col>
+        <v-card class="frosted-glass pa-3 fill-height" flat>
+          <div class="d-flex align-center mb-1">
+            <v-icon size="18" color="warning" class="mr-2">mdi-swap-vertical</v-icon>
+            <span class="text-caption font-weight-bold">{{ $t('overview.traffic') }}</span>
+          </div>
+          <div class="text-body-1 font-weight-bold d-flex align-center">
+            <v-icon class="mr-1">mdi-arrow-up</v-icon>
+            <span>{{ totalTrafficSent }}</span>
+          </div>
+          <div class="text-body-1 font-weight-bold d-flex align-center">
+            <v-icon class="mr-1">mdi-arrow-down</v-icon>
+            <span>{{ totalTrafficRecv }}</span>
+          </div>
+        </v-card>
+      </v-col>
+      <v-col>
+        <v-card class="frosted-glass pa-3 fill-height" flat>
+          <div class="d-flex align-center mb-1">
+            <v-icon size="18" color="error" class="mr-2">mdi-speedometer</v-icon>
+            <span class="text-caption font-weight-bold">{{ $t('overview.speed') }}</span>
+          </div>
+          <div class="text-body-1 font-weight-bold d-flex align-center">
+            <v-icon class="mr-1">mdi-arrow-up</v-icon>
+            <span>{{ totalSpeedSent }}</span>
+          </div>
+          <div class="text-body-1 font-weight-bold d-flex align-center">
+            <v-icon class="mr-1">mdi-arrow-down</v-icon>
+            <span>{{ totalSpeedRecv }}</span>
+          </div>
+        </v-card>
+      </v-col>
+    </v-row>
+
     <v-data-table :headers="headers" :items="filteredViewData" item-value="host"
       class="elevation-1 frosted-table rounded-xl" :items-per-page-options="[5, 10, 15, 20, -1]" :items-per-page="-1"
       :expanded="expandedRows" @click:row="toggleExpand">
@@ -153,14 +221,20 @@
   overflow: hidden;
 }
 
-.frosted-glass,
+.frosted-glass {
+  background-color: rgba(255, 255, 255, 0.84) !important;
+}
+
+.v-theme--dark .frosted-glass {
+  background-color: rgba(30, 30, 30, 0.84) !important;
+}
+
 .v-data-table,
 .v-data-table thead,
 .v-data-table tbody tr {
   background-color: rgba(255, 255, 255, 0.64) !important;
 }
 
-.v-theme--dark .frosted-glass,
 .v-theme--dark .v-data-table,
 .v-theme--dark .v-data-table thead,
 .v-theme--dark .v-data-table tbody tr {

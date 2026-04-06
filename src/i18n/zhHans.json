@@ -57,6 +57,13 @@
     "speedUnitByte": "速率单位：字节(B)",
     "speedUnitBit": "速率单位：位(bit)"
   },
+  "overview": {
+    "currentTime": "当前时间",
+    "online": "在线节点",
+    "regions": "在线地区",
+    "traffic": "本月流量",
+    "speed": "网络速率"
+  },
   "units": {
     "day": "天"
   }

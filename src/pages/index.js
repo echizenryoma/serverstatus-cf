@@ -40,6 +40,8 @@ export default {
       db: [],
       viewData: [],
       refreshTimer: null,
+      clockTimer: null,
+      currentTime: '',
       themeChangeHandler: null,
       refreshIntervalMs: 1000,
       apiConfigs: [
@@ -65,6 +67,36 @@ export default {
   computed: {
     title() {
       return this.$t('app.title');
+    },
+    onlineCount() {
+      return this.viewData.filter(item => item.uptime > 0).length;
+    },
+    totalCount() {
+      return this.viewData.length;
+    },
+    onlinePercent() {
+      if (this.totalCount === 0) return 0;
+      return Math.round(this.onlineCount / this.totalCount * 100);
+    },
+    uniqueRegions() {
+      const regions = new Set(this.viewData.map(item => item.location).filter(loc => loc && loc !== 'un'));
+      return regions.size;
+    },
+    totalTrafficRecv() {
+      const total = this.viewData.reduce((sum, item) => sum + (item.traffic_1m_recv || 0), 0);
+      return formatSize(total);
+    },
+    totalTrafficSent() {
+      const total = this.viewData.reduce((sum, item) => sum + (item.traffic_1m_sent || 0), 0);
+      return formatSize(total);
+    },
+    totalSpeedRecv() {
+      const total = this.viewData.reduce((sum, item) => sum + (item.net_recv || 0), 0);
+      return formatSpeed(total, this.speedUnit === 'bit');
+    },
+    totalSpeedSent() {
+      const total = this.viewData.reduce((sum, item) => sum + (item.net_sent || 0), 0);
+      return formatSpeed(total, this.speedUnit === 'bit');
     },
     filteredViewData() {
       if (!this.search) {
@@ -651,9 +683,16 @@ export default {
       date.setTime(date.getTime() + parseDuration(days + 'd'));
       document.cookie = `${name}=${value};expires=${date.toUTCString()};path=/`;
     },
+    updateClock() {
+      const now = new Date();
+      this.currentTime = now.toLocaleTimeString(this.$i18n.locale);
+    },
   },
   mounted() {
     this.applySavedPreferences();
+
+    this.updateClock();
+    this.clockTimer = window.setInterval(() => this.updateClock(), 1000);
 
     this.fetchData();
     if (this.isRefreshEnabled) {
@@ -664,6 +703,9 @@ export default {
   },
   beforeUnmount() {
     this.stopRefreshTimer();
+    if (this.clockTimer) {
+      clearInterval(this.clockTimer);
+    }
     if (this.themeMediaQuery && this.themeChangeHandler) {
       this.themeMediaQuery.removeEventListener('change', this.themeChangeHandler);
     }

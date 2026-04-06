@@ -57,6 +57,13 @@
     "speedUnitByte": "速率單位：位元組(B)",
     "speedUnitBit": "速率單位：位元(bit)"
   },
+  "overview": {
+    "currentTime": "當前時間",
+    "online": "在線節點",
+    "regions": "在線地區",
+    "traffic": "本月流量",
+    "speed": "網絡速率"
+  },
   "units": {
     "day": "天"
   }

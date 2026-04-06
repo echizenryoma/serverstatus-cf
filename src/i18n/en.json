@@ -57,6 +57,13 @@
     "speedUnitByte": "Speed units: byte",
     "speedUnitBit": "Speed units: bit"
   },
+  "overview": {
+    "currentTime": "Current Time",
+    "online": "Online Nodes",
+    "regions": "Online Regions",
+    "traffic": "Monthly Traffic",
+    "speed": "Network Speed"
+  },
   "units": {
     "day": "d"
   }
