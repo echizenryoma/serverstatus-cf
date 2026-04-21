@@ -26,9 +26,9 @@ export function getNetProtoIcon(value) {
 
 export function getLossColor(value) {
   switch (true) {
-    case value < 20:
+    case value < 10:
       return 'success';
-    case value > 50:
+    case value >= 25:
       return 'error';
     default:
       return 'warning';
