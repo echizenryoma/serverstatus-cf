@@ -42,7 +42,8 @@ import LatencyChart from './LatencyChart.vue'
 export default {
   name: 'ExpandedRow',
   components: {
-    SpeedChart
+    SpeedChart,
+    LatencyChart
   },
   props: {
     showEstimatedMonthlyTraffic: {

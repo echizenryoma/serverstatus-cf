@@ -234,8 +234,25 @@ export default {
     toggleLanguageChange(lang) {
       this.$vuetify.locale.current = lang
       this.setCookie('lang', lang);
+      this.updateChartSeriesNames();
       this.updateViewData();
       this.updateClock();
+    },
+    updateChartSeriesNames() {
+      const speedNames = [this.$t('server.title.receive'), this.$t('server.title.send')];
+      const latencyNames = [this.$t('server.title.cm'), this.$t('server.title.ct'), this.$t('server.title.cu')];
+      this.viewData.forEach(view => {
+        if (view.chart?.speed?.length) {
+          view.chart.speed.forEach((s, i) => {
+            if (speedNames[i] !== undefined) s.name = speedNames[i];
+          });
+        }
+        if (view.chart?.latency?.length) {
+          view.chart.latency.forEach((s, i) => {
+            if (latencyNames[i] !== undefined) s.name = latencyNames[i];
+          });
+        }
+      });
     },
     toggleSpeedUnit() {
       this.speedUnit = this.speedUnit === 'bit' ? 'byte' : 'bit';
