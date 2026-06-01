@@ -339,6 +339,10 @@ export default {
 
       const newView = view || this.initializeView(item.host);
 
+      if (view && item.cpu?.uptime && item.cpu.uptime < view.uptime) {
+        return view;
+      }
+
       this.updateInfoView(item.info, newView);
       this.updateCpuView(item.cpu, newView);
       this.updateMemoryView(item.mem, newView);
@@ -346,10 +350,6 @@ export default {
       this.updateNetworkView(item.net, newView);
       this.updateTrafficView(item.traffic, item.traffic_1d, item.traffic_1m, newView);
       this.updatePingView(item.ping, newView);
-
-      if (view && newView.uptime < view.uptime) {
-        return view;
-      }
 
       return newView;
     },
