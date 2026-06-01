@@ -73,7 +73,7 @@ export default {
       const totalCount = this.viewData.length;
       const onlineCount = this.viewData.filter(item => item.uptime > 0).length;
       const onlinePercent = totalCount === 0 ? 0 : Math.round(onlineCount / totalCount * 100);
-      
+
       const regions = new Set(this.viewData.map(item => item.location).filter(loc => loc && loc !== 'un'));
       const uniqueRegions = regions.size;
 
@@ -346,6 +346,10 @@ export default {
       this.updateNetworkView(item.net, newView);
       this.updateTrafficView(item.traffic, item.traffic_1d, item.traffic_1m, newView);
       this.updatePingView(item.ping, newView);
+
+      if (view && newView.uptime < view.uptime) {
+        return view;
+      }
 
       return newView;
     },
