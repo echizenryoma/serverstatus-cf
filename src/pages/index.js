@@ -10,7 +10,7 @@ import {
   getNetProtoColor,
   getNetProtoIcon,
 } from '@/utils/ui';
-import { parseDuration } from 'enhanced-ms';
+import { ms } from 'enhanced-ms';
 import 'flag-icons/css/flag-icons.min.css';
 import { computed, watchEffect } from 'vue';
 import { useI18n } from 'vue-i18n';
@@ -709,7 +709,7 @@ export default {
     },
     setCookie(name, value, days = 30) {
       const date = new Date();
-      date.setTime(date.getTime() + parseDuration(days + 'd'));
+      date.setTime(date.getTime() + ms(days + 'd'));
       document.cookie = `${name}=${value};expires=${date.toUTCString()};path=/`;
     },
     updateClock() {

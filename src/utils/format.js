@@ -1,7 +1,7 @@
 import { filesize } from "filesize";
-import { ms, parseDuration } from 'enhanced-ms';
+import { ms } from 'enhanced-ms';
 
-const ONE_DAY_IN_MS = parseDuration('1d');
+const ONE_DAY_IN_MS = ms('1d');
 
 export function formatSize(size, options = {}) {
   if (isNaN(size)) {
