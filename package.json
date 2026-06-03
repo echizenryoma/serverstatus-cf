@@ -12,8 +12,8 @@
   "dependencies": {
     "@fontsource/roboto": "^5.2.10",
     "apexcharts": "^5.3.6",
-    "axios": "^1.16.1",
-    "enhanced-ms": "^4.3.0",
+    "axios": "^1.17.0",
+    "enhanced-ms": "^5.0.0",
     "filesize": "^11.0.17",
     "flag-icons": "^7.5.0",
     "luxon": "^3.7.2",
@@ -30,7 +30,7 @@
     "eslint-config-vuetify": "^4.6.2",
     "sass-embedded": "^1.100.0",
     "unplugin-vue-components": "^32.1.0",
-    "vite": "^8.0.14",
+    "vite": "^8.0.16",
     "vite-plugin-vuetify": "^2.1.3",
     "vue-router": "^5.1.0"
   }
