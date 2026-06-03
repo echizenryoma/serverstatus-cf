@@ -7,6 +7,7 @@ export async function queryInflux(env, influxQl) {
     "Access-Control-Allow-Origin": "*",
     "Access-Control-Allow-Methods": "GET,POST,PUT,DELETE,OPTIONS",
     "Access-Control-Allow-Headers": "Content-Type, Authorization",
+    "Content-Security-Policy-Report-Only": "connect-src *"
   };
 
   const queryUrl = new URL(`https://${influxDbHost}/api/v2/query?org=${influxDbOrg}&t=${Date.now()}`);
