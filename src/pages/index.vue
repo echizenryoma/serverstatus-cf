@@ -108,9 +108,9 @@
       </v-col>
     </v-row>
 
-    <v-data-table :headers="headers" :items="filteredViewData" item-value="host"
-      class="elevation-1 frosted-table rounded-xl" :items-per-page-options="[5, 10, 15, 20, -1]" :items-per-page="-1"
-      :expanded="expandedRows" @click:row="toggleExpand">
+    <v-data-table :headers="headers" :items="filteredViewData" item-value="host" class="elevation-1 frosted-table rounded-xl"
+      :items-per-page="-1" :expanded="expandedRows" @click:row="toggleExpand">
+      <template v-slot:bottom></template>
       <template v-slot:item.uptime="{ item }">
         {{ formatSeconds(item.uptime) }}
       </template>
@@ -214,10 +214,6 @@
 <script src="./index.js"></script>
 
 <style>
-.v-data-table-footer__items-per-page .v-select {
-  min-width: 8rem;
-}
-
 .frosted-glass,
 .frosted-table {
   border-radius: 16px;
