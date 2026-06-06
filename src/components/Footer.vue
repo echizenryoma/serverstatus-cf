@@ -1,5 +1,5 @@
 <template>
-  <v-footer app absolute color="transparent" class="text-center flex-column">
+  <v-footer color="transparent" class="text-center flex-column">
       <v-col class="text-caption">
         {{ appVersion }}
         <i18n-t keypath="app.footer.poweredBy">
@@ -14,7 +14,7 @@
           </template>
         </i18n-t>
       </v-col>
-      <v-col  class="text-caption">
+      <v-col class="text-caption">
         <i18n-t keypath="app.footer.copyright">
           <template #year>{{ new Date().getFullYear() }}</template>
           <template #author>Ryoma Dev</template>
