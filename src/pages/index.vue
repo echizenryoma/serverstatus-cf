@@ -9,7 +9,7 @@
         <v-text-field v-model="search" prepend-inner-icon="mdi-magnify" class="mr-2" hide-details clearable>
           <template v-slot:append-inner>
             <div class="d-none d-md-flex align-center">
-              <v-chip v-for="keyword in searchKeywords" :key="keyword" size="x-small" label class="mr-1 cursor-pointer"
+              <v-chip v-for="keyword in searchKeywords" :key="keyword" size="x-small" class="mr-1 cursor-pointer"
                 @click="search = keyword">
                 {{ keyword }}
               </v-chip>
@@ -21,18 +21,18 @@
       <v-col cols="auto" class="d-flex align-center align-self-center">
         <v-select v-model="$i18n.locale" :items="languageOptions" item-title="text" item-value="value"
           hide-details="auto" style="min-width: 8em" @update:modelValue="toggleLanguageChange" class="mr-2"></v-select>
-        <v-tooltip location="bottom"
-          :text="speedUnit === 'bit' ? $t('actions.speedUnitBit') : $t('actions.speedUnitByte')">
+        <v-tooltip location="bottom">
+          {{ speedUnit === 'bit' ? $t('actions.speedUnitBit') : $t('actions.speedUnitByte') }}
           <template v-slot:activator="{ props }">
-            <v-btn v-bind="props" @click="toggleSpeedUnit" icon rounded class="mr-2">
+            <v-btn v-bind="props" @click="toggleSpeedUnit" icon class="mr-2">
               <v-icon>{{ speedUnit === 'bit' ? 'mdi-speedometer' : 'mdi-chip' }}</v-icon>
             </v-btn>
           </template>
         </v-tooltip>
-        <v-btn @click="toggleDarkMode" icon rounded class="mr-2">
+        <v-btn @click="toggleDarkMode" icon class="mr-2">
           <v-icon>mdi-theme-light-dark</v-icon>
         </v-btn>
-        <v-btn @click="stopRefresh" :color="isRefreshEnabled ? 'error' : 'success'" icon rounded class="mr-2">
+        <v-btn @click="stopRefresh" :color="isRefreshEnabled ? 'error' : 'success'" icon class="mr-2">
           <v-icon>{{ isRefreshEnabled ? 'mdi-pause' : 'mdi-refresh' }}</v-icon>
         </v-btn>
       </v-col>
@@ -60,8 +60,7 @@
             <span class="text-h8">{{ overview.onlineCount }}/{{ overview.totalCount }}</span>
             <span class="text-h8">{{ overview.onlinePercent }}%</span>
           </div>
-          <v-progress-linear :model-value="overview.onlinePercent" color="success" rounded
-            height="6"></v-progress-linear>
+          <v-progress-linear :model-value="overview.onlinePercent" color="success" height="6"></v-progress-linear>
         </v-card>
       </v-col>
       <v-col style="min-width: 8em;">
@@ -108,8 +107,9 @@
       </v-col>
     </v-row>
 
-    <v-data-table :headers="headers" :items="filteredViewData" item-value="host" class="elevation-1 frosted-table rounded-xl"
-      :items-per-page="-1" :expanded="expandedRows" @click:row="toggleExpand">
+    <v-data-table :headers="headers" :items="filteredViewData" item-value="host"
+      class="elevation-1 frosted-table rounded-xl" :items-per-page="-1" :expanded="expandedRows"
+      @click:row="toggleExpand">
       <template v-slot:bottom></template>
       <template v-slot:item.uptime="{ item }">
         {{ formatSeconds(item.uptime) }}
@@ -118,7 +118,8 @@
         <span :class="'fi fi-' + getFlags(item.location)"></span>
       </template>
       <template v-slot:item.ipv4="{ item }">
-        <v-tooltip location="top" text="NAT" :disabled="item.ipv4 !== 'nat'">
+        <v-tooltip location="top" :disabled="item.ipv4 !== 'nat'">
+          NAT
           <template v-slot:activator="{ props }">
             <v-icon v-bind="props" :color="getNetProtoColor(item.ipv4)" class="mr-1">
               {{ getNetProtoIcon(item.ipv4) }}
@@ -127,7 +128,8 @@
         </v-tooltip>
       </template>
       <template v-slot:item.ipv6="{ item }">
-        <v-tooltip location="top" text="NAT" :disabled="item.ipv6 !== 'nat'">
+        <v-tooltip location="top" :disabled="item.ipv6 !== 'nat'">
+          NAT
           <template v-slot:activator="{ props }">
             <v-icon v-bind="props" :color="getNetProtoColor(item.ipv6)" class="mr-1">
               {{ getNetProtoIcon(item.ipv6) }}
@@ -174,7 +176,7 @@
       </template>
 
       <template v-slot:item.ping_cm="{ item }">
-        <v-sheet :color="showPingLatency ? getLatencyColor(item.ping_cm) : getLossColor(item.ping_cm)" rounded>
+        <v-sheet :color="showPingLatency ? getLatencyColor(item.ping_cm) : getLossColor(item.ping_cm)" class="rounded">
           <template v-if="!showPingLatency">
             {{ formatLoss(item.ping_cm) }}
           </template>
@@ -184,7 +186,7 @@
         </v-sheet>
       </template>
       <template v-slot:item.ping_ct="{ item }">
-        <v-sheet :color="showPingLatency ? getLatencyColor(item.ping_ct) : getLossColor(item.ping_ct)" rounded>
+        <v-sheet :color="showPingLatency ? getLatencyColor(item.ping_ct) : getLossColor(item.ping_ct)" class="rounded">
           <template v-if="!showPingLatency">
             {{ formatLoss(item.ping_ct) }}
           </template>
@@ -194,7 +196,7 @@
         </v-sheet>
       </template>
       <template v-slot:item.ping_cu="{ item }">
-        <v-sheet :color="showPingLatency ? getLatencyColor(item.ping_cu) : getLossColor(item.ping_cu)" rounded>
+        <v-sheet :color="showPingLatency ? getLatencyColor(item.ping_cu) : getLossColor(item.ping_cu)" class="rounded">
           <template v-if="!showPingLatency">
             {{ formatLoss(item.ping_cu) }}
           </template>

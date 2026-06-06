@@ -17,9 +17,6 @@ import { i18n } from '../i18n';
 
 // https://vuetifyjs.com/en/introduction/why-vuetify/#feature-guides
 export default createVuetify({
-  theme: {
-    defaultTheme: 'system',
-  },
   icons: {
     defaultSet: 'mdi',
   },
