@@ -2,7 +2,7 @@
   <v-card class="mb-4 rounded-xl" v-if="series && series.length">
     <v-card-title>{{ title }}</v-card-title>
     <v-card-text>
-      <VueApexCharts type="line" height="200" :options="chartOptions" :series="series">
+      <VueApexCharts type="line" height="200" :options="chartOptions" :series="series" :key="chartKey">
       </VueApexCharts>
     </v-card-text>
   </v-card>
@@ -37,6 +37,9 @@ export default {
     return { theme }
   },
   computed: {
+    chartKey() {
+      return `${this.chartId}-${this.theme.global.name.value}`
+    },
     chartOptions() {
       return {
         chart: {
