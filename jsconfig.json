@@ -3,11 +3,10 @@
     "allowJs": true,
     "target": "es2017",
     "module": "esnext",
-    "baseUrl": "./",
     "moduleResolution": "bundler",
     "paths": {
       "@/*": [
-        "src/*"
+        "./src/*"
       ]
     },
     "lib": [
