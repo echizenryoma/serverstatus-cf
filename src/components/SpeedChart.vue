@@ -40,9 +40,22 @@ export default {
     const theme = useTheme();
     return { theme }
   },
+  data() {
+    return {
+      dataVersion: 0
+    }
+  },
+  watch: {
+    series: {
+      handler() {
+        this.dataVersion++
+      },
+      deep: true
+    }
+  },
   computed: {
     chartKey() {
-      return `${this.chartId}-${this.speedUnit}-${this.theme.global.name.value}`
+      return `${this.chartId}-${this.speedUnit}-${this.theme.global.name.value}-${this.dataVersion}`
     },
     chartOptions() {
       return {
