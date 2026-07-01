@@ -99,7 +99,10 @@ export default {
           }
         },
         legend: {
-          position: 'top'
+          position: 'top',
+          onItemClick: {
+            toggleDataSeries: false
+          }
         }
       }
     }
