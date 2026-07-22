@@ -36,22 +36,10 @@ export default {
     const theme = useTheme();
     return { theme }
   },
-  data() {
-    return {
-      dataVersion: 0
-    }
-  },
-  watch: {
-    series: {
-      handler() {
-        this.dataVersion++
-      },
-      deep: true
-    }
-  },
   computed: {
+    // chartKey 仅响应配置级变更（主题/chartId），不再随数据变化而重建图表
     chartKey() {
-      return `${this.chartId}-${this.theme.global.name.value}-${this.dataVersion}`
+      return `${this.chartId}-${this.theme.global.name.value}`
     },
     chartOptions() {
       return {
