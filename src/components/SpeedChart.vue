@@ -41,9 +41,8 @@ export default {
     return { theme }
   },
   computed: {
-    // chartKey 仅响应配置级变更（主题/单位/chartId），不再随数据变化而重建图表
     chartKey() {
-      return `${this.chartId}-${this.speedUnit}-${this.theme.global.name.value}`
+      return `${this.chartId}-${this.speedUnit}-${this.theme.global.current.value.dark ? 'dark' : 'light'}`
     },
     chartOptions() {
       return {
@@ -66,7 +65,7 @@ export default {
           this.theme.current.value.colors.success,
         ],
         theme: {
-          mode: this.theme.global.name.value === 'dark' ? 'dark' : 'light'
+          mode: this.theme.global.current.value.dark ? 'dark' : 'light'
         },
         stroke: {
           width: 2

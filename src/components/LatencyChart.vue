@@ -37,9 +37,8 @@ export default {
     return { theme }
   },
   computed: {
-    // chartKey 仅响应配置级变更（主题/chartId），不再随数据变化而重建图表
     chartKey() {
-      return `${this.chartId}-${this.theme.global.name.value}`
+      return `${this.chartId}-${this.theme.global.current.value.dark ? 'dark' : 'light'}`
     },
     chartOptions() {
       return {
@@ -62,7 +61,7 @@ export default {
           this.theme.current.value.colors.error,
         ],
         theme: {
-          mode: this.theme.global.name.value === 'dark' ? 'dark' : 'light'
+          mode: this.theme.global.current.value.dark ? 'dark' : 'light'
         },
         stroke: {
           width: 2

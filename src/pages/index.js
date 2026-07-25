@@ -229,7 +229,7 @@ export default {
     },
     toggleDarkMode() {
       this.darkMode = !this.darkMode
-      this.$vuetify.theme.global.name = this.darkMode ? 'dark' : 'light'
+      this.$vuetify.theme.change(this.darkMode ? 'dark' : 'light')
     },
     toggleLanguageChange(lang) {
       this.$vuetify.locale.current = lang
@@ -688,7 +688,7 @@ export default {
     },
     updateTheme(mode) {
       this.darkMode = mode;
-      this.$vuetify.theme.global.name = mode ? 'dark' : 'light';
+      this.$vuetify.theme.change(mode ? 'dark' : 'light');
     },
     bindThemePreferenceListener() {
       if (!window.matchMedia) {
