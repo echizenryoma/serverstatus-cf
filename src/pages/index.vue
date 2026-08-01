@@ -21,6 +21,8 @@
       <v-col cols="auto" class="d-flex align-center align-self-center">
         <v-select v-model="$i18n.locale" :items="languageOptions" item-title="text" item-value="value"
           hide-details="auto" style="min-width: 8em" @update:modelValue="toggleLanguageChange" class="mr-2"></v-select>
+        <v-select v-model="pingIpVersion" :items="pingIpVersionItems" item-title="text" item-value="value"
+          hide-details="auto" style="min-width: 6em" class="mr-2" @update:modelValue="togglePingIpVersion"></v-select>
         <v-tooltip location="bottom">
           {{ speedUnit === 'bit' ? $t('actions.speedUnitBit') : $t('actions.speedUnitByte') }}
           <template v-slot:activator="{ props }">
@@ -207,7 +209,7 @@
       </template>
       <template v-slot:expanded-row="{ columns, item }">
         <ExpandedRow :show-estimated-monthly-traffic="showEstimatedMonthlyTraffic" :columns="columns" :item="item"
-          :speed-unit="speedUnit" />
+          :speed-unit="speedUnit" :ping-ip-version="pingIpVersion" />
       </template>
     </v-data-table>
   </v-container>

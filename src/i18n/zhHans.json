@@ -29,7 +29,10 @@
       "loss": "丢包率",
       "cm": "移动",
       "ct": "电信",
-      "cu": "联通"
+      "cu": "联通",
+      "pingAuto": "自动",
+      "pingV4": "IPv4",
+      "pingV6": "IPv6"
     },
     "details": {
       "kernel": "内核",

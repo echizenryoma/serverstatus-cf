@@ -59,6 +59,7 @@ export default {
       speedUnit: 'byte',
       maxHistoryPoints: 60,
       showPingLatency: false,
+      pingIpVersion: 'auto',
       showEstimatedDailyTraffic: false,
       showEstimatedMonthlyTraffic: false,
       searchKeywords: ['iepl', 'nat', 'cn', 'hk', 'jp', 'sg', 'us'],
@@ -128,6 +129,13 @@ export default {
     languageMap() {
       return new Map(languageOptions.map(obj => [obj.value, obj]));
     },
+    pingIpVersionItems() {
+      return [
+        { text: this.$t('server.title.pingAuto'), value: 'auto' },
+        { text: this.$t('server.title.pingV4'), value: 'v4' },
+        { text: this.$t('server.title.pingV6'), value: 'v6' },
+      ];
+    },
     headers() {
       return [
         { title: this.$t('server.title.node'), key: "host", align: 'center', minWidth: '8em', fixed: true, headerProps: { style: 'font-weight: bold;' } },
@@ -180,7 +188,7 @@ export default {
         { title: this.$t('server.title.memory'), key: "memory", align: 'center', minWidth: '6em', headerProps: { style: 'font-weight: bold;' } },
         { title: this.$t('server.title.disk'), key: "disk", align: 'center', minWidth: '6em', headerProps: { style: 'font-weight: bold;' } },
         {
-          title: this.$t(this.showPingLatency ? 'server.title.latency' : 'server.title.loss'),
+          title: this.$t(this.showPingLatency ? 'server.title.latency' : 'server.title.loss') + ' (' + this.$t('server.title.ping' + this.pingIpVersion.charAt(0).toUpperCase() + this.pingIpVersion.slice(1)) + ')',
           align: 'center',
           headerProps: {
             style: 'font-weight: bold; cursor: pointer;',
@@ -217,6 +225,11 @@ export default {
       const savedSpeedUnit = this.getCookie('speedUnit');
       if (['bit', 'byte'].includes(savedSpeedUnit)) {
         this.speedUnit = savedSpeedUnit;
+      }
+
+      const savedPingIpVersion = this.getCookie('pingIpVersion');
+      if (['auto', 'v4', 'v6'].includes(savedPingIpVersion)) {
+        this.pingIpVersion = savedPingIpVersion;
       }
     },
     toggleExpand(_, { item }) {
@@ -261,6 +274,14 @@ export default {
     },
     togglePingLatency() {
       this.showPingLatency = !this.showPingLatency;
+      this.updateViewData();
+    },
+    togglePingIpVersion(version) {
+      this.pingIpVersion = version;
+      this.setCookie('pingIpVersion', version);
+      this.viewData.forEach(view => {
+        view.chart.latency = null;
+      });
       this.updateViewData();
     },
     toggleDailyTraffic() {
@@ -448,14 +469,10 @@ export default {
         },
       ];
     },
-    appendLatencyChart(view, ping, ipv6 = false) {
+    appendLatencyChart(view, metrics) {
       const now = new Date().getTime();
       const latencyChart = view.chart.latency?.length ? view.chart.latency : this.initializeLatencyChart();
-      const latencyValues = [
-        ipv6 ? ping.ping_cmv6 : ping.ping_cmv4,
-        ipv6 ? ping.ping_ctv6 : ping.ping_ctv4,
-        ipv6 ? ping.ping_cuv6 : ping.ping_cuv4,
-      ];
+      const latencyValues = [metrics.ping.cm, metrics.ping.ct, metrics.ping.cu];
 
       latencyValues.forEach((value, index) => {
         const data = latencyChart[index]?.data || [];
@@ -585,28 +602,25 @@ export default {
       const ipv6Metrics = this.getPingMetrics(ping, 'v6');
       const ipv4Metrics = this.getPingMetrics(ping, 'v4');
 
-      if (view.ipv6 === 'yes') {
-        this.applyPingMetricsToView(view, ipv6Metrics);
-        view.lossv6_detail = this.formatPingDetail(ipv6Metrics.loss, '%');
-        view.pingv6_detail = this.formatPingDetail(ipv6Metrics.ping, ' ms');
-        if (view.ipv4 !== 'yes') {
-          this.appendLatencyChart(view, {
-            ping_cmv6: ipv6Metrics.ping.cm,
-            ping_ctv6: ipv6Metrics.ping.ct,
-            ping_cuv6: ipv6Metrics.ping.cu,
-          }, true);
-        }
-      }
-      if (view.ipv4 === 'yes') {
-        this.applyPingMetricsToView(view, ipv4Metrics);
-        view.lossv4_detail = this.formatPingDetail(ipv4Metrics.loss, '%');
-        view.pingv4_detail = this.formatPingDetail(ipv4Metrics.ping, ' ms');
-        this.appendLatencyChart(view, {
-          ping_cmv4: ipv4Metrics.ping.cm,
-          ping_ctv4: ipv4Metrics.ping.ct,
-          ping_cuv4: ipv4Metrics.ping.cu,
-        }, false);
-      }
+      // Always compute detail strings for both versions
+      view.lossv4_detail = this.formatPingDetail(ipv4Metrics.loss, '%');
+      view.pingv4_detail = this.formatPingDetail(ipv4Metrics.ping, ' ms');
+      view.lossv6_detail = this.formatPingDetail(ipv6Metrics.loss, '%');
+      view.pingv6_detail = this.formatPingDetail(ipv6Metrics.ping, ' ms');
+
+      // Determine which IP version to use for table display and latency chart
+      const useV6 = this.resolvePingIpVersion(view);
+      const activeMetrics = useV6 ? ipv6Metrics : ipv4Metrics;
+
+      this.applyPingMetricsToView(view, activeMetrics);
+      this.appendLatencyChart(view, activeMetrics);
+    },
+    resolvePingIpVersion(view) {
+      if (this.pingIpVersion === 'v6') return true;
+      if (this.pingIpVersion === 'v4') return false;
+      // 'auto' mode: prefer IPv6, fallback to IPv4
+      if (view.ipv6 === 'yes') return true;
+      return false;
     },
     updateViewData() {
       if (!this.db || this.db.length === 0) {

@@ -29,7 +29,10 @@
       "loss": "丟包率",
       "cm": "移動",
       "ct": "電信",
-      "cu": "聯通"
+      "cu": "聯通",
+      "pingAuto": "自動",
+      "pingV4": "IPv4",
+      "pingV6": "IPv6"
     },
     "details": {
       "load": "系統負載(1/5/15)",

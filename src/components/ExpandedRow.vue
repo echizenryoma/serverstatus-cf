@@ -27,7 +27,7 @@
           </v-col>
           <v-col cols="4">
             <LatencyChart :series="item.chart.latency" :chart-id="'latency-chart-' + item.host"
-              :title="$t('server.details.latencyChartTitle')" />
+              :title="latencyChartTitle" />
           </v-col>
         </v-row>
       </v-card>
@@ -61,6 +61,20 @@ export default {
     speedUnit: {
       type: String,
       required: true
+    },
+    pingIpVersion: {
+      type: String,
+      default: 'auto'
+    }
+  },
+  computed: {
+    latencyChartTitle() {
+      const label = this.pingIpVersion === 'auto'
+        ? this.$t('server.title.pingAuto')
+        : this.pingIpVersion === 'v6'
+          ? this.$t('server.title.pingV6')
+          : this.$t('server.title.pingV4');
+      return this.$t('server.details.latencyChartTitle') + ' (' + label + ')';
     }
   }
 }

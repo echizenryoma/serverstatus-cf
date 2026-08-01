@@ -29,7 +29,10 @@
       "loss": "Loss",
       "cm": "CM",
       "ct": "CT",
-      "cu": "CU"
+      "cu": "CU",
+      "pingAuto": "Auto",
+      "pingV4": "IPv4",
+      "pingV6": "IPv6"
     },
     "details": {
       "load": "System Load(1/5/15min)",
