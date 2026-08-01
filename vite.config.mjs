@@ -7,7 +7,7 @@ import Vuetify, { transformAssetUrls } from 'vite-plugin-vuetify'
 import { defineConfig } from 'vite'
 import { fileURLToPath, URL } from 'node:url'
 
-import pkg from './package.json'
+import pkg from './package.json' with { type: 'json' }
 
 // https://vitejs.dev/config/
 export default defineConfig({
