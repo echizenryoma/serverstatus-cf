@@ -31,6 +31,14 @@
             </v-btn>
           </template>
         </v-tooltip>
+        <v-tooltip location="bottom">
+          {{ $t('actions.showGlobe') }}
+          <template v-slot:activator="{ props }">
+            <v-btn v-bind="props" @click="showGlobeDialog = true" icon class="mr-2">
+              <v-icon>mdi-earth</v-icon>
+            </v-btn>
+          </template>
+        </v-tooltip>
         <v-btn @click="toggleDarkMode" icon class="mr-2">
           <v-icon>mdi-theme-light-dark</v-icon>
         </v-btn>
@@ -66,7 +74,7 @@
         </v-card>
       </v-col>
       <v-col style="min-width: 8em;">
-        <v-card class="frosted-glass pa-3 fill-height" flat>
+        <v-card class="frosted-glass pa-3 fill-height cursor-pointer" flat @click="showGlobeDialog = true">
           <div class="d-flex align-center mb-1">
             <v-icon size="18" color="info" class="mr-2">mdi-earth</v-icon>
             <span class="text-h7 font-weight-bold">{{ $t('overview.regions') }}</span>
@@ -212,6 +220,14 @@
           :speed-unit="speedUnit" :ping-ip-version="pingIpVersion" />
       </template>
     </v-data-table>
+
+    <!-- 3D Earth Globe Modal Dialog -->
+    <GlobeDialog
+      v-model="showGlobeDialog"
+      :nodes="viewData"
+      :is-dark="darkMode"
+      :speed-unit="speedUnit"
+    />
   </v-container>
 </template>
 

@@ -15,13 +15,15 @@ import 'flag-icons/css/flag-icons.min.css';
 import { computed, watchEffect } from 'vue';
 import { useI18n } from 'vue-i18n';
 import ExpandedRow from '@/components/ExpandedRow.vue';
+import GlobeDialog from '@/components/GlobeDialog.vue';
 import { languageOptions } from "../i18n";
 
 const PING_METRIC_SUFFIXES = ['cm', 'ct', 'cu'];
 
 export default {
   components: {
-    ExpandedRow
+    ExpandedRow,
+    GlobeDialog,
   },
   setup() {
     const { t } = useI18n()
@@ -32,6 +34,7 @@ export default {
   },
   data() {
     return {
+      showGlobeDialog: false,
       languageOptions,
       darkMode: window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches,
       themeMediaQuery: null,
