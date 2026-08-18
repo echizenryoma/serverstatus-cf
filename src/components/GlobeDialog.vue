@@ -111,10 +111,10 @@
                     </div>
 
                     <div class="d-flex align-center justify-space-between text-caption mt-1 text-grey">
-                      <div>CPU: {{ node.cpu }}%</div>
-                      <div>MEM: {{ node.memory }}%</div>
-                      <div>DISK: {{ node.disk }}%</div>
-                    </div>
+                      <div>{{ $t('server.title.cpu') }}: {{ node.cpu }}%</div>
+                      <div>{{ $t('server.title.memory') }}: {{ node.memory }}%</div>
+                      <div>{{ $t('server.title.disk') }}: {{ node.disk }}%</div>
+.                    </div>
 
                     <div class="d-flex align-center justify-space-between text-caption mt-1">
                       <div class="d-flex align-center text-truncate">
@@ -139,6 +139,7 @@
 </template>
 
 <script>
+  import { useI18n } from 'vue-i18n'
   import { formatSeconds, formatSpeed } from '@/utils/format'
   import { getCoordinatesByCountryCode, getRegionDisplayName } from '@/utils/geo'
   import CobeGlobe from './CobeGlobe.vue'
@@ -167,6 +168,10 @@
       },
     },
     emits: ['update:modelValue'],
+    setup () {
+      const { t, locale } = useI18n()
+      return { t, locale }
+    },
     data () {
       return {
         selectedCluster: null,
@@ -234,14 +239,14 @@
       },
       getFlagCode (code) {
         const lower = (code || '').toLowerCase()
-        const currentLocale = this.$i18n?.locale
+        const currentLocale = this.locale || this.$i18n?.locale
         if (currentLocale === 'zhHans' && (lower === 'hk' || lower === 'tw' || lower === 'mo')) {
           return 'cn'
         }
         return lower
       },
       getRegionName (code) {
-        return getRegionDisplayName(code, this.$i18n?.locale || 'zhHans')
+        return getRegionDisplayName(code, this.locale || this.$i18n?.locale || 'zhHans')
       },
       onSelectCluster (cluster) {
         this.selectedCluster = cluster

@@ -38,7 +38,7 @@
 
             <div v-for="node in cluster.nodes.slice(0, 5)" :key="node.host" class="d-flex align-center justify-space-between ga-2 mt-1">
               <span :class="node.uptime > 0 ? 'text-success' : 'text-grey'">● {{ node.host }}</span>
-              <span v-if="node.uptime > 0" class="text-caption text-grey">CPU: {{ node.cpu }}%</span>
+              <span v-if="node.uptime > 0" class="text-caption text-grey">{{ $t('server.title.cpu') }}: {{ node.cpu }}%</span>
             </div>
 
             <div v-if="cluster.nodes.length > 5" class="text-grey text-caption mt-1">
@@ -73,6 +73,7 @@
 
 <script>
   import createGlobe from 'cobe'
+  import { useI18n } from 'vue-i18n'
   import { getCoordinatesByCountryCode, getRegionDisplayName } from '@/utils/geo'
 
   const INITIAL_THETA = 0.22
@@ -105,6 +106,10 @@
       },
     },
     emits: ['select-cluster'],
+    setup () {
+      const { t, locale } = useI18n()
+      return { t, locale }
+    },
     data () {
       return {
         autoRotate: true,
@@ -215,14 +220,14 @@
     methods: {
       getFlagCode (code) {
         const lower = (code || '').toLowerCase()
-        const currentLocale = this.$i18n?.locale
+        const currentLocale = this.locale || this.$i18n?.locale
         if (currentLocale === 'zhHans' && (lower === 'hk' || lower === 'tw' || lower === 'mo')) {
           return 'cn'
         }
         return lower
       },
       getRegionName (code) {
-        return getRegionDisplayName(code, this.$i18n?.locale || 'zhHans')
+        return getRegionDisplayName(code, this.locale || this.$i18n?.locale || 'zhHans')
       },
       toggleAutoRotate () {
         this.autoRotate = !this.autoRotate
