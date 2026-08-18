@@ -52,6 +52,9 @@
       "ipv6Ping": "IPv6延遲(移動/電信/聯通)",
       "speedChartTitle": "網絡速率",
       "latencyChartTitle": "網絡延遲"
+    },
+    "tooltip": {
+      "nat": "NAT"
     }
   },
   "actions": {

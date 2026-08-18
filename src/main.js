@@ -4,21 +4,19 @@
  * Bootstraps Vuetify and other plugins then mounts the App`
  */
 
+// Composables
+import { createApp } from 'vue'
+
+// i18n
+import i18n from '@/i18n'
 // Plugins
 import { registerPlugins } from '@/plugins'
 
 // Components
 import App from './App.vue'
-
-// Composables
-import { createApp } from 'vue'
-
 import '@fontsource/roboto/400.css'
 import '@fontsource/roboto/500.css'
 import '@fontsource/roboto/700.css'
-
-// i18n
-import i18n from '@/i18n'
 
 const app = createApp(App)
 

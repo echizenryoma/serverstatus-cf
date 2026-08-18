@@ -52,6 +52,9 @@
       "ipv6Ping": "IPv6 Latency(CM/CT/CU)",
       "speedChartTitle": "Network Speed",
       "latencyChartTitle": "Latency"
+    },
+    "tooltip": {
+      "nat": "NAT"
     }
   },
   "actions": {

@@ -52,6 +52,9 @@
       "ipv6Ping": "IPv6遅延（中国移動/中国電信/中国聯通）",
       "speedChartTitle": "ネットワーク速度",
       "latencyChartTitle": "ネットワーク遅延"
+    },
+    "tooltip": {
+      "nat": "NAT"
     }
   },
   "actions": {

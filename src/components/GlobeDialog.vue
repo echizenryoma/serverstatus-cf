@@ -1,10 +1,10 @@
 <template>
   <v-dialog
-    :model-value="modelValue"
-    @update:model-value="$emit('update:modelValue', $event)"
     max-width="840"
-    transition="dialog-bottom-transition"
+    :model-value="modelValue"
     scrollable
+    transition="dialog-bottom-transition"
+    @update:model-value="$emit('update:modelValue', $event)"
   >
     <v-card class="globe-dialog-card frosted-glass rounded-xl overflow-hidden" flat>
       <!-- Dialog Header -->
@@ -15,16 +15,17 @@
         </div>
 
         <div class="d-flex align-center ga-2">
-          <v-chip size="small" color="success" variant="tonal" class="font-weight-medium">
-            <v-icon start size="14">mdi-server</v-icon>
+          <v-chip class="font-weight-medium" color="success" size="small" variant="tonal">
+            <v-icon size="14" start>mdi-server</v-icon>
             {{ onlineCount }} / {{ totalCount }} {{ $t('overview.online') }}
           </v-chip>
-          <v-chip size="small" color="info" variant="tonal" class="font-weight-medium d-none d-sm-flex">
-            <v-icon start size="14">mdi-map-marker-multiple</v-icon>
+
+          <v-chip class="font-weight-medium d-none d-sm-flex" color="info" size="small" variant="tonal">
+            <v-icon size="14" start>mdi-map-marker-multiple</v-icon>
             {{ uniqueRegionCount }} {{ $t('overview.regions') }}
           </v-chip>
 
-          <v-btn icon="mdi-close" variant="text" size="small" @click="closeDialog"></v-btn>
+          <v-btn icon="mdi-close" size="small" variant="text" @click="closeDialog" />
         </div>
       </v-card-title>
 
@@ -35,8 +36,8 @@
           <CobeGlobe
             v-if="modelValue"
             ref="cobeGlobeRef"
-            :nodes="nodes"
             :is-dark="isDark"
+            :nodes="nodes"
             @select-cluster="onSelectCluster"
           />
         </div>
@@ -51,13 +52,13 @@
             <v-chip
               v-for="cluster in clusterList"
               :key="cluster.id"
-              :color="selectedCluster?.id === cluster.id ? 'primary' : 'default'"
-              :variant="selectedCluster?.id === cluster.id ? 'flat' : 'tonal'"
-              size="small"
               class="cursor-pointer"
+              :color="selectedCluster?.id === cluster.id ? 'primary' : 'default'"
+              size="small"
+              :variant="selectedCluster?.id === cluster.id ? 'flat' : 'tonal'"
               @click="focusCluster(cluster)"
             >
-              <span :class="'fi fi-' + getFlagCode(cluster.code)" class="mr-1"></span>
+              <span class="mr-1" :class="'fi fi-' + getFlagCode(cluster.code)" />
               <span>{{ getRegionName(cluster.code) }}</span>
               <span class="ml-1 opacity-70">({{ cluster.onlineServers }}/{{ cluster.servers }})</span>
             </v-chip>
@@ -67,23 +68,25 @@
         <!-- Selected Region Server Details -->
         <v-expand-transition>
           <div v-if="selectedCluster" class="selected-region-details mt-2">
-            <v-card variant="outlined" class="pa-3 rounded-lg bg-surface-light">
+            <v-card class="pa-3 rounded-lg bg-surface-light" variant="outlined">
               <div class="d-flex align-center justify-space-between mb-2">
                 <div class="d-flex align-center ga-2">
-                  <span :class="'fi fi-' + getFlagCode(selectedCluster.code)" class="text-h6"></span>
+                  <span class="text-h6" :class="'fi fi-' + getFlagCode(selectedCluster.code)" />
                   <span class="font-weight-bold">{{ getRegionName(selectedCluster.code) }}</span>
+
                   <v-badge
-                    :content="`${selectedCluster.onlineServers}/${selectedCluster.servers}`"
                     color="primary"
+                    :content="`${selectedCluster.onlineServers}/${selectedCluster.servers}`"
                     inline
                   />
                 </div>
+
                 <v-btn
+                  icon="mdi-close"
                   size="x-small"
                   variant="text"
-                  icon="mdi-close"
                   @click="selectedCluster = null"
-                ></v-btn>
+                />
               </div>
 
               <v-row dense>
@@ -93,14 +96,15 @@
                   cols="12"
                   sm="6"
                 >
-                  <v-card class="pa-2 fill-height" variant="tonal" :color="node.uptime > 0 ? '' : 'grey'">
+                  <v-card class="pa-2 fill-height" :color="node.uptime > 0 ? '' : 'grey'" variant="tonal">
                     <div class="d-flex align-center justify-space-between">
                       <div class="font-weight-bold text-truncate" style="max-width: 140px;">
-                        <v-icon size="12" :color="node.uptime > 0 ? 'success' : 'error'" class="mr-1">
+                        <v-icon class="mr-1" :color="node.uptime > 0 ? 'success' : 'error'" size="12">
                           mdi-circle
                         </v-icon>
                         {{ node.host }}
                       </div>
+
                       <div class="text-caption text-grey">
                         {{ formatSeconds(node.uptime) }}
                       </div>
@@ -114,11 +118,12 @@
 
                     <div class="d-flex align-center justify-space-between text-caption mt-1">
                       <div class="d-flex align-center text-truncate">
-                        <v-icon size="14" color="info" class="mr-1">mdi-download</v-icon>
+                        <v-icon class="mr-1" color="info" size="14">mdi-download</v-icon>
                         <span>{{ formatSpeed(node.net_recv, speedUnit === 'bit') }}</span>
                       </div>
+
                       <div class="d-flex align-center text-truncate">
-                        <v-icon size="14" color="warning" class="mr-1">mdi-upload</v-icon>
+                        <v-icon class="mr-1" color="warning" size="14">mdi-upload</v-icon>
                         <span>{{ formatSpeed(node.net_sent, speedUnit === 'bit') }}</span>
                       </div>
                     </div>
@@ -134,123 +139,121 @@
 </template>
 
 <script>
-import CobeGlobe from './CobeGlobe.vue';
-import { getCoordinatesByCountryCode, getRegionDisplayName } from '@/utils/geo';
-import { formatSpeed, formatSeconds } from '@/utils/format';
+  import { formatSeconds, formatSpeed } from '@/utils/format'
+  import { getCoordinatesByCountryCode, getRegionDisplayName } from '@/utils/geo'
+  import CobeGlobe from './CobeGlobe.vue'
 
-export default {
-  name: 'GlobeDialog',
-  components: {
-    CobeGlobe,
-  },
-  props: {
-    modelValue: {
-      type: Boolean,
-      default: false,
+  export default {
+    name: 'GlobeDialog',
+    components: {
+      CobeGlobe,
     },
-    nodes: {
-      type: Array,
-      default: () => [],
+    props: {
+      modelValue: {
+        type: Boolean,
+        default: false,
+      },
+      nodes: {
+        type: Array,
+        default: () => [],
+      },
+      isDark: {
+        type: Boolean,
+        default: false,
+      },
+      speedUnit: {
+        type: String,
+        default: 'byte',
+      },
     },
-    isDark: {
-      type: Boolean,
-      default: false,
+    emits: ['update:modelValue'],
+    data () {
+      return {
+        selectedCluster: null,
+      }
     },
-    speedUnit: {
-      type: String,
-      default: 'byte',
-    },
-  },
-  emits: ['update:modelValue'],
-  data() {
-    return {
-      selectedCluster: null,
-    };
-  },
-  computed: {
-    totalCount() {
-      return this.nodes.length;
-    },
-    onlineCount() {
-      return this.nodes.filter(n => n.uptime > 0).length;
-    },
-    clusterList() {
-      const clusterMap = new Map();
+    computed: {
+      totalCount () {
+        return this.nodes.length
+      },
+      onlineCount () {
+        return this.nodes.filter(n => n.uptime > 0).length
+      },
+      clusterList () {
+        const clusterMap = new Map()
 
-      for (const node of this.nodes) {
-        const rawLoc = (node.location || 'un').trim().toLowerCase();
-        if (rawLoc === 'un' || !rawLoc) continue;
+        for (const node of this.nodes) {
+          const rawLoc = (node.location || 'un').trim().toLowerCase()
+          if (rawLoc === 'un' || !rawLoc) continue
 
-        const code = rawLoc.toUpperCase();
-        const coord = getCoordinatesByCountryCode(code);
-        if (!coord) continue;
+          const code = rawLoc.toUpperCase()
+          const coord = getCoordinatesByCountryCode(code)
+          if (!coord) continue
 
-        const id = `cluster-${rawLoc}`;
-        if (!clusterMap.has(id)) {
-          clusterMap.set(id, {
-            id,
-            code,
-            coord,
-            servers: 0,
-            onlineServers: 0,
-            offlineServers: 0,
-            nodes: [],
-          });
+          const id = `cluster-${rawLoc}`
+          if (!clusterMap.has(id)) {
+            clusterMap.set(id, {
+              id,
+              code,
+              coord,
+              servers: 0,
+              onlineServers: 0,
+              offlineServers: 0,
+              nodes: [],
+            })
+          }
+
+          const cluster = clusterMap.get(id)
+          cluster.servers += 1
+          if (node.uptime > 0) {
+            cluster.onlineServers += 1
+          } else {
+            cluster.offlineServers += 1
+          }
+          cluster.nodes.push(node)
         }
 
-        const cluster = clusterMap.get(id);
-        cluster.servers += 1;
-        if (node.uptime > 0) {
-          cluster.onlineServers += 1;
-        } else {
-          cluster.offlineServers += 1;
+        return Array.from(clusterMap.values()).sort((a, b) => b.servers - a.servers)
+      },
+      uniqueRegionCount () {
+        return this.clusterList.length
+      },
+    },
+    watch: {
+      modelValue (val) {
+        if (!val) {
+          this.selectedCluster = null
         }
-        cluster.nodes.push(node);
-      }
-
-      return Array.from(clusterMap.values()).sort((a, b) => b.servers - a.servers);
+      },
     },
-    uniqueRegionCount() {
-      return this.clusterList.length;
-    },
-  },
-  watch: {
-    modelValue(val) {
-      if (!val) {
-        this.selectedCluster = null;
-      }
-    },
-  },
-  methods: {
-    formatSpeed,
-    formatSeconds,
-    closeDialog() {
-      this.$emit('update:modelValue', false);
-    },
-    getFlagCode(code) {
-      const lower = (code || '').toLowerCase();
-      const currentLocale = this.$i18n?.locale;
-      if (currentLocale === 'zhHans') {
-        if (lower === 'hk' || lower === 'tw' || lower === 'mo') {
-          return 'cn';
+    methods: {
+      formatSpeed,
+      formatSeconds,
+      closeDialog () {
+        this.$emit('update:modelValue', false)
+      },
+      getFlagCode (code) {
+        const lower = (code || '').toLowerCase()
+        const currentLocale = this.$i18n?.locale
+        if (currentLocale === 'zhHans' && (lower === 'hk' || lower === 'tw' || lower === 'mo')) {
+          return 'cn'
         }
-      }
-      return lower;
+        return lower
+      },
+      getRegionName (code) {
+        return getRegionDisplayName(code, this.$i18n?.locale || 'zhHans')
+      },
+      onSelectCluster (cluster) {
+        this.selectedCluster = cluster
+      },
+      focusCluster (cluster) {
+        this.selectedCluster = cluster
+        if (this.$refs.cobeGlobeRef) {
+          this.$refs.cobeGlobeRef.selectCluster(cluster)
+        }
+      },
     },
-    getRegionName(code) {
-      return getRegionDisplayName(code, this.$i18n?.locale || 'zhHans');
-    },
-    onSelectCluster(cluster) {
-      this.selectedCluster = cluster;
-    },
-    focusCluster(cluster) {
-      this.selectedCluster = cluster;
-      if (this.$refs.cobeGlobeRef) {
-        this.$refs.cobeGlobeRef.selectCluster(cluster);
-      }
-    },
-  },
-};
+  }
 </script>
 
 <style scoped>

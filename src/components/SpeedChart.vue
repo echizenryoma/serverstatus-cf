@@ -1,104 +1,110 @@
 <template>
-  <v-card class="mb-4 rounded-xl" v-if="series && series.length">
+  <v-card v-if="series && series.length > 0" class="mb-4 rounded-xl">
     <v-card-title>{{ title }}</v-card-title>
+
     <v-card-text>
-      <VueApexCharts type="line" height="200" :options="chartOptions" :series="series" :key="chartKey">
-      </VueApexCharts>
+      <VueApexCharts
+        height="200"
+        :key="chartKey"
+        :options="chartOptions"
+        :series="series"
+        type="line"
+      />
     </v-card-text>
   </v-card>
 </template>
 
 <script>
-import VueApexCharts from "vue3-apexcharts";
-import { formatSpeed } from '@/utils/format';
-import { useTheme } from 'vuetify'
+  import VueApexCharts from 'vue3-apexcharts'
+  import { useTheme } from 'vuetify'
+  import { formatSpeed } from '@/utils/format'
 
-export default {
-  name: 'SpeedChart',
-  components: {
-    VueApexCharts
-  },
-  props: {
-    series: {
-      type: Array,
-      required: true
+  export default {
+    name: 'SpeedChart',
+    components: {
+      VueApexCharts,
     },
-    speedUnit: {
-      type: String,
-      default: 'bit'
+    props: {
+      series: {
+        type: Array,
+        required: true,
+      },
+      speedUnit: {
+        type: String,
+        default: 'bit',
+      },
+      title: {
+        type: String,
+        required: true,
+      },
+      chartId: {
+        type: String,
+        default: 'speed-chart',
+      },
     },
-    title: {
-      type: String,
-      required: true
+    setup () {
+      const theme = useTheme()
+      return { theme }
     },
-    chartId: {
-      type: String,
-      default: 'speed-chart'
-    }
-  },
-  setup() {
-    const theme = useTheme();
-    return { theme }
-  },
-  computed: {
-    chartKey() {
-      return `${this.chartId}-${this.speedUnit}-${this.theme.global.current.value.dark ? 'dark' : 'light'}`
-    },
-    chartOptions() {
-      return {
-        chart: {
-          id: this.chartId,
-          background: 'transparent',
-          animations: {
-            enabled: false
+    computed: {
+      chartKey () {
+        return `${this.chartId}-${this.speedUnit}-${this.theme.global.current.value.dark ? 'dark' : 'light'}`
+      },
+      chartOptions () {
+        return {
+          chart: {
+            id: this.chartId,
+            background: 'transparent',
+            animations: {
+              enabled: false,
+            },
+            toolbar: {
+              show: false,
+            },
+            zoom: {
+              enabled: false,
+            },
           },
-          toolbar: {
-            show: false
+          colors: [
+            this.theme.current.value.colors.primary,
+            this.theme.current.value.colors.secondary,
+            this.theme.current.value.colors.success,
+          ],
+          theme: {
+            mode: this.theme.global.current.value.dark ? 'dark' : 'light',
           },
-          zoom: {
-            enabled: false
-          }
-        },
-        colors: [
-          this.theme.current.value.colors.primary,
-          this.theme.current.value.colors.secondary,
-          this.theme.current.value.colors.success,
-        ],
-        theme: {
-          mode: this.theme.global.current.value.dark ? 'dark' : 'light'
-        },
-        stroke: {
-          width: 2
-        },
-        xaxis: {
-          type: 'datetime',
-          labels: {
-            datetimeUTC: false
-          }
-        },
-        yaxis: {
-          labels: {
-            formatter: (value) => formatSpeed(value, this.speedUnit === 'bit')
-          }
-        },
-        tooltip: {
-          x: {
-            format: 'HH:mm:ss'
+          stroke: {
+            width: 2,
           },
-          y: {
-            formatter: (value) => formatSpeed(value, this.speedUnit === 'bit')
-          }
-        },
-        legend: {
-          position: 'top',
-          onItemClick: {
-            toggleDataSeries: false
-          }
+          xaxis: {
+            type: 'datetime',
+            labels: {
+              datetimeUTC: false,
+            },
+          },
+          yaxis: {
+            labels: {
+              formatter: value => formatSpeed(value, this.speedUnit === 'bit'),
+            },
+          },
+          tooltip: {
+            x: {
+              format: 'HH:mm:ss',
+            },
+            y: {
+              formatter: value => formatSpeed(value, this.speedUnit === 'bit'),
+            },
+          },
+          legend: {
+            position: 'top',
+            onItemClick: {
+              toggleDataSeries: false,
+            },
+          },
         }
-      }
-    }
+      },
+    },
   }
-}
 </script>
 
 <style scoped>

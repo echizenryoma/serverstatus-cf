@@ -4,13 +4,14 @@
       <div class="global-bg">
         <router-view />
       </div>
+
       <Footer />
     </v-main>
   </v-app>
 </template>
 
 <script setup>
-import Footer from './components/Footer.vue';
+  import Footer from './components/Footer.vue'
 </script>
 
 <style>

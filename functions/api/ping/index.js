@@ -1,6 +1,6 @@
-import { queryInflux } from "../../utils";
+import { queryInflux } from '../../utils'
 
-export async function onRequest({ request, env }) {
+export async function onRequest ({ request, env }) {
   if (request.method === 'GET') {
     try {
       const influxQl = `
@@ -63,10 +63,10 @@ join(
   on: ["host"]
 )
 `
-      return await queryInflux(env, influxQl);
-    } catch (error) {
-      return new Response('Internal Server Error', { status: 500 });
+      return await queryInflux(env, influxQl)
+    } catch {
+      return new Response('Internal Server Error', { status: 500 })
     }
   }
-  return new Response('Method Not Allowed', { status: 405 });
+  return new Response('Method Not Allowed', { status: 405 })
 }

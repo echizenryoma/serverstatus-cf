@@ -1,11 +1,10 @@
+import { fileURLToPath, URL } from 'node:url'
+import Vue from '@vitejs/plugin-vue'
 // Plugins
 import Components from 'unplugin-vue-components/vite'
-import Vue from '@vitejs/plugin-vue'
-import Vuetify, { transformAssetUrls } from 'vite-plugin-vuetify'
-
 // Utilities
 import { defineConfig } from 'vite'
-import { fileURLToPath, URL } from 'node:url'
+import Vuetify, { transformAssetUrls } from 'vite-plugin-vuetify'
 
 import pkg from './package.json' with { type: 'json' }
 
@@ -40,7 +39,7 @@ export default defineConfig({
   },
   define: {
     'process.env': {},
-    __APP_VERSION__: JSON.stringify(pkg.version),
+    '__APP_VERSION__': JSON.stringify(pkg.version),
   },
   resolve: {
     alias: {

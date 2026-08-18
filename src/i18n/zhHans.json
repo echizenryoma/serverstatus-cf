@@ -52,6 +52,9 @@
       "ipv6Ping": "IPv6延迟(移动/电信/联通)",
       "speedChartTitle": "网络速率",
       "latencyChartTitle": "网络延迟"
+    },
+    "tooltip": {
+      "nat": "NAT"
     }
   },
   "actions": {
