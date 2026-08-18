@@ -38,7 +38,7 @@
 
             <div v-for="node in cluster.nodes.slice(0, 5)" :key="node.host" class="d-flex align-center justify-space-between ga-2 mt-1">
               <span :class="node.uptime > 0 ? 'text-success' : 'text-grey'">● {{ node.host }}</span>
-              <span v-if="node.uptime > 0" class="text-caption text-grey">{{ $t('server.title.cpu') }}: {{ node.cpu }}%</span>
+              <span v-if="node.uptime > 0" class="text-caption text-grey">{{ $t('table.title.cpu') }}: {{ node.cpu }}%</span>
             </div>
 
             <div v-if="cluster.nodes.length > 5" class="text-grey text-caption mt-1">

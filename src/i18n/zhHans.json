@@ -6,7 +6,7 @@
       "copyright": "版权所有 © {year} 由{author}设计"
     }
   },
-  "server": {
+  "table": {
     "title": {
       "node": "节点",
       "uptime": "在线",

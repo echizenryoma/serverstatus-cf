@@ -108,7 +108,7 @@
 
       <template #item.ipv4="{ item }">
         <v-tooltip :disabled="item.ipv4 !== 'nat'" location="top">
-          {{ $t('server.tooltip.nat') }}
+          {{ $t('table.tooltip.nat') }}
           <template #activator="{ props }">
             <v-icon v-bind="props" class="mr-1" :color="getNetProtoColor(item.ipv4)">
               {{ getNetProtoIcon(item.ipv4) }}
@@ -119,7 +119,7 @@
 
       <template #item.ipv6="{ item }">
         <v-tooltip :disabled="item.ipv6 !== 'nat'" location="top">
-          {{ $t('server.tooltip.nat') }}
+          {{ $t('table.tooltip.nat') }}
           <template #activator="{ props }">
             <v-icon v-bind="props" class="mr-1" :color="getNetProtoColor(item.ipv6)">
               {{ getNetProtoIcon(item.ipv6) }}

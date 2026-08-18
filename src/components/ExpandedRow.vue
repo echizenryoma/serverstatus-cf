@@ -4,26 +4,26 @@
       <v-card class="pa-3 rounded-xl" flat>
         <v-row>
           <v-col cols="4">
-            <div><strong>{{ $t('server.details.kernel') }}:</strong> {{ item.kernel }}</div>
-            <div><strong>{{ $t('server.details.load') }}:</strong> {{ item.load_detail }}</div>
+            <div><strong>{{ $t('table.details.kernel') }}:</strong> {{ item.kernel }}</div>
+            <div><strong>{{ $t('table.details.load') }}:</strong> {{ item.load_detail }}</div>
 
-            <div><strong>{{ $t('server.details.cpu') }}:</strong> {{ item.cpu_module }} {{ item.cpu_cores > 1 ? "(" +
+            <div><strong>{{ $t('table.details.cpu') }}:</strong> {{ item.cpu_module }} {{ item.cpu_cores > 1 ? "(" +
               item.cpu_cores + ")" : "" }}</div>
 
-            <div><strong>{{ $t('server.details.cpuUsage') }}:</strong> {{ item.cpu_detail }}</div>
-            <div><strong>{{ $t('server.details.memory') }}:</strong> {{ item.memory_detail }}</div>
-            <div><strong>{{ $t('server.details.swap') }}:</strong> {{ item.swap_detail }}</div>
-            <div><strong>{{ $t('server.details.disk') }}:</strong> {{ item.disk_detail }}</div>
-            <div><strong>{{ $t('server.details.network') }}:</strong> {{ item.network_detail }}</div>
-            <div><strong>{{ $t('server.details.traffic') }}:</strong> {{ item.traffic_detail }}</div>
+            <div><strong>{{ $t('table.details.cpuUsage') }}:</strong> {{ item.cpu_detail }}</div>
+            <div><strong>{{ $t('table.details.memory') }}:</strong> {{ item.memory_detail }}</div>
+            <div><strong>{{ $t('table.details.swap') }}:</strong> {{ item.swap_detail }}</div>
+            <div><strong>{{ $t('table.details.disk') }}:</strong> {{ item.disk_detail }}</div>
+            <div><strong>{{ $t('table.details.network') }}:</strong> {{ item.network_detail }}</div>
+            <div><strong>{{ $t('table.details.traffic') }}:</strong> {{ item.traffic_detail }}</div>
 
-            <div><strong>{{ $t(showEstimatedMonthlyTraffic ? 'server.details.estimatedMonthlyTraffic' :
-              'server.details.monthlyTraffic') }}:</strong> {{ item.monthly_traffic_detail }}</div>
+            <div><strong>{{ $t(showEstimatedMonthlyTraffic ? 'table.details.estimatedMonthlyTraffic' :
+              'table.details.monthlyTraffic') }}:</strong> {{ item.monthly_traffic_detail }}</div>
 
-            <div><strong>{{ $t('server.details.ipv4Loss') }}:</strong> {{ item.lossv4_detail }}</div>
-            <div><strong>{{ $t('server.details.ipv4Ping') }}:</strong> {{ item.pingv4_detail }}</div>
-            <div><strong>{{ $t('server.details.ipv6Loss') }}:</strong> {{ item.lossv6_detail }}</div>
-            <div><strong>{{ $t('server.details.ipv6Ping') }}:</strong> {{ item.pingv6_detail }}</div>
+            <div><strong>{{ $t('table.details.ipv4Loss') }}:</strong> {{ item.lossv4_detail }}</div>
+            <div><strong>{{ $t('table.details.ipv4Ping') }}:</strong> {{ item.pingv4_detail }}</div>
+            <div><strong>{{ $t('table.details.ipv6Loss') }}:</strong> {{ item.lossv6_detail }}</div>
+            <div><strong>{{ $t('table.details.ipv6Ping') }}:</strong> {{ item.pingv6_detail }}</div>
           </v-col>
 
           <v-col cols="4">
@@ -31,7 +31,7 @@
               :chart-id="'speed-chart-' + item.host"
               :series="item.chart.speed"
               :speed-unit="speedUnit"
-              :title="$t('server.details.speedChartTitle')"
+              :title="$t('table.details.speedChartTitle')"
             />
           </v-col>
 
@@ -83,11 +83,11 @@
     computed: {
       latencyChartTitle () {
         const label = this.pingIpVersion === 'auto'
-          ? this.$t('server.title.pingAuto')
+          ? this.$t('table.title.pingAuto')
           : (this.pingIpVersion === 'v6'
-            ? this.$t('server.title.pingV6')
-            : this.$t('server.title.pingV4'))
-        return this.$t('server.details.latencyChartTitle') + ' (' + label + ')'
+            ? this.$t('table.title.pingV6')
+            : this.$t('table.title.pingV4'))
+        return this.$t('table.details.latencyChartTitle') + ' (' + label + ')'
       },
     },
   }

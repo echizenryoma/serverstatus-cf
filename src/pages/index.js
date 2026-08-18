@@ -136,73 +136,73 @@ export default {
     },
     pingIpVersionItems () {
       return [
-        { text: this.$t('server.title.pingAuto'), value: 'auto' },
-        { text: this.$t('server.title.pingV4'), value: 'v4' },
-        { text: this.$t('server.title.pingV6'), value: 'v6' },
+        { text: this.$t('table.title.pingAuto'), value: 'auto' },
+        { text: this.$t('table.title.pingV4'), value: 'v4' },
+        { text: this.$t('table.title.pingV6'), value: 'v6' },
       ]
     },
     headers () {
       return [
-        { title: this.$t('server.title.node'), key: 'host', align: 'center', minWidth: '8em', fixed: true, headerProps: { style: 'font-weight: bold;' } },
-        { title: this.$t('server.title.uptime'), key: 'uptime', align: 'center', minWidth: '6em', headerProps: { style: 'font-weight: bold;' } },
+        { title: this.$t('table.title.node'), key: 'host', align: 'center', minWidth: '8em', fixed: true, headerProps: { style: 'font-weight: bold;' } },
+        { title: this.$t('table.title.uptime'), key: 'uptime', align: 'center', minWidth: '6em', headerProps: { style: 'font-weight: bold;' } },
         {
-          title: this.$t('server.title.networkStack'),
+          title: this.$t('table.title.networkStack'),
           align: 'center',
           headerProps: { style: 'font-weight: bold;' },
           children: [
-            { title: this.$t('server.title.ipv4'), key: 'ipv4', align: 'center', headerProps: { style: 'font-weight: bold;' } },
-            { title: this.$t('server.title.ipv6'), key: 'ipv6', align: 'center', headerProps: { style: 'font-weight: bold;' } },
+            { title: this.$t('table.title.ipv4'), key: 'ipv4', align: 'center', headerProps: { style: 'font-weight: bold;' } },
+            { title: this.$t('table.title.ipv6'), key: 'ipv6', align: 'center', headerProps: { style: 'font-weight: bold;' } },
           ],
         },
-        { title: this.$t('server.title.location'), key: 'location', align: 'center', minWidth: '6em', headerProps: { style: 'font-weight: bold;' } },
-        { title: this.$t('server.title.load'), key: 'load', align: 'center', minWidth: '6em', headerProps: { style: 'font-weight: bold;' } },
+        { title: this.$t('table.title.location'), key: 'location', align: 'center', minWidth: '6em', headerProps: { style: 'font-weight: bold;' } },
+        { title: this.$t('table.title.load'), key: 'load', align: 'center', minWidth: '6em', headerProps: { style: 'font-weight: bold;' } },
         {
-          title: this.$t('server.title.speed'),
+          title: this.$t('table.title.speed'),
           align: 'center',
           headerProps: { style: 'font-weight: bold;' },
           children: [
-            { title: this.$t('server.title.receive'), key: 'net_recv', align: 'center', minWidth: '8em', headerProps: { style: 'font-weight: bold;' }, prependIcon: 'mdi-download' },
-            { title: this.$t('server.title.send'), key: 'net_sent', align: 'center', minWidth: '8em', headerProps: { style: 'font-weight: bold;' }, prependIcon: 'mdi-upload' },
+            { title: this.$t('table.title.receive'), key: 'net_recv', align: 'center', minWidth: '8em', headerProps: { style: 'font-weight: bold;' }, prependIcon: 'mdi-download' },
+            { title: this.$t('table.title.send'), key: 'net_sent', align: 'center', minWidth: '8em', headerProps: { style: 'font-weight: bold;' }, prependIcon: 'mdi-upload' },
           ],
         },
         {
-          title: this.$t(this.showEstimatedDailyTraffic ? 'server.title.estimatedDailyTraffic' : 'server.title.dailyTraffic'),
+          title: this.$t(this.showEstimatedDailyTraffic ? 'table.title.estimatedDailyTraffic' : 'table.title.dailyTraffic'),
           align: 'center',
           headerProps: {
             style: 'font-weight: bold; cursor: pointer;',
             onClick: () => this.toggleDailyTraffic(),
           },
           children: [
-            { title: this.$t('server.title.receive'), key: 'traffic_1d_recv', align: 'center', minWidth: '8em', headerProps: { style: 'font-weight: bold;' }, prependIcon: 'mdi-download' },
-            { title: this.$t('server.title.send'), key: 'traffic_1d_sent', align: 'center', minWidth: '8em', headerProps: { style: 'font-weight: bold;' }, prependIcon: 'mdi-upload' },
+            { title: this.$t('table.title.receive'), key: 'traffic_1d_recv', align: 'center', minWidth: '8em', headerProps: { style: 'font-weight: bold;' }, prependIcon: 'mdi-download' },
+            { title: this.$t('table.title.send'), key: 'traffic_1d_sent', align: 'center', minWidth: '8em', headerProps: { style: 'font-weight: bold;' }, prependIcon: 'mdi-upload' },
           ],
         },
         {
-          title: this.$t(this.showEstimatedMonthlyTraffic ? 'server.title.estimatedMonthlyTraffic' : 'server.title.monthlyTraffic'),
+          title: this.$t(this.showEstimatedMonthlyTraffic ? 'table.title.estimatedMonthlyTraffic' : 'table.title.monthlyTraffic'),
           align: 'center',
           headerProps: {
             style: 'font-weight: bold; cursor: pointer;',
             onClick: () => this.toggleMonthlyTraffic(),
           },
           children: [
-            { title: this.$t('server.title.receive'), key: 'traffic_1m_recv', align: 'center', minWidth: '8em', headerProps: { style: 'font-weight: bold;' }, prependIcon: 'mdi-download' },
-            { title: this.$t('server.title.send'), key: 'traffic_1m_sent', align: 'center', minWidth: '8em', headerProps: { style: 'font-weight: bold;' }, prependIcon: 'mdi-upload' },
+            { title: this.$t('table.title.receive'), key: 'traffic_1m_recv', align: 'center', minWidth: '8em', headerProps: { style: 'font-weight: bold;' }, prependIcon: 'mdi-download' },
+            { title: this.$t('table.title.send'), key: 'traffic_1m_sent', align: 'center', minWidth: '8em', headerProps: { style: 'font-weight: bold;' }, prependIcon: 'mdi-upload' },
           ],
         },
-        { title: this.$t('server.title.cpu'), key: 'cpu', align: 'center', minWidth: '6em', headerProps: { style: 'font-weight: bold;' } },
-        { title: this.$t('server.title.memory'), key: 'memory', align: 'center', minWidth: '6em', headerProps: { style: 'font-weight: bold;' } },
-        { title: this.$t('server.title.disk'), key: 'disk', align: 'center', minWidth: '6em', headerProps: { style: 'font-weight: bold;' } },
+        { title: this.$t('table.title.cpu'), key: 'cpu', align: 'center', minWidth: '6em', headerProps: { style: 'font-weight: bold;' } },
+        { title: this.$t('table.title.memory'), key: 'memory', align: 'center', minWidth: '6em', headerProps: { style: 'font-weight: bold;' } },
+        { title: this.$t('table.title.disk'), key: 'disk', align: 'center', minWidth: '6em', headerProps: { style: 'font-weight: bold;' } },
         {
-          title: this.$t(this.showPingLatency ? 'server.title.latency' : 'server.title.loss') + ' (' + this.$t('server.title.ping' + this.pingIpVersion.charAt(0).toUpperCase() + this.pingIpVersion.slice(1)) + ')',
+          title: this.$t(this.showPingLatency ? 'table.title.latency' : 'table.title.loss') + ' (' + this.$t('table.title.ping' + this.pingIpVersion.charAt(0).toUpperCase() + this.pingIpVersion.slice(1)) + ')',
           align: 'center',
           headerProps: {
             style: 'font-weight: bold; cursor: pointer;',
             onClick: () => this.togglePingLatency(),
           },
           children: [
-            { title: this.$t('server.title.cm'), key: 'ping_cm', align: 'center', minWidth: '6em', headerProps: { style: 'font-weight: bold;' } },
-            { title: this.$t('server.title.ct'), key: 'ping_ct', align: 'center', minWidth: '6em', headerProps: { style: 'font-weight: bold;' } },
-            { title: this.$t('server.title.cu'), key: 'ping_cu', align: 'center', minWidth: '6em', headerProps: { style: 'font-weight: bold;' } },
+            { title: this.$t('table.title.cm'), key: 'ping_cm', align: 'center', minWidth: '6em', headerProps: { style: 'font-weight: bold;' } },
+            { title: this.$t('table.title.ct'), key: 'ping_ct', align: 'center', minWidth: '6em', headerProps: { style: 'font-weight: bold;' } },
+            { title: this.$t('table.title.cu'), key: 'ping_cu', align: 'center', minWidth: '6em', headerProps: { style: 'font-weight: bold;' } },
           ],
         },
       ]
@@ -257,8 +257,8 @@ export default {
       this.updateClock()
     },
     updateChartSeriesNames () {
-      const speedNames = [this.$t('server.title.receive'), this.$t('server.title.send')]
-      const latencyNames = [this.$t('server.title.cm'), this.$t('server.title.ct'), this.$t('server.title.cu')]
+      const speedNames = [this.$t('table.title.receive'), this.$t('table.title.send')]
+      const latencyNames = [this.$t('table.title.cm'), this.$t('table.title.ct'), this.$t('table.title.cu')]
       for (const view of this.viewData) {
         if (view.chart?.speed?.length) {
           for (const [i, s] of view.chart.speed.entries()) {
@@ -435,14 +435,14 @@ export default {
       const now = Date.now()
       return [
         {
-          name: this.$t('server.title.receive'),
+          name: this.$t('table.title.receive'),
           data: Array.from({ length: this.maxHistoryPoints }, (_, i) => [
             now - (this.maxHistoryPoints - i + 1) * 1000,
             0,
           ]),
         },
         {
-          name: this.$t('server.title.send'),
+          name: this.$t('table.title.send'),
           data: Array.from({ length: this.maxHistoryPoints }, (_, i) => [
             now - (this.maxHistoryPoints - i + 1) * 1000,
             0,
@@ -468,21 +468,21 @@ export default {
       const now = Date.now()
       return [
         {
-          name: this.$t('server.title.cm'),
+          name: this.$t('table.title.cm'),
           data: Array.from({ length: this.maxHistoryPoints }, (_, i) => [
             now - (this.maxHistoryPoints - i + 1) * 1000,
             0,
           ]),
         },
         {
-          name: this.$t('server.title.ct'),
+          name: this.$t('table.title.ct'),
           data: Array.from({ length: this.maxHistoryPoints }, (_, i) => [
             now - (this.maxHistoryPoints - i + 1) * 1000,
             0,
           ]),
         },
         {
-          name: this.$t('server.title.cu'),
+          name: this.$t('table.title.cu'),
           data: Array.from({ length: this.maxHistoryPoints }, (_, i) => [
             now - (this.maxHistoryPoints - i + 1) * 1000,
             0,

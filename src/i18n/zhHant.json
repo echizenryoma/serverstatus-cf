@@ -6,7 +6,7 @@
       "copyright": "版權所有 © {year} 由{author}設計"
     }
   },
-  "server": {
+  "table": {
     "title": {
       "node": "節點",
       "uptime": "運行",

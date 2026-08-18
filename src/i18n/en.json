@@ -6,7 +6,7 @@
       "copyright": "Copyright © {year} Designed by {author}"
     }
   },
-  "server": {
+  "table": {
     "title": {
       "node": "Node",
       "uptime": "Uptime",
