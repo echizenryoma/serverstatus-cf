@@ -62,13 +62,11 @@
     "pause": "Pause",
     "speedUnitByte": "Speed units: byte",
     "speedUnitBit": "Speed units: bit",
-    "showGlobe": "3D Globe"
+    "showGlobe": "Node Map"
   },
   "globe": {
-    "title": "3D Globe Node Distribution",
-    "regionsList": "Covered Regions",
-    "autoRotate": "Auto Rotate",
-    "resetView": "Reset View"
+    "title": "Node Map",
+    "regionsList": "Node Regions"
   },
   "overview": {
     "currentTime": "Current Time",

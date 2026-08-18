@@ -62,13 +62,11 @@
     "pause": "一時停止",
     "speedUnitByte": "速度単位：バイト (B)",
     "speedUnitBit": "速度単位：ビット (bit)",
-    "showGlobe": "3D地球"
+    "showGlobe": "ノードマップ"
   },
   "globe": {
-    "title": "3D地球ノード分布",
-    "regionsList": "対象地域",
-    "autoRotate": "自動回転",
-    "resetView": "視点をリセット"
+    "title": "ノードマップ",
+    "regionsList": "ノード地域"
   },
   "overview": {
     "currentTime": "現在時刻",

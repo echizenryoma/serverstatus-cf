@@ -62,13 +62,11 @@
     "pause": "暂停",
     "speedUnitByte": "速率单位：字节(B)",
     "speedUnitBit": "速率单位：位(bit)",
-    "showGlobe": "3D地球"
+    "showGlobe": "节点地图"
   },
   "globe": {
-    "title": "3D地球节点分布",
-    "regionsList": "覆盖地区",
-    "autoRotate": "自动旋转",
-    "resetView": "重置视角"
+    "title": "节点地图",
+    "regionsList": "节点地区"
   },
   "overview": {
     "currentTime": "当前时间",

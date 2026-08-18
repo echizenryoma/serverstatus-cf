@@ -62,13 +62,11 @@
     "pause": "暫停",
     "speedUnitByte": "速率單位：位元組(B)",
     "speedUnitBit": "速率單位：位元(bit)",
-    "showGlobe": "3D地球"
+    "showGlobe": "節點地圖"
   },
   "globe": {
-    "title": "3D地球節點分佈",
-    "regionsList": "覆蓋地區",
-    "autoRotate": "自動旋轉",
-    "resetView": "重設視角"
+    "title": "節點地圖",
+    "regionsList": "節點地區"
   },
   "overview": {
     "currentTime": "當前時間",
