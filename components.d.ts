@@ -16,6 +16,7 @@ declare module 'vue' {
     Footer: typeof import('./src/components/Footer.vue')['default']
     GlobeDialog: typeof import('./src/components/GlobeDialog.vue')['default']
     LatencyChart: typeof import('./src/components/LatencyChart.vue')['default']
+    OverviewBar: typeof import('./src/components/OverviewBar.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
     SpeedChart: typeof import('./src/components/SpeedChart.vue')['default']

@@ -4,8 +4,8 @@
 
     <v-card-text>
       <VueApexCharts
-        height="200"
         :key="chartKey"
+        height="200"
         :options="chartOptions"
         :series="series"
         type="line"

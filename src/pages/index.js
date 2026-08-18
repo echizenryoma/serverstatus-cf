@@ -5,6 +5,7 @@ import { computed, watchEffect } from 'vue'
 import { useI18n } from 'vue-i18n'
 import ExpandedRow from '@/components/ExpandedRow.vue'
 import GlobeDialog from '@/components/GlobeDialog.vue'
+import OverviewBar from '@/components/OverviewBar.vue'
 import { formatLatency, formatLoss, formatSeconds, formatSize, formatSpeed } from '@/utils/format'
 import {
   getCPUColor,
@@ -24,6 +25,7 @@ export default {
   components: {
     ExpandedRow,
     GlobeDialog,
+    OverviewBar,
   },
   setup () {
     const { t } = useI18n()
