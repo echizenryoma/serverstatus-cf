@@ -74,6 +74,7 @@
 <script>
   import createGlobe from 'cobe'
   import { useI18n } from 'vue-i18n'
+  import { getFlagCode } from '@/utils/format'
   import { getCoordinatesByCountryCode, getRegionDisplayName } from '@/utils/geo'
 
   const INITIAL_THETA = 0.22
@@ -218,14 +219,7 @@
       }
     },
     methods: {
-      getFlagCode (code) {
-        const lower = (code || '').toLowerCase()
-        const currentLocale = this.locale || this.$i18n?.locale
-        if (currentLocale === 'zhHans' && (lower === 'hk' || lower === 'tw' || lower === 'mo')) {
-          return 'cn'
-        }
-        return lower
-      },
+      getFlagCode,
       getRegionName (code) {
         return getRegionDisplayName(code, this.locale || this.$i18n?.locale || 'zhHans')
       },

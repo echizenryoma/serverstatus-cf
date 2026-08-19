@@ -3,7 +3,7 @@ import { filesize } from 'filesize'
 
 const ONE_DAY_IN_MS = ms('1d')
 
-export function formatSize (size, options = {}) {
+export function formatSize(size, options = {}) {
   if (isNaN(size)) {
     return '-'
   }
@@ -11,7 +11,7 @@ export function formatSize (size, options = {}) {
   return filesize(size, options)
 }
 
-export function formatSpeed (speed, bits = true, options = {}) {
+export function formatSpeed(speed, bits = true, options = {}) {
   if (isNaN(speed)) {
     speed = 0
   }
@@ -29,15 +29,15 @@ export function formatSpeed (speed, bits = true, options = {}) {
   return filesize(speed, options)
 }
 
-export function formatLatency (latency_ms) {
+export function formatLatency(latency_ms) {
   return `${Math.round(latency_ms ?? 0)} ms`
 }
 
-export function formatLoss (loss) {
+export function formatLoss(loss) {
   return `${Math.min(100, Math.round(loss ?? 0))} %`
 }
 
-export function formatSeconds (seconds, options = {}) {
+export function formatSeconds(seconds, options = {}) {
   if (isNaN(seconds) || seconds < 0) {
     return '-'
   }
@@ -57,4 +57,20 @@ export function formatSeconds (seconds, options = {}) {
     formatDuration = ms(d, options) + this.$t('units.day')
   }
   return formatDuration
+}
+
+export function getFlagCode(location, locale) {
+  const loc = (location || '').toLowerCase()
+  const currentLocale = locale || this?.$vuetify?.locale?.current || this?.locale || this?.$i18n?.locale
+  if (currentLocale === 'zhHans') {
+    const chinaFlagsMap = {
+      hk: 'cn',
+      tw: 'cn',
+      mo: 'cn',
+    }
+    if (chinaFlagsMap[loc]) {
+      return chinaFlagsMap[loc]
+    }
+  }
+  return loc || location
 }

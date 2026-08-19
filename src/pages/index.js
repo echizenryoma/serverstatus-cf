@@ -6,7 +6,14 @@ import { useI18n } from 'vue-i18n'
 import ExpandedRow from '@/components/ExpandedRow.vue'
 import GlobeDialog from '@/components/GlobeDialog.vue'
 import OverviewBar from '@/components/OverviewBar.vue'
-import { formatLatency, formatLoss, formatSeconds, formatSize, formatSpeed } from '@/utils/format'
+import {
+  formatLatency,
+  formatLoss,
+  formatSeconds,
+  formatSize,
+  formatSpeed,
+  getFlagCode,
+} from '@/utils/format'
 import {
   getCPUColor,
   getDiskColor,
@@ -27,14 +34,14 @@ export default {
     GlobeDialog,
     OverviewBar,
   },
-  setup () {
+  setup() {
     const { t } = useI18n()
     const title = computed(() => t('app.title'))
     watchEffect(() => {
       document.title = title.value
     })
   },
-  data () {
+  data() {
     return {
       showGlobeDialog: false,
       languageOptions,
@@ -72,10 +79,10 @@ export default {
     }
   },
   computed: {
-    title () {
+    title() {
       return this.$t('app.title')
     },
-    overviewStats () {
+    overviewStats() {
       const totalCount = this.viewData.length
       const onlineCount = this.viewData.filter(item => item.uptime > 0).length
       const onlinePercent = totalCount === 0 ? 0 : Math.round(onlineCount / totalCount * 100)
@@ -104,14 +111,14 @@ export default {
         totalSpeedSent,
       }
     },
-    overview () {
+    overview() {
       return {
         currentDate: this.currentDate,
         currentTime: this.currentTime,
         ...this.overviewStats,
       }
     },
-    filteredViewData () {
+    filteredViewData() {
       if (!this.search) {
         return this.viewData
       }
@@ -131,17 +138,17 @@ export default {
         return false
       })
     },
-    languageMap () {
+    languageMap() {
       return new Map(languageOptions.map(obj => [obj.value, obj]))
     },
-    pingIpVersionItems () {
+    pingIpVersionItems() {
       return [
         { text: this.$t('table.title.pingAuto'), value: 'auto' },
         { text: this.$t('table.title.pingV4'), value: 'v4' },
         { text: this.$t('table.title.pingV6'), value: 'v6' },
       ]
     },
-    headers () {
+    headers() {
       return [
         { title: this.$t('table.title.node'), key: 'host', align: 'center', minWidth: '8em', fixed: true, headerProps: { style: 'font-weight: bold;' } },
         { title: this.$t('table.title.uptime'), key: 'uptime', align: 'center', minWidth: '6em', headerProps: { style: 'font-weight: bold;' } },
@@ -214,6 +221,7 @@ export default {
     formatSeconds,
     formatLatency,
     formatLoss,
+    getFlagCode,
     getNetProtoColor,
     getNetProtoIcon,
     getLossColor,
@@ -221,7 +229,7 @@ export default {
     getCPUColor,
     getMemoryColor,
     getDiskColor,
-    applySavedPreferences () {
+    applySavedPreferences() {
       const savedLang = this.getCookie('lang')
       if (savedLang && this.languageMap.has(savedLang)) {
         this.$i18n.locale = savedLang
@@ -237,7 +245,7 @@ export default {
         this.pingIpVersion = savedPingIpVersion
       }
     },
-    toggleExpand (_, { item }) {
+    toggleExpand(_, { item }) {
       const index = this.expandedRows.indexOf(item.host)
       if (index === -1) {
         this.expandedRows.push(item.host)
@@ -245,18 +253,18 @@ export default {
         this.expandedRows.splice(index, 1)
       }
     },
-    toggleDarkMode () {
+    toggleDarkMode() {
       this.darkMode = !this.darkMode
       this.$vuetify.theme.change(this.darkMode ? 'dark' : 'light')
     },
-    toggleLanguageChange (lang) {
+    toggleLanguageChange(lang) {
       this.$vuetify.locale.current = lang
       this.setCookie('lang', lang)
       this.updateChartSeriesNames()
       this.updateViewData()
       this.updateClock()
     },
-    updateChartSeriesNames () {
+    updateChartSeriesNames() {
       const speedNames = [this.$t('table.title.receive'), this.$t('table.title.send')]
       const latencyNames = [this.$t('table.title.cm'), this.$t('table.title.ct'), this.$t('table.title.cu')]
       for (const view of this.viewData) {
@@ -276,16 +284,16 @@ export default {
         }
       }
     },
-    toggleSpeedUnit () {
+    toggleSpeedUnit() {
       this.speedUnit = this.speedUnit === 'bit' ? 'byte' : 'bit'
       this.setCookie('speedUnit', this.speedUnit)
       this.updateViewData()
     },
-    togglePingLatency () {
+    togglePingLatency() {
       this.showPingLatency = !this.showPingLatency
       this.updateViewData()
     },
-    togglePingIpVersion (version) {
+    togglePingIpVersion(version) {
       this.pingIpVersion = version
       this.setCookie('pingIpVersion', version)
       for (const view of this.viewData) {
@@ -293,7 +301,7 @@ export default {
       }
       this.updateViewData()
     },
-    toggleDailyTraffic () {
+    toggleDailyTraffic() {
       const now = new Date()
       const startInDay = new Date(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate())
       if (now - startInDay >= 60 * 1000) {
@@ -301,7 +309,7 @@ export default {
         this.updateViewData()
       }
     },
-    toggleMonthlyTraffic () {
+    toggleMonthlyTraffic() {
       const now = new Date()
       const startInMonth = new Date(now.getUTCFullYear(), now.getUTCMonth(), 1)
       if (now - startInMonth >= 60 * 1000) {
@@ -309,20 +317,7 @@ export default {
         this.updateViewData()
       }
     },
-    getFlags (location) {
-      const currentLocale = this.$vuetify.locale.current
-      if (currentLocale === 'zhHans') {
-        const chinaFlagsMap = {
-          hk: 'cn',
-          tw: 'cn',
-        }
-        if (chinaFlagsMap[location]) {
-          return chinaFlagsMap[location]
-        }
-      }
-      return location
-    },
-    initializeView (host) {
+    initializeView(host) {
       return {
         host,
         uptime: 0,
@@ -364,7 +359,7 @@ export default {
         },
       }
     },
-    formatViewDataItem (item, view) {
+    formatViewDataItem(item, view) {
       if (!item?.host) {
         return null
       }
@@ -385,7 +380,7 @@ export default {
 
       return newView
     },
-    updateInfoView (info, view) {
+    updateInfoView(info, view) {
       if (!info) {
         return
       }
@@ -397,7 +392,7 @@ export default {
       view.kernel = info.kernel
       view.traffic_quota = info.traffic_quota_gb * 1000 * 1000 * 1000
     },
-    updateCpuView (cpu, view) {
+    updateCpuView(cpu, view) {
       if (!cpu) {
         return
       }
@@ -408,7 +403,7 @@ export default {
       view.cpu_detail = `${cpu.usage_system.toFixed(2)}% / ${cpu.usage_user.toFixed(2)}% / ${cpu.usage_steal.toFixed(2)}%`
       view.cpu_cores = cpu.n_cpus
     },
-    updateMemoryView (mem, view) {
+    updateMemoryView(mem, view) {
       if (!mem) {
         return
       }
@@ -416,14 +411,14 @@ export default {
       view.memory_detail = `${formatSize(mem.used, { standard: 'iec' })} \(${Math.round(mem.used / mem.total * 100)}%\) / ${formatSize(mem.total, { standard: 'iec' })}`
       view.swap_detail = `${formatSize((mem.swap_total - mem.swap_free), { standard: 'iec' })} \(${Math.round((mem.swap_total - mem.swap_free) / mem.swap_total * 100)}%\) / ${formatSize(mem.swap_total, { standard: 'iec' })}`
     },
-    updateDiskView (disk, view) {
+    updateDiskView(disk, view) {
       if (!disk) {
         return
       }
       view.disk = Math.round(disk.used / disk.total * 100) || 0
       view.disk_detail = `${formatSize(disk.used, { standard: 'iec' })} \(${Math.round(disk.used / disk.total * 100)}%\) / ${formatSize(disk.total, { standard: 'iec' })}`
     },
-    updateNetworkView (net, view) {
+    updateNetworkView(net, view) {
       if (!net) {
         return
       }
@@ -431,7 +426,7 @@ export default {
       view.net_sent = net.bytes_sent
       this.appendSpeedChart(view, net)
     },
-    initializeSpeedChart () {
+    initializeSpeedChart() {
       const now = Date.now()
       return [
         {
@@ -450,7 +445,7 @@ export default {
         },
       ]
     },
-    appendSpeedChart (view, net) {
+    appendSpeedChart(view, net) {
       const now = Date.now()
       const speedChart = view.chart.speed?.length ? view.chart.speed : this.initializeSpeedChart()
 
@@ -464,7 +459,7 @@ export default {
 
       view.chart.speed = speedChart
     },
-    initializeLatencyChart () {
+    initializeLatencyChart() {
       const now = Date.now()
       return [
         {
@@ -490,7 +485,7 @@ export default {
         },
       ]
     },
-    appendLatencyChart (view, metrics) {
+    appendLatencyChart(view, metrics) {
       const now = Date.now()
       const latencyChart = view.chart.latency?.length ? view.chart.latency : this.initializeLatencyChart()
       const latencyValues = [metrics.ping.cm, metrics.ping.ct, metrics.ping.cu]
@@ -505,7 +500,7 @@ export default {
 
       view.chart.latency = latencyChart
     },
-    calculateTrafficRange (currentTraffic, previousTraffic, uptimeMs, rangeStart) {
+    calculateTrafficRange(currentTraffic, previousTraffic, uptimeMs, rangeStart) {
       const elapsedMs = Date.now() - rangeStart.getTime()
       const hasSnapshot = previousTraffic && uptimeMs > elapsedMs
 
@@ -526,7 +521,7 @@ export default {
         sent: Math.max(0, currentTraffic.bytes_sent * rate),
       }
     },
-    estimateTrafficRange (traffic, rangeStart, rangeEnd) {
+    estimateTrafficRange(traffic, rangeStart, rangeEnd) {
       const elapsedMs = Date.now() - rangeStart.getTime()
       if (elapsedMs < 60 * 1000) {
         return traffic
@@ -538,28 +533,28 @@ export default {
         sent: traffic.sent * rate,
       }
     },
-    normalizePingMetric (value, max) {
+    normalizePingMetric(value, max) {
       return Math.min(max, Math.round(value || 0))
     },
-    getPingMetrics (ping, version) {
+    getPingMetrics(ping, version) {
       return PING_METRIC_SUFFIXES.reduce((metrics, suffix) => {
         metrics.ping[suffix] = this.normalizePingMetric(ping[`ping_${suffix}${version}`], 500)
         metrics.loss[suffix] = this.normalizePingMetric(ping[`loss_${suffix}${version}`], 100)
         return metrics
       }, { ping: {}, loss: {} })
     },
-    applyPingMetricsToView (view, metrics) {
+    applyPingMetricsToView(view, metrics) {
       const metricType = this.showPingLatency ? 'ping' : 'loss'
       view.ping_cm = metrics[metricType].cm
       view.ping_ct = metrics[metricType].ct
       view.ping_cu = metrics[metricType].cu
     },
-    formatPingDetail (metrics, unit = '') {
+    formatPingDetail(metrics, unit = '') {
       return PING_METRIC_SUFFIXES
         .map(suffix => `${metrics[suffix]}${unit}`)
         .join(' / ')
     },
-    getTrafficRangeBoundaries (now = new Date()) {
+    getTrafficRangeBoundaries(now = new Date()) {
       const year = now.getUTCFullYear()
       const month = now.getUTCMonth()
       const day = now.getUTCDate()
@@ -571,13 +566,13 @@ export default {
         nextMonthStart: new Date(Date.UTC(year, month + 1, 1)),
       }
     },
-    getTrafficViewData (currentTraffic, previousTraffic, uptimeMs, rangeStart, rangeEnd, shouldEstimate) {
+    getTrafficViewData(currentTraffic, previousTraffic, uptimeMs, rangeStart, rangeEnd, shouldEstimate) {
       const traffic = this.calculateTrafficRange(currentTraffic, previousTraffic, uptimeMs, rangeStart)
       return shouldEstimate
         ? this.estimateTrafficRange(traffic, rangeStart, rangeEnd)
         : traffic
     },
-    formatQuotaUsageDetail (totalTraffic, quota) {
+    formatQuotaUsageDetail(totalTraffic, quota) {
       if (quota > 0) {
         const usage = Math.round(totalTraffic / quota * 100)
         return `${formatSize(totalTraffic)} (${usage}%) / ${formatSize(quota)}`
@@ -585,7 +580,7 @@ export default {
 
       return `${formatSize(totalTraffic)} / ${formatSize(quota)}`
     },
-    updateTrafficView (currentTraffic, last1dTraffic, last1mTraffic, view) {
+    updateTrafficView(currentTraffic, last1dTraffic, last1mTraffic, view) {
       if (!currentTraffic) {
         return
       }
@@ -620,7 +615,7 @@ export default {
       const monthlyTotalTraffic = monthlyTraffic.recv + monthlyTraffic.sent
       view.monthly_traffic_detail = this.formatQuotaUsageDetail(monthlyTotalTraffic, view.traffic_quota)
     },
-    updatePingView (ping, view) {
+    updatePingView(ping, view) {
       if (!ping) {
         return
       }
@@ -640,7 +635,7 @@ export default {
       this.applyPingMetricsToView(view, activeMetrics)
       this.appendLatencyChart(view, activeMetrics)
     },
-    resolvePingIpVersion (view) {
+    resolvePingIpVersion(view) {
       if (this.pingIpVersion === 'v6') {
         return true
       }
@@ -653,14 +648,14 @@ export default {
       }
       return false
     },
-    updateViewData () {
+    updateViewData() {
       if (!this.db || this.db.length === 0) {
         return
       }
       const preViewDataMap = new Map(this.viewData.map(r => [r.host, r]))
       this.viewData = this.db.map(item => this.formatViewDataItem(item, preViewDataMap.get(item.host)))
     },
-    async fetchData () {
+    async fetchData() {
       const baseUrl = import.meta.env.VITE_API_BASE_URL || ''
       const now = Date.now()
 
@@ -717,7 +712,7 @@ export default {
         console.error('fetchData error:', error)
       }
     },
-    stopRefresh () {
+    stopRefresh() {
       this.isRefreshEnabled = !this.isRefreshEnabled
       if (this.isRefreshEnabled) {
         this.startRefreshTimer()
@@ -725,23 +720,23 @@ export default {
         this.stopRefreshTimer()
       }
     },
-    startRefreshTimer () {
+    startRefreshTimer() {
       this.stopRefreshTimer()
       this.refreshTimer = window.setInterval(() => {
         this.fetchData()
       }, this.refreshIntervalMs)
     },
-    stopRefreshTimer () {
+    stopRefreshTimer() {
       if (this.refreshTimer !== null) {
         clearInterval(this.refreshTimer)
         this.refreshTimer = null
       }
     },
-    updateTheme (mode) {
+    updateTheme(mode) {
       this.darkMode = mode
       this.$vuetify.theme.change(mode ? 'dark' : 'light')
     },
-    bindThemePreferenceListener () {
+    bindThemePreferenceListener() {
       if (!window.matchMedia) {
         return
       }
@@ -753,19 +748,19 @@ export default {
       }
       this.themeMediaQuery.addEventListener('change', this.themeChangeHandler)
     },
-    getCookie (name) {
+    getCookie(name) {
       const value = `; ${document.cookie}`
       const parts = value.split(`; ${name}=`)
       if (parts.length === 2) {
         return parts.pop().split(';').shift()
       }
     },
-    setCookie (name, value, days = 30) {
+    setCookie(name, value, days = 30) {
       const date = new Date()
       date.setTime(date.getTime() + ms(days + 'd'))
       document.cookie = `${name}=${value};expires=${date.toUTCString()};path=/`
     },
-    updateClock () {
+    updateClock() {
       const now = new Date()
       const isSmallScreen = this.$vuetify.display.smAndDown
       this.currentDate = now.toLocaleDateString(this.$i18n.locale, isSmallScreen
@@ -775,7 +770,7 @@ export default {
       this.currentTime = now.toLocaleTimeString(this.$i18n.locale, isSmallScreen ? {} : { timeZoneName: 'short' })
     },
   },
-  mounted () {
+  mounted() {
     this.applySavedPreferences()
 
     this.updateClock()
@@ -788,7 +783,7 @@ export default {
 
     this.bindThemePreferenceListener()
   },
-  beforeUnmount () {
+  beforeUnmount() {
     this.stopRefreshTimer()
     if (this.clockTimer) {
       clearInterval(this.clockTimer)

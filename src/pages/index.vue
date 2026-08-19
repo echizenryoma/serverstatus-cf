@@ -103,7 +103,7 @@
       </template>
 
       <template #item.location="{ item }">
-        <span :class="'fi fi-' + getFlags(item.location)" />
+        <span :class="'fi fi-' + getFlagCode(item.location)" />
       </template>
 
       <template #item.ipv4="{ item }">
