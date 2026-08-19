@@ -114,7 +114,7 @@
                       <div>{{ $t('table.title.cpu') }}: {{ node.cpu }}%</div>
                       <div>{{ $t('table.title.memory') }}: {{ node.memory }}%</div>
                       <div>{{ $t('table.title.disk') }}: {{ node.disk }}%</div>
-                      .                    </div>
+                    </div>
 
                     <div class="d-flex align-center justify-space-between text-caption mt-1">
                       <div class="d-flex align-center text-truncate">
