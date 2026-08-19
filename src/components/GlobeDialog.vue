@@ -17,12 +17,12 @@
         <div class="d-flex align-center ga-2">
           <v-chip class="font-weight-medium" color="success" size="small" variant="tonal">
             <v-icon size="14" start>mdi-server</v-icon>
-            {{ onlineCount }} / {{ totalCount }} {{ $t('overview.online') }}
+            {{ $t('overview.online') }}: {{ onlineCount }} / {{ totalCount }}
           </v-chip>
 
           <v-chip class="font-weight-medium d-none d-sm-flex" color="info" size="small" variant="tonal">
             <v-icon size="14" start>mdi-map-marker-multiple</v-icon>
-            {{ uniqueRegionCount }} {{ $t('overview.regions') }}
+            {{ $t('overview.regions') }}: {{ uniqueRegionCount }}
           </v-chip>
 
           <v-btn icon="mdi-close" size="small" variant="text" @click="closeDialog" />
