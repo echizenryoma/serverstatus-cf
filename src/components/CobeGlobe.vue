@@ -165,7 +165,7 @@
           cluster.nodes.push(node)
         }
 
-        return Array.from(clusterMap.values()).sort((a, b) => b.servers - a.servers)
+        return Array.from(clusterMap.values()).toSorted((a, b) => b.servers - a.servers)
       },
       globeMarkers () {
         return this.regionClusters.map(cluster => ({

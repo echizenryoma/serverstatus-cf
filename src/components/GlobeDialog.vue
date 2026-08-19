@@ -4,7 +4,7 @@
     :model-value="modelValue"
     scrollable
     transition="dialog-bottom-transition"
-    @update:model-value="$emit('update:modelValue', $event)"
+    @update:model-value="$emit('update:model-value', $event)"
   >
     <v-card class="globe-dialog-card frosted-glass rounded-xl overflow-hidden" flat>
       <!-- Dialog Header -->
@@ -167,7 +167,7 @@
         default: 'byte',
       },
     },
-    emits: ['update:modelValue'],
+    emits: ['update:model-value'],
     setup () {
       const { t, locale } = useI18n()
       return { t, locale }
@@ -218,7 +218,7 @@
           cluster.nodes.push(node)
         }
 
-        return Array.from(clusterMap.values()).sort((a, b) => b.servers - a.servers)
+        return Array.from(clusterMap.values()).toSorted((a, b) => b.servers - a.servers)
       },
       uniqueRegionCount () {
         return this.clusterList.length
@@ -235,7 +235,7 @@
       formatSpeed,
       formatSeconds,
       closeDialog () {
-        this.$emit('update:modelValue', false)
+        this.$emit('update:model-value', false)
       },
       getFlagCode,
       getRegionName (code) {

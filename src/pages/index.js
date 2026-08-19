@@ -652,8 +652,8 @@ export default {
       if (!this.db || this.db.length === 0) {
         return
       }
-      const preViewDataMap = new Map(this.viewData.map(r => [r.host, r]))
-      this.viewData = this.db.map(item => this.formatViewDataItem(item, preViewDataMap.get(item.host)))
+      const previousViewDataMap = new Map(this.viewData.map(r => [r.host, r]))
+      this.viewData = this.db.map(item => this.formatViewDataItem(item, previousViewDataMap.get(item.host)))
     },
     async fetchData () {
       const baseUrl = import.meta.env.VITE_API_BASE_URL || ''
@@ -749,6 +749,12 @@ export default {
       this.themeMediaQuery.addEventListener('change', this.themeChangeHandler)
     },
     getCookie (name) {
+      if (typeof window !== 'undefined' && window.localStorage) {
+        const localVal = window.localStorage.getItem(`pref_${name}`)
+        if (localVal !== null) {
+          return localVal
+        }
+      }
       const value = `; ${document.cookie}`
       const parts = value.split(`; ${name}=`)
       if (parts.length === 2) {
@@ -756,9 +762,17 @@ export default {
       }
     },
     setCookie (name, value, days = 30) {
-      const date = new Date()
-      date.setTime(date.getTime() + ms(days + 'd'))
-      document.cookie = `${name}=${value};expires=${date.toUTCString()};path=/`
+      if (typeof cookieStore !== 'undefined') {
+        cookieStore.set({
+          name,
+          value: String(value),
+          expires: Date.now() + ms(days + 'd'),
+          path: '/',
+        }).catch(() => null)
+      }
+      if (typeof window !== 'undefined' && window.localStorage) {
+        window.localStorage.setItem(`pref_${name}`, String(value))
+      }
     },
     updateClock () {
       const now = new Date()
@@ -767,7 +781,7 @@ export default {
         ? { year: 'numeric', month: 'short', day: 'numeric' }
         : { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' },
       )
-      this.currentTime = now.toLocaleTimeString(this.$i18n.locale, isSmallScreen ? {} : { timeZoneName: 'short' })
+      this.currentTime = now.toLocaleTimeString(this.$i18n.locale, isSmallScreen ? undefined : { timeZoneName: 'short' })
     },
   },
   mounted () {
