@@ -66,7 +66,8 @@
   },
   "globe": {
     "title": "Node Map",
-    "regionsList": "Node Regions"
+    "regionsList": "Node Regions",
+    "more": "+{count} more..."
   },
   "overview": {
     "currentTime": "Current Time",

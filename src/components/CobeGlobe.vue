@@ -37,12 +37,12 @@
             <div>{{ $t('overview.online') }}: {{ cluster.onlineServers }} / {{ cluster.servers }}</div>
 
             <div v-for="node in cluster.nodes.slice(0, 5)" :key="node.host" class="d-flex align-center justify-space-between ga-2 mt-1">
-              <span :class="node.uptime > 0 ? 'text-success' : 'text-grey'">● {{ node.host }}</span>
-              <span v-if="node.uptime > 0" class="text-caption text-grey">{{ $t('table.title.cpu') }}: {{ node.cpu }}%</span>
+              <span :class="node.uptime > 0 ? 'text-success' : 'text-error'">● {{ node.host }}</span>
+              <span v-if="node.uptime > 0" class="text-caption" :class="`text-${getCPUColor(node.cpu)}`">{{ $t('table.title.cpu') }}: {{ node.cpu }}%</span>
             </div>
 
-            <div v-if="cluster.nodes.length > 5" class="text-grey text-caption mt-1">
-              +{{ cluster.nodes.length - 5 }} more...
+            <div v-if="cluster.nodes.length > 5" class="text-caption mt-1">
+              {{ $t('globe.more', { count: cluster.nodes.length - 5 }) }}
             </div>
           </div>
         </v-tooltip>
@@ -55,7 +55,7 @@
           density="compact"
           :icon="autoRotate ? 'mdi-pause' : 'mdi-play'"
           size="small"
-          variant="tonal"
+          :variant="autoRotate ? 'flat' : 'tonal'"
           @click="toggleAutoRotate"
         />
 
@@ -75,8 +75,10 @@
   import createGlobe from 'cobe'
   import { computed, nextTick, onBeforeUnmount, onMounted, ref, watch } from 'vue'
   import { useI18n } from 'vue-i18n'
+  import { useTheme } from 'vuetify'
   import { getFlagCode } from '@/utils/format'
   import { getCoordinatesByCountryCode, getRegionDisplayName } from '@/utils/geo'
+  import { getCPUColor } from '@/utils/ui'
 
   const props = defineProps({
     nodes: {
@@ -90,6 +92,9 @@
   })
 
   const emit = defineEmits(['select-cluster'])
+
+  const theme = useTheme()
+  const isDarkTheme = computed(() => props.isDark || theme.global.current.value.dark)
 
   const INITIAL_THETA = 0.22
   const MIN_THETA = -0.65
@@ -106,6 +111,32 @@
 
   function clampTheta (value) {
     return Math.min(Math.max(value, MIN_THETA), MAX_THETA)
+  }
+
+  function parseColorToRgb01 (colorStr, fallback = [0.1, 0.5, 1]) {
+    if (!colorStr) return fallback
+    if (colorStr.startsWith('#')) {
+      const hex = colorStr.slice(1)
+      const fullHex = hex.length === 3
+        ? hex.split('').map(c => c + c).join('')
+        : hex
+      const num = Number.parseInt(fullHex, 16)
+      if (Number.isNaN(num)) return fallback
+      return [
+        ((num >> 16) & 255) / 255,
+        ((num >> 8) & 255) / 255,
+        (num & 255) / 255,
+      ]
+    }
+    const match = colorStr.match(/rgba?\((\d+),\s*(\d+),\s*(\d+)/i)
+    if (match) {
+      return [
+        Number.parseInt(match[1], 10) / 255,
+        Number.parseInt(match[2], 10) / 255,
+        Number.parseInt(match[3], 10) / 255,
+      ]
+    }
+    return fallback
   }
 
   const { locale } = useI18n()
@@ -174,13 +205,17 @@
   })
 
   const themeColors = computed(() => {
-    if (props.isDark) {
+    const currentColors = theme.current.value.colors || {}
+    const primaryRgb = parseColorToRgb01(currentColors.primary, [0.08, 0.4, 0.95])
+    const infoRgb = parseColorToRgb01(currentColors.info, [0.2, 0.8, 1])
+
+    if (isDarkTheme.value) {
       return {
         dark: 1,
         mapBrightness: 7.5,
         baseColor: [0.95, 0.95, 0.98],
-        markerColor: [0.2, 0.8, 1],
-        glowColor: [0.75, 0.88, 1],
+        markerColor: infoRgb || primaryRgb,
+        glowColor: primaryRgb,
         diffuse: 0.6,
       }
     }
@@ -188,8 +223,8 @@
       dark: 0,
       mapBrightness: 10,
       baseColor: [0.96, 0.97, 0.99],
-      markerColor: [0.08, 0.4, 0.95],
-      glowColor: [0.82, 0.91, 1],
+      markerColor: primaryRgb,
+      glowColor: primaryRgb,
       diffuse: 0.7,
     }
   })
@@ -294,7 +329,7 @@
       rafId = requestAnimationFrame(render)
     }
 
-    rafId = requestAnimationFrame(render)
+    render()
   }
 
   function startGlobe () {
@@ -397,7 +432,7 @@
     }
   }
 
-  watch(() => props.isDark, () => {
+  watch([() => props.isDark, () => theme.global.name.value], () => {
     rebuildGlobe()
   })
 
@@ -467,31 +502,26 @@
 }
 
 .marker-badge {
-  background: rgba(255, 255, 255, 0.88);
+  background: rgba(var(--v-theme-surface), 0.88);
   backdrop-filter: blur(8px);
-  border: 1px solid rgba(255, 255, 255, 0.6);
+  border: 1px solid rgba(var(--v-theme-on-surface), 0.16);
   padding: 2px 6px;
   border-radius: 12px;
   font-size: 11px;
-  color: #1e293b;
+  color: rgb(var(--v-theme-on-surface));
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-  transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.2s ease;
-}
-
-:deep(.v-theme--dark) .marker-badge,
-.v-theme--dark .marker-badge {
-  background: rgba(30, 41, 59, 0.85);
-  backdrop-filter: blur(8px);
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  color: #f8fafc;
-  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.45);
+  transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.2s ease, border-color 0.2s ease;
 }
 
 .marker-badge:hover,
 .globe-marker-label.is-active .marker-badge {
   transform: scale(1.18);
   box-shadow: 0 6px 18px rgba(0, 0, 0, 0.25);
-  border-color: rgba(59, 130, 246, 0.8);
+  border-color: rgb(var(--v-theme-primary));
+}
+
+.marker-badge.has-offline {
+  border-color: rgb(var(--v-theme-warning));
 }
 
 .marker-flag {
@@ -504,24 +534,14 @@
   line-height: 1;
 }
 
-.marker-badge.has-offline {
-  border-color: rgba(234, 179, 8, 0.6);
-}
-
 .globe-floating-controls {
   bottom: 8px;
   right: 8px;
   z-index: 10;
-  background: rgba(255, 255, 255, 0.65);
+  background: rgba(var(--v-theme-surface), 0.75);
   backdrop-filter: blur(8px);
   padding: 4px;
   border-radius: 20px;
-  border: 1px solid rgba(255, 255, 255, 0.4);
-}
-
-:deep(.v-theme--dark) .globe-floating-controls,
-.v-theme--dark .globe-floating-controls {
-  background: rgba(30, 41, 59, 0.65);
-  border-color: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(var(--v-theme-on-surface), 0.12);
 }
 </style>

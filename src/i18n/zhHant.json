@@ -66,7 +66,8 @@
   },
   "globe": {
     "title": "節點地圖",
-    "regionsList": "節點地區"
+    "regionsList": "節點地區",
+    "more": "+{count} 更多..."
   },
   "overview": {
     "currentTime": "當前時間",
