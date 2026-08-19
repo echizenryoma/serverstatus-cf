@@ -1,5 +1,6 @@
 import { ms } from 'enhanced-ms'
 import { filesize } from 'filesize'
+import i18n from '@/i18n'
 
 const ONE_DAY_IN_MS = ms('1d')
 
@@ -54,15 +55,16 @@ export function formatSeconds (seconds, options = {}) {
     options.includedUnits = options.includedUnits || ['day']
     options.useAbbreviations = options.useAbbreviations || true
     options.hideUnitNames = options.hideUnitNames || true
-    formatDuration = ms(d, options) + this.$t('units.day')
+    const dayUnit = i18n.global.t('units.day')
+    formatDuration = ms(d, options) + dayUnit
   }
   return formatDuration
 }
 
 export function getFlagCode (location, locale) {
   const loc = (location || '').toLowerCase()
-  const currentLocale = locale || this?.$vuetify?.locale?.current || this?.locale || this?.$i18n?.locale
-  if (currentLocale === 'zhHans') {
+  const activeLocale = locale || (typeof i18n.global.locale === 'object' ? i18n.global.locale.value : i18n.global.locale)
+  if (activeLocale === 'zhHans') {
     const chinaFlagsMap = {
       hk: 'cn',
       tw: 'cn',
