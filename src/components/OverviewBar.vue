@@ -79,19 +79,17 @@
   </v-row>
 </template>
 
-<script>
-  export default {
-    name: 'OverviewBar',
-    props: {
-      overview: {
-        type: Object,
-        required: true,
-      },
-      showEstimatedMonthlyTraffic: {
-        type: Boolean,
-        default: false,
-      },
+<script setup>
+  defineProps({
+    overview: {
+      type: Object,
+      required: true,
     },
-    emits: ['open-globe'],
-  }
+    showEstimatedMonthlyTraffic: {
+      type: Boolean,
+      default: false,
+    },
+  })
+
+  defineEmits(['open-globe'])
 </script>

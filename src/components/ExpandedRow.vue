@@ -48,49 +48,45 @@
   </tr>
 </template>
 
-<script>
+<script setup>
+  import { computed } from 'vue'
+  import { useI18n } from 'vue-i18n'
   import LatencyChart from './LatencyChart.vue'
   import SpeedChart from './SpeedChart.vue'
 
-  export default {
-    name: 'ExpandedRow',
-    components: {
-      SpeedChart,
-      LatencyChart,
+  const props = defineProps({
+    showEstimatedMonthlyTraffic: {
+      type: Boolean,
+      required: true,
     },
-    props: {
-      showEstimatedMonthlyTraffic: {
-        type: Boolean,
-        required: true,
-      },
-      item: {
-        type: Object,
-        required: true,
-      },
-      columns: {
-        type: Array,
-        required: true,
-      },
-      speedUnit: {
-        type: String,
-        required: true,
-      },
-      pingIpVersion: {
-        type: String,
-        default: 'auto',
-      },
+    item: {
+      type: Object,
+      required: true,
     },
-    computed: {
-      latencyChartTitle () {
-        const label = this.pingIpVersion === 'auto'
-          ? this.$t('table.title.pingAuto')
-          : (this.pingIpVersion === 'v6'
-            ? this.$t('table.title.pingV6')
-            : this.$t('table.title.pingV4'))
-        return this.$t('table.details.latencyChartTitle') + ' (' + label + ')'
-      },
+    columns: {
+      type: Array,
+      required: true,
     },
-  }
+    speedUnit: {
+      type: String,
+      required: true,
+    },
+    pingIpVersion: {
+      type: String,
+      default: 'auto',
+    },
+  })
+
+  const { t } = useI18n()
+
+  const latencyChartTitle = computed(() => {
+    const label = props.pingIpVersion === 'auto'
+      ? t('table.title.pingAuto')
+      : (props.pingIpVersion === 'v6'
+        ? t('table.title.pingV6')
+        : t('table.title.pingV4'))
+    return t('table.details.latencyChartTitle') + ' (' + label + ')'
+  })
 </script>
 
 <style scoped>

@@ -14,93 +14,86 @@
   </v-card>
 </template>
 
-<script>
+<script setup>
+  import { computed } from 'vue'
   import VueApexCharts from 'vue3-apexcharts'
   import { useTheme } from 'vuetify'
   import { formatLatency } from '@/utils/format'
 
-  export default {
-    name: 'LatencyChart',
-    components: {
-      VueApexCharts,
+  const props = defineProps({
+    series: {
+      type: Array,
+      required: true,
     },
-    props: {
-      series: {
-        type: Array,
-        required: true,
-      },
-      title: {
-        type: String,
-        required: true,
-      },
-      chartId: {
-        type: String,
-        default: 'latency-chart',
-      },
+    title: {
+      type: String,
+      required: true,
     },
-    setup () {
-      const theme = useTheme()
-      return { theme }
+    chartId: {
+      type: String,
+      default: 'latency-chart',
     },
-    computed: {
-      chartKey () {
-        return `${this.chartId}-${this.theme.global.current.value.dark ? 'dark' : 'light'}`
+  })
+
+  const theme = useTheme()
+
+  const chartKey = computed(() => {
+    return `${props.chartId}-${theme.global.current.value.dark ? 'dark' : 'light'}`
+  })
+
+  const chartOptions = computed(() => {
+    return {
+      chart: {
+        id: props.chartId,
+        background: 'transparent',
+        animations: {
+          enabled: false,
+        },
+        toolbar: {
+          show: false,
+        },
+        zoom: {
+          enabled: false,
+        },
       },
-      chartOptions () {
-        return {
-          chart: {
-            id: this.chartId,
-            background: 'transparent',
-            animations: {
-              enabled: false,
-            },
-            toolbar: {
-              show: false,
-            },
-            zoom: {
-              enabled: false,
-            },
-          },
-          colors: [
-            this.theme.current.value.colors.success,
-            this.theme.current.value.colors.primary,
-            this.theme.current.value.colors.error,
-          ],
-          theme: {
-            mode: this.theme.global.current.value.dark ? 'dark' : 'light',
-          },
-          stroke: {
-            width: 2,
-          },
-          xaxis: {
-            type: 'datetime',
-            labels: {
-              datetimeUTC: false,
-            },
-          },
-          yaxis: {
-            labels: {
-              formatter: value => formatLatency(value),
-            },
-          },
-          tooltip: {
-            x: {
-              format: 'HH:mm:ss',
-            },
-            y: {
-              formatter: value => formatLatency(value),
-            },
-          },
-          legend: {
-            position: 'top',
-            onItemClick: {
-              toggleDataSeries: false,
-            },
-          },
-        }
+      colors: [
+        theme.current.value.colors.success,
+        theme.current.value.colors.primary,
+        theme.current.value.colors.error,
+      ],
+      theme: {
+        mode: theme.global.current.value.dark ? 'dark' : 'light',
       },
-    },
-  }
+      stroke: {
+        width: 2,
+      },
+      xaxis: {
+        type: 'datetime',
+        labels: {
+          datetimeUTC: false,
+        },
+      },
+      yaxis: {
+        labels: {
+          formatter: value => formatLatency(value),
+        },
+      },
+      tooltip: {
+        x: {
+          format: 'HH:mm:ss',
+        },
+        y: {
+          formatter: value => formatLatency(value),
+        },
+      },
+      legend: {
+        position: 'top',
+        onItemClick: {
+          toggleDataSeries: false,
+        },
+      },
+    }
+  })
 </script>
 
 <style scoped>

@@ -138,119 +138,104 @@
   </v-dialog>
 </template>
 
-<script>
+<script setup>
+  import { computed, ref, watch } from 'vue'
   import { useI18n } from 'vue-i18n'
   import { formatSeconds, formatSpeed, getFlagCode } from '@/utils/format'
   import { getCoordinatesByCountryCode, getRegionDisplayName } from '@/utils/geo'
   import CobeGlobe from './CobeGlobe.vue'
 
-  export default {
-    name: 'GlobeDialog',
-    components: {
-      CobeGlobe,
+  const props = defineProps({
+    modelValue: {
+      type: Boolean,
+      default: false,
     },
-    props: {
-      modelValue: {
-        type: Boolean,
-        default: false,
-      },
-      nodes: {
-        type: Array,
-        default: () => [],
-      },
-      isDark: {
-        type: Boolean,
-        default: false,
-      },
-      speedUnit: {
-        type: String,
-        default: 'byte',
-      },
+    nodes: {
+      type: Array,
+      default: () => [],
     },
-    emits: ['update:model-value'],
-    setup () {
-      const { t, locale } = useI18n()
-      return { t, locale }
+    isDark: {
+      type: Boolean,
+      default: false,
     },
-    data () {
-      return {
-        selectedCluster: null,
+    speedUnit: {
+      type: String,
+      default: 'byte',
+    },
+  })
+
+  const emit = defineEmits(['update:model-value'])
+
+  const { locale } = useI18n()
+
+  const cobeGlobeRef = ref(null)
+  const selectedCluster = ref(null)
+
+  const totalCount = computed(() => props.nodes.length)
+  const onlineCount = computed(() => props.nodes.filter(n => n.uptime > 0).length)
+
+  const clusterList = computed(() => {
+    const clusterMap = new Map()
+
+    for (const node of props.nodes) {
+      const rawLoc = (node.location || 'un').trim().toLowerCase()
+      if (rawLoc === 'un' || !rawLoc) continue
+
+      const code = rawLoc.toUpperCase()
+      const coord = getCoordinatesByCountryCode(code)
+      if (!coord) continue
+
+      const id = `cluster-${rawLoc}`
+      if (!clusterMap.has(id)) {
+        clusterMap.set(id, {
+          id,
+          code,
+          coord,
+          servers: 0,
+          onlineServers: 0,
+          offlineServers: 0,
+          nodes: [],
+        })
       }
-    },
-    computed: {
-      totalCount () {
-        return this.nodes.length
-      },
-      onlineCount () {
-        return this.nodes.filter(n => n.uptime > 0).length
-      },
-      clusterList () {
-        const clusterMap = new Map()
 
-        for (const node of this.nodes) {
-          const rawLoc = (node.location || 'un').trim().toLowerCase()
-          if (rawLoc === 'un' || !rawLoc) continue
+      const cluster = clusterMap.get(id)
+      cluster.servers += 1
+      if (node.uptime > 0) {
+        cluster.onlineServers += 1
+      } else {
+        cluster.offlineServers += 1
+      }
+      cluster.nodes.push(node)
+    }
 
-          const code = rawLoc.toUpperCase()
-          const coord = getCoordinatesByCountryCode(code)
-          if (!coord) continue
+    return Array.from(clusterMap.values()).toSorted((a, b) => b.servers - a.servers)
+  })
 
-          const id = `cluster-${rawLoc}`
-          if (!clusterMap.has(id)) {
-            clusterMap.set(id, {
-              id,
-              code,
-              coord,
-              servers: 0,
-              onlineServers: 0,
-              offlineServers: 0,
-              nodes: [],
-            })
-          }
+  const uniqueRegionCount = computed(() => clusterList.value.length)
 
-          const cluster = clusterMap.get(id)
-          cluster.servers += 1
-          if (node.uptime > 0) {
-            cluster.onlineServers += 1
-          } else {
-            cluster.offlineServers += 1
-          }
-          cluster.nodes.push(node)
-        }
+  watch(() => props.modelValue, val => {
+    if (!val) {
+      selectedCluster.value = null
+    }
+  })
 
-        return Array.from(clusterMap.values()).toSorted((a, b) => b.servers - a.servers)
-      },
-      uniqueRegionCount () {
-        return this.clusterList.length
-      },
-    },
-    watch: {
-      modelValue (val) {
-        if (!val) {
-          this.selectedCluster = null
-        }
-      },
-    },
-    methods: {
-      formatSpeed,
-      formatSeconds,
-      closeDialog () {
-        this.$emit('update:model-value', false)
-      },
-      getFlagCode,
-      getRegionName (code) {
-        return getRegionDisplayName(code, this.locale || this.$i18n?.locale || 'zhHans')
-      },
-      onSelectCluster (cluster) {
-        this.selectedCluster = cluster
-      },
-      focusCluster (cluster) {
-        this.selectedCluster = cluster
-        if (this.$refs.cobeGlobeRef) {
-          this.$refs.cobeGlobeRef.selectCluster(cluster)
-        }
-      },
-    },
+  function closeDialog () {
+    emit('update:model-value', false)
+  }
+
+  function getRegionName (code) {
+    return getRegionDisplayName(code, locale.value || 'zhHans')
+  }
+
+  function onSelectCluster (cluster) {
+    selectedCluster.value = cluster
+  }
+
+  function focusCluster (cluster) {
+    selectedCluster.value = cluster
+    if (cobeGlobeRef.value) {
+      cobeGlobeRef.value.selectCluster(cluster)
+    }
   }
 </script>
 

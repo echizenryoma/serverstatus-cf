@@ -32,13 +32,6 @@
   </v-footer>
 </template>
 
-<script>
-  export default {
-    name: 'AppFooter',
-    data () {
-      return {
-        appVersion: __APP_VERSION__,
-      }
-    },
-  }
+<script setup>
+  const appVersion = __APP_VERSION__
 </script>

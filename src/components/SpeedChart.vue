@@ -14,97 +14,90 @@
   </v-card>
 </template>
 
-<script>
+<script setup>
+  import { computed } from 'vue'
   import VueApexCharts from 'vue3-apexcharts'
   import { useTheme } from 'vuetify'
   import { formatSpeed } from '@/utils/format'
 
-  export default {
-    name: 'SpeedChart',
-    components: {
-      VueApexCharts,
+  const props = defineProps({
+    series: {
+      type: Array,
+      required: true,
     },
-    props: {
-      series: {
-        type: Array,
-        required: true,
-      },
-      speedUnit: {
-        type: String,
-        default: 'bit',
-      },
-      title: {
-        type: String,
-        required: true,
-      },
-      chartId: {
-        type: String,
-        default: 'speed-chart',
-      },
+    speedUnit: {
+      type: String,
+      default: 'bit',
     },
-    setup () {
-      const theme = useTheme()
-      return { theme }
+    title: {
+      type: String,
+      required: true,
     },
-    computed: {
-      chartKey () {
-        return `${this.chartId}-${this.speedUnit}-${this.theme.global.current.value.dark ? 'dark' : 'light'}`
-      },
-      chartOptions () {
-        return {
-          chart: {
-            id: this.chartId,
-            background: 'transparent',
-            animations: {
-              enabled: false,
-            },
-            toolbar: {
-              show: false,
-            },
-            zoom: {
-              enabled: false,
-            },
-          },
-          colors: [
-            this.theme.current.value.colors.primary,
-            this.theme.current.value.colors.secondary,
-            this.theme.current.value.colors.success,
-          ],
-          theme: {
-            mode: this.theme.global.current.value.dark ? 'dark' : 'light',
-          },
-          stroke: {
-            width: 2,
-          },
-          xaxis: {
-            type: 'datetime',
-            labels: {
-              datetimeUTC: false,
-            },
-          },
-          yaxis: {
-            labels: {
-              formatter: value => formatSpeed(value, this.speedUnit === 'bit'),
-            },
-          },
-          tooltip: {
-            x: {
-              format: 'HH:mm:ss',
-            },
-            y: {
-              formatter: value => formatSpeed(value, this.speedUnit === 'bit'),
-            },
-          },
-          legend: {
-            position: 'top',
-            onItemClick: {
-              toggleDataSeries: false,
-            },
-          },
-        }
-      },
+    chartId: {
+      type: String,
+      default: 'speed-chart',
     },
-  }
+  })
+
+  const theme = useTheme()
+
+  const chartKey = computed(() => {
+    return `${props.chartId}-${props.speedUnit}-${theme.global.current.value.dark ? 'dark' : 'light'}`
+  })
+
+  const chartOptions = computed(() => {
+    return {
+      chart: {
+        id: props.chartId,
+        background: 'transparent',
+        animations: {
+          enabled: false,
+        },
+        toolbar: {
+          show: false,
+        },
+        zoom: {
+          enabled: false,
+        },
+      },
+      colors: [
+        theme.current.value.colors.primary,
+        theme.current.value.colors.secondary,
+        theme.current.value.colors.success,
+      ],
+      theme: {
+        mode: theme.global.current.value.dark ? 'dark' : 'light',
+      },
+      stroke: {
+        width: 2,
+      },
+      xaxis: {
+        type: 'datetime',
+        labels: {
+          datetimeUTC: false,
+        },
+      },
+      yaxis: {
+        labels: {
+          formatter: value => formatSpeed(value, props.speedUnit === 'bit'),
+        },
+      },
+      tooltip: {
+        x: {
+          format: 'HH:mm:ss',
+        },
+        y: {
+          formatter: value => formatSpeed(value, props.speedUnit === 'bit'),
+        },
+      },
+      legend: {
+        position: 'top',
+        onItemClick: {
+          toggleDataSeries: false,
+        },
+      },
+    }
+  })
 </script>
 
 <style scoped>
