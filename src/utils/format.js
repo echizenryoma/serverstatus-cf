@@ -3,16 +3,16 @@ import { filesize } from 'filesize'
 
 const ONE_DAY_IN_MS = ms('1d')
 
-export function formatSize(size, options = {}) {
-  if (isNaN(size)) {
+export function formatSize (size, options = {}) {
+  if (Number.isNaN(size)) {
     return '-'
   }
   options.round = options.round || 1
   return filesize(size, options)
 }
 
-export function formatSpeed(speed, bits = true, options = {}) {
-  if (isNaN(speed)) {
+export function formatSpeed (speed, bits = true, options = {}) {
+  if (Number.isNaN(speed)) {
     speed = 0
   }
   options.standard = options.standard || 'si'
@@ -29,20 +29,20 @@ export function formatSpeed(speed, bits = true, options = {}) {
   return filesize(speed, options)
 }
 
-export function formatLatency(latency_ms) {
+export function formatLatency (latency_ms) {
   return `${Math.round(latency_ms ?? 0)} ms`
 }
 
-export function formatLoss(loss) {
+export function formatLoss (loss) {
   return `${Math.min(100, Math.round(loss ?? 0))} %`
 }
 
-export function formatSeconds(seconds, options = {}) {
-  if (isNaN(seconds) || seconds < 0) {
+export function formatSeconds (seconds, options = {}) {
+  if (Number.isNaN(seconds) || seconds < 0) {
     return '-'
   }
   const d = seconds * 1000
-  let formatDuration = '-'
+  let formatDuration
   if (d < ONE_DAY_IN_MS) {
     options.includedUnits = options.includedUnits || ['hour', 'minute', 'second']
     options.unitSeparator = options.unitSeparator || ':'
@@ -59,7 +59,7 @@ export function formatSeconds(seconds, options = {}) {
   return formatDuration
 }
 
-export function getFlagCode(location, locale) {
+export function getFlagCode (location, locale) {
   const loc = (location || '').toLowerCase()
   const currentLocale = locale || this?.$vuetify?.locale?.current || this?.locale || this?.$i18n?.locale
   if (currentLocale === 'zhHans') {
