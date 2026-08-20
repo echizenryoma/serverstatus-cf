@@ -11,12 +11,15 @@
 </template>
 
 <script setup>
+  import bgUrl from '@/assets/background.webp'
   import Footer from './components/Footer.vue'
+
+  const backgroundImage = `url("${bgUrl}?v=${__APP_VERSION__}")`
 </script>
 
 <style>
 .global-bg {
-  background-image: url('@/assets/background.webp');
+  background-image: v-bind(backgroundImage);
   background-size: cover;
   background-attachment: fixed;
   background-position: top;
