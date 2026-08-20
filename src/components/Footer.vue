@@ -35,4 +35,5 @@
 <script setup>
   import authorImg from '@/assets/author.webp'
   const authorImageUrl = `${authorImg}?v=${__APP_VERSION__}`
+  const appVersion = __APP_VERSION__
 </script>
