@@ -26,12 +26,13 @@
 
     <div class="d-flex justify-center">
       <v-avatar size="42">
-        <v-img alt="作者" src="@/assets/author.webp" />
+        <v-img :src="authorImageUrl" />
       </v-avatar>
     </div>
   </v-footer>
 </template>
 
 <script setup>
-  const appVersion = __APP_VERSION__
+  import authorImg from '@/assets/author.webp'
+  const authorImageUrl = `${authorImg}?v=${__APP_VERSION__}`
 </script>
