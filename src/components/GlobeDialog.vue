@@ -45,7 +45,7 @@
         <!-- Region Quick Filter Chips -->
         <div class="region-chips-wrapper mb-3">
           <div class="text-subtitle-2 font-weight-bold mb-2 d-flex align-center justify-space-between">
-            <span>{{ $t('globe.regionsList') }}</span>
+            <span>{{ $t('globe.regions') }}</span>
           </div>
 
           <div class="d-flex flex-wrap ga-2">

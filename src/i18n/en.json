@@ -62,11 +62,11 @@
     "pause": "Pause",
     "speedUnitByte": "Speed units: byte",
     "speedUnitBit": "Speed units: bit",
-    "showGlobe": "Node Map"
+    "showGlobe": "Show Servers Map"
   },
   "globe": {
-    "title": "Node Map",
-    "regionsList": "Node Regions",
+    "title": "Servers Map",
+    "regions": "Regions",
     "more": "+{count} more..."
   },
   "overview": {

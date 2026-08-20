@@ -62,11 +62,11 @@
     "pause": "一時停止",
     "speedUnitByte": "速度単位：バイト (B)",
     "speedUnitBit": "速度単位：ビット (bit)",
-    "showGlobe": "ノードマップ"
+    "showGlobe": "サーバマップを表示"
   },
   "globe": {
-    "title": "ノードマップ",
-    "regionsList": "ノード地域",
+    "title": "サーバマップ",
+    "regions": "地域",
     "more": "+{count} 件その他..."
   },
   "overview": {
