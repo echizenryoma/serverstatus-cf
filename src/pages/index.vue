@@ -563,12 +563,13 @@
   }
 
   function initializeView (host) {
+    const hostLocation = host && host.includes('-') ? host.split('-').pop().trim().toLowerCase() : 'un'
     return {
       host,
       uptime: 0,
       ipv4: '-',
       ipv6: '-',
-      location: 'un',
+      location: hostLocation || 'un',
       cpu: 0,
       memory: 0,
       disk: 0,
@@ -616,7 +617,7 @@
       return view
     }
 
-    updateInfoView(item.info, newView)
+    updateInfoView(item.info, newView, item.host)
     updateCpuView(item.cpu, newView)
     updateMemoryView(item.mem, newView)
     updateDiskView(item.disk, newView)
@@ -627,13 +628,17 @@
     return newView
   }
 
-  function updateInfoView (info, view) {
+  function updateInfoView (info, view, host) {
+    const hostLocation = host && host.includes('-') ? host.split('-').pop().trim().toLowerCase() : ''
     if (!info) {
+      if ((!view.location || view.location === 'un') && hostLocation) {
+        view.location = hostLocation
+      }
       return
     }
     view.ipv4 = info.have_ipv4 || ''
     view.ipv6 = info.have_ipv6 || ''
-    view.location = (info.loc || 'un').toLowerCase()
+    view.location = (info.loc || hostLocation || view.location || 'un').toLowerCase()
     view.network_detail = `${formatSpeed(info.down_mbps / 8 * 1000 * 1000, speedUnit.value === 'bit')} / ${formatSpeed(info.up_mbps / 8 * 1000 * 1000, speedUnit.value === 'bit')}`
     view.cpu_module = info.cpu
     view.kernel = info.kernel
