@@ -11,9 +11,14 @@
 </template>
 
 <script setup>
-  import bgUrl from '@/assets/background.webp'
   import Footer from './components/Footer.vue'
 
+  const backgrounds = import.meta.glob('@/assets/background.*.webp', {
+    eager: true,
+    import: 'default',
+  })
+  const bgList = Object.values(backgrounds)
+  const bgUrl = bgList[Math.floor(Math.random() * bgList.length)]
   const backgroundImage = `url("${bgUrl}?v=${__APP_VERSION__}")`
 </script>
 
