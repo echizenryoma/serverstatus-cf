@@ -27,7 +27,7 @@
   "devDependencies": {
     "@mdi/font": "^7.4.47",
     "@vitejs/plugin-vue": "^6.0.8",
-    "eslint": "^10.9.1",
+    "eslint": "^10.10.0",
     "eslint-config-vuetify": "^4.7.2",
     "sass-embedded": "^1.104.0",
     "unplugin-vue-components": "^32.1.0",
