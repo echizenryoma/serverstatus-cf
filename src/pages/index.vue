@@ -70,6 +70,15 @@
           </template>
         </v-tooltip>
 
+        <v-tooltip location="bottom">
+          {{ $t('actions.changeBackground') }}
+          <template #activator="{ props }">
+            <v-btn v-bind="props" class="mr-2 btn-change-bg" icon @click="changeBackgroundImage">
+              <v-icon>mdi-image-sync-outline</v-icon>
+            </v-btn>
+          </template>
+        </v-tooltip>
+
         <v-btn class="mr-2" icon @click="toggleDarkMode">
           <v-icon>mdi-theme-light-dark</v-icon>
         </v-btn>
@@ -237,6 +246,7 @@
   import ExpandedRow from '@/components/ExpandedRow.vue'
   import GlobeDialog from '@/components/GlobeDialog.vue'
   import OverviewBar from '@/components/OverviewBar.vue'
+  import { setBackgroundImage } from '@/utils/background'
   import {
     formatLatency,
     formatLoss,
@@ -263,6 +273,7 @@
   const searchKeywords = ['iepl', 'nat', 'cn', 'hk', 'jp', 'sg', 'us']
 
   const { t, locale } = useI18n()
+  const { changeBackgroundImage } = setBackgroundImage()
   const theme = useTheme()
   const display = useDisplay()
 
@@ -1088,5 +1099,11 @@
 .v-theme--dark .v-data-table thead,
 .v-theme--dark .v-data-table tbody tr {
   background-color: rgba(30, 30, 30, 0.64) !important;
+}
+
+@media (max-width: 768px) {
+  .btn-change-bg {
+    display: none !important;
+  }
 }
 </style>

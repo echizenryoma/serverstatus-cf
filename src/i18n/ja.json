@@ -62,7 +62,8 @@
     "pause": "一時停止",
     "speedUnitByte": "速度単位：バイト (B)",
     "speedUnitBit": "速度単位：ビット (bit)",
-    "showGlobe": "サーバマップを表示"
+    "showGlobe": "サーバマップを表示",
+    "changeBackground": "背景を切り替え"
   },
   "globe": {
     "title": "サーバマップ",

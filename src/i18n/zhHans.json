@@ -62,7 +62,8 @@
     "pause": "暂停",
     "speedUnitByte": "速率单位：字节(B)",
     "speedUnitBit": "速率单位：位(bit)",
-    "showGlobe": "显示服务器地图"
+    "showGlobe": "显示服务器地图",
+    "changeBackground": "切换背景"
   },
   "globe": {
     "title": "服务器地图",

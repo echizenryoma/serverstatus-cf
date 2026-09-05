@@ -62,7 +62,8 @@
     "pause": "Pause",
     "speedUnitByte": "Speed units: byte",
     "speedUnitBit": "Speed units: bit",
-    "showGlobe": "Show Servers Map"
+    "showGlobe": "Show Servers Map",
+    "changeBackground": "Change Background"
   },
   "globe": {
     "title": "Servers Map",

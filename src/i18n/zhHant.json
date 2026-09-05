@@ -62,7 +62,8 @@
     "pause": "暫停",
     "speedUnitByte": "速率單位：位元組(B)",
     "speedUnitBit": "速率單位：位元(bit)",
-    "showGlobe": "顯示伺服器地圖"
+    "showGlobe": "顯示伺服器地圖",
+    "changeBackground": "切換背景"
   },
   "globe": {
     "title": "伺服器地圖",
