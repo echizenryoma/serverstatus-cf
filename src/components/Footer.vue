@@ -1,6 +1,6 @@
 <template>
   <v-footer class="text-center flex-column pa-4" color="transparent">
-    <div class="text-caption mb-1">
+    <div class="text-body-small mb-1">
       {{ appVersion }}
       <i18n-t keypath="app.footer.poweredBy">
         <template #influxDb>
@@ -17,7 +17,7 @@
       </i18n-t>
     </div>
 
-    <div class="text-caption mb-2">
+    <div class="text-body-small mb-2">
       <i18n-t keypath="app.footer.copyright">
         <template #year>{{ new Date().getFullYear() }}</template>
         <template #author>Ryoma Dev</template>

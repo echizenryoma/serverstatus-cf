@@ -32,16 +32,16 @@
             </div>
           </template>
 
-          <div class="text-caption">
+          <div class="text-body-small">
             <div class="font-weight-bold mb-1">{{ getRegionName(cluster.code) }} ({{ cluster.code }})</div>
             <div>{{ $t('overview.online') }}: {{ cluster.onlineServers }} / {{ cluster.servers }}</div>
 
             <div v-for="node in cluster.nodes.slice(0, 5)" :key="node.host" class="d-flex align-center justify-space-between ga-2 mt-1">
               <span :class="node.uptime > 0 ? 'text-success' : 'text-error'">● {{ node.host }}</span>
-              <span v-if="node.uptime > 0" class="text-caption" :class="`text-${getCPUColor(node.cpu)}`">{{ $t('table.title.cpu') }}: {{ node.cpu }}%</span>
+              <span v-if="node.uptime > 0" class="text-body-small" :class="`text-${getCPUColor(node.cpu)}`">{{ $t('table.title.cpu') }}: {{ node.cpu }}%</span>
             </div>
 
-            <div v-if="cluster.nodes.length > 5" class="text-caption mt-1">
+            <div v-if="cluster.nodes.length > 5" class="text-body-small mt-1">
               {{ $t('globe.more', { count: cluster.nodes.length - 5 }) }}
             </div>
           </div>
@@ -502,9 +502,9 @@
 }
 
 .marker-badge {
-  background: rgba(var(--v-theme-surface), 0.88);
+  background: color-mix(in srgb, rgb(var(--v-theme-surface)) 88%, transparent);
   backdrop-filter: blur(8px);
-  border: 1px solid rgba(var(--v-theme-on-surface), 0.16);
+  border: 1px solid color-mix(in srgb, rgb(var(--v-theme-on-surface)) 16%, transparent);
   padding: 2px 6px;
   border-radius: 12px;
   font-size: 11px;
@@ -538,10 +538,10 @@
   bottom: 8px;
   right: 8px;
   z-index: 10;
-  background: rgba(var(--v-theme-surface), 0.75);
+  background: color-mix(in srgb, rgb(var(--v-theme-surface)) 75%, transparent);
   backdrop-filter: blur(8px);
   padding: 4px;
   border-radius: 20px;
-  border: 1px solid rgba(var(--v-theme-on-surface), 0.12);
+  border: 1px solid color-mix(in srgb, rgb(var(--v-theme-on-surface)) 12%, transparent);
 }
 </style>

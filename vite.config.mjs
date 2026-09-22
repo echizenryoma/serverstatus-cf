@@ -33,8 +33,17 @@ export default defineConfig({
   ],
   optimizeDeps: {
     exclude: [
-      'vuetify',
       'vue-router',
+    ],
+    // Vuetify 4: keep overlay modules pre-bundled together so the shared
+    // z-index stack (useStack) is not duplicated in dev mode.
+    // https://vuetifyjs.com/en/getting-started/upgrade-guide/#vite-overlay-z-index-in-dev-mode
+    include: [
+      'vuetify/components/VOverlay',
+      'vuetify/components/VDialog',
+      'vuetify/components/VMenu',
+      'vuetify/components/VSelect',
+      'vuetify/components/VTooltip',
     ],
   },
   define: {

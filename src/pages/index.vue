@@ -1,8 +1,8 @@
 <template>
   <v-container fluid style="max-width: 120em;">
-    <v-row align="center" class="frosted-glass mb-4 pa-2" justify="space-between" no-gutters>
+    <v-row class="frosted-glass mb-4 pa-2 align-center justify-space-between" no-gutters>
       <v-col class="d-flex align-center" cols="auto">
-        <v-card-title class="text-h4 text-left mr-2 font-weight-bold">{{ $t('app.title') }}</v-card-title>
+        <v-card-title class="text-headline-large text-left mr-2 font-weight-bold">{{ $t('app.title') }}</v-card-title>
       </v-col>
 
       <v-col class="d-flex align-center align-self-center" cols="4" style="min-width: 12em;">

@@ -11,7 +11,7 @@
       <v-card-title class="d-flex align-center justify-space-between pa-4 pb-2 border-b">
         <div class="d-flex align-center ga-2">
           <v-icon color="primary" size="24">mdi-earth</v-icon>
-          <span class="text-h6 font-weight-bold">{{ $t('globe.title') }}</span>
+          <span class="text-title-large font-weight-bold">{{ $t('globe.title') }}</span>
         </div>
 
         <div class="d-flex align-center ga-2">
@@ -44,7 +44,7 @@
 
         <!-- Region Quick Filter Chips -->
         <div class="region-chips-wrapper mb-3">
-          <div class="text-subtitle-2 font-weight-bold mb-2 d-flex align-center justify-space-between">
+          <div class="text-title-small font-weight-bold mb-2 d-flex align-center justify-space-between">
             <span>{{ $t('globe.regions') }}</span>
           </div>
 
@@ -71,7 +71,7 @@
             <v-card class="pa-3 rounded-lg bg-surface-light" variant="outlined">
               <div class="d-flex align-center justify-space-between mb-2">
                 <div class="d-flex align-center ga-2">
-                  <span class="text-h6" :class="'fi fi-' + getFlagCode(selectedCluster.code)" />
+                  <span class="text-title-large" :class="'fi fi-' + getFlagCode(selectedCluster.code)" />
                   <span class="font-weight-bold">{{ getRegionName(selectedCluster.code) }}</span>
 
                   <v-badge
@@ -89,7 +89,7 @@
                 />
               </div>
 
-              <v-row dense>
+              <v-row density="compact">
                 <v-col
                   v-for="node in selectedCluster.nodes"
                   :key="node.host"
@@ -105,18 +105,18 @@
                         {{ node.host }}
                       </div>
 
-                      <div class="text-caption text-grey">
+                      <div class="text-body-small text-grey">
                         {{ formatSeconds(node.uptime) }}
                       </div>
                     </div>
 
-                    <div class="d-flex align-center justify-space-between text-caption mt-1 text-grey">
+                    <div class="d-flex align-center justify-space-between text-body-small mt-1 text-grey">
                       <div>{{ $t('table.title.cpu') }}: {{ node.cpu }}%</div>
                       <div>{{ $t('table.title.memory') }}: {{ node.memory }}%</div>
                       <div>{{ $t('table.title.disk') }}: {{ node.disk }}%</div>
                     </div>
 
-                    <div class="d-flex align-center justify-space-between text-caption mt-1">
+                    <div class="d-flex align-center justify-space-between text-body-small mt-1">
                       <div class="d-flex align-center text-truncate">
                         <v-icon class="mr-1" color="info" size="14">mdi-download</v-icon>
                         <span>{{ formatSpeed(node.net_recv, speedUnit === 'bit') }}</span>
