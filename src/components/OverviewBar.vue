@@ -4,7 +4,7 @@
       <v-card class="frosted-glass pa-3 fill-height" flat>
         <div class="d-flex align-center mb-1">
           <v-icon class="mr-2" color="primary" size="18">mdi-clock-outline</v-icon>
-          <span class="text-title-medium  font-weight-bold">{{ $t('overview.currentTime') }}</span>
+          <span class="text-title-medium font-weight-bold">{{ $t('overview.currentTime') }}</span>
         </div>
 
         <div class="text-body-large">{{ overview.currentDate }}</div>
@@ -16,7 +16,7 @@
       <v-card class="frosted-glass pa-3 fill-height" flat>
         <div class="d-flex align-center mb-1">
           <v-icon class="mr-2" color="success" size="18">mdi-server</v-icon>
-          <span class="text-title-medium  font-weight-bold">{{ $t('overview.online') }}</span>
+          <span class="text-title-medium font-weight-bold">{{ $t('overview.online') }}</span>
         </div>
 
         <div class="d-flex align-center justify-space-between mb-1">
@@ -32,7 +32,7 @@
       <v-card class="frosted-glass pa-3 fill-height cursor-pointer" flat @click="$emit('open-globe')">
         <div class="d-flex align-center mb-1">
           <v-icon class="mr-2" color="info" size="18">mdi-earth</v-icon>
-          <span class="text-title-medium  font-weight-bold">{{ $t('overview.regions') }}</span>
+          <span class="text-title-medium font-weight-bold">{{ $t('overview.regions') }}</span>
         </div>
 
         <div class="text-body-large">{{ overview.uniqueRegions }}</div>
@@ -44,7 +44,7 @@
         <div class="d-flex align-center mb-1">
           <v-icon class="mr-2" color="warning" size="18">mdi-swap-vertical</v-icon>
 
-          <span class="text-title-medium  font-weight-bold">{{ $t(showEstimatedMonthlyTraffic ?
+          <span class="text-title-medium font-weight-bold">{{ $t(showEstimatedMonthlyTraffic ?
             'overview.estimatedTraffic' : 'overview.traffic') }}</span>
         </div>
 
@@ -64,7 +64,7 @@
       <v-card class="frosted-glass pa-3 fill-height" flat>
         <div class="d-flex align-center mb-1">
           <v-icon class="mr-2" color="error" size="18">mdi-speedometer</v-icon>
-          <span class="text-title-medium  font-weight-bold">{{ $t('overview.speed') }}</span>
+          <span class="text-title-medium font-weight-bold">{{ $t('overview.speed') }}</span>
         </div>
 
         <div class="text-body-large d-flex align-center">
