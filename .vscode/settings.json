@@ -1,0 +1,45 @@
+{
+  // 使用 ESLint 作为默认格式化器，与 eslint-config-vuetify 规则保持一致
+  "eslint.format.enable": true,
+  "eslint.useFlatConfig": true,
+  "eslint.validate": [
+    "javascript",
+    "javascriptreact",
+    "typescript",
+    "typescriptreact",
+    "vue"
+  ],
+
+  // 各语言的默认格式化器统一指向 ESLint
+  "[javascript]": {
+    "editor.defaultFormatter": "dbaeumer.vscode-eslint"
+  },
+  "[javascriptreact]": {
+    "editor.defaultFormatter": "dbaeumer.vscode-eslint"
+  },
+  "[typescript]": {
+    "editor.defaultFormatter": "dbaeumer.vscode-eslint"
+  },
+  "[typescriptreact]": {
+    "editor.defaultFormatter": "dbaeumer.vscode-eslint"
+  },
+  "[vue]": {
+    "editor.defaultFormatter": "dbaeumer.vscode-eslint"
+  },
+
+  // 保存时自动修复 ESLint 问题（含格式化）
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": "explicit"
+  },
+  "editor.formatOnSave": false,
+
+  // 关闭 Volar 自带格式化，避免与 ESLint 规则冲突
+  "vue.format.script.enabled": false,
+  "vue.format.template.enabled": false,
+  "vue.format.style.enabled": false,
+
+  // 缩进与 ESLint 规则保持一致（2 空格）
+  "editor.tabSize": 2,
+  "editor.insertSpaces": true,
+  "editor.detectIndentation": false
+}
