@@ -10,10 +10,6 @@
         <template #cloudflarePage>
           <a href="https://pages.cloudflare.com/" target="_blank">Cloudflare Pages</a>
         </template>
-
-        <template #vuetify>
-          <a href="https://vuetifyjs.com/" target="_blank">Vuetify</a>
-        </template>
       </i18n-t>
     </div>
 

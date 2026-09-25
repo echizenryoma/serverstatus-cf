@@ -2,7 +2,7 @@
   "app": {
     "title": "Server Status",
     "footer": {
-      "poweredBy": "℗ Powered by {influxDb}, {cloudflarePage}, {vuetify}",
+      "poweredBy": "℗ Powered by {influxDb}, {cloudflarePage}",
       "copyright": "Copyright © {year} Designed by {author}"
     }
   },

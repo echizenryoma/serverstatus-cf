@@ -2,7 +2,7 @@
   "app": {
     "title": "サーバーステータス",
     "footer": {
-      "poweredBy": "℗ {influxDb}、{cloudflarePage}、{vuetify} によって提供されています",
+      "poweredBy": "℗ {influxDb}、{cloudflarePage} によって提供されています",
       "copyright": "Copyright © {year} Designed by {author}"
     }
   },
