@@ -36,6 +36,7 @@
     },
     "details": {
       "load": "系統負載(1/5/15)",
+      "os": "系統",
       "kernel": "核心",
       "cpu": "CPU",
       "cpuUsage": "CPU使用率(系統/用戶/竊取)",

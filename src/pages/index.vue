@@ -609,6 +609,7 @@
       lossv6_detail: '-',
       pingv6_detail: '-',
       cpu_module: '-',
+      os: '-',
       kernel: '-',
       chart: {
         speed: [],
@@ -652,6 +653,7 @@
     view.location = (info.loc || hostLocation || view.location || 'un').toLowerCase()
     view.network_detail = `${formatSpeed(info.down_mbps / 8 * 1000 * 1000, speedUnit.value === 'bit')} / ${formatSpeed(info.up_mbps / 8 * 1000 * 1000, speedUnit.value === 'bit')}`
     view.cpu_module = info.cpu
+    view.os = info.os
     view.kernel = info.kernel
     view.traffic_quota = info.traffic_quota_gb * 1000 * 1000 * 1000
   }

@@ -9,7 +9,7 @@ from(bucket: "server")
   |> filter(fn: (r) => r["_measurement"] == "info")
   |> last(column: "host")
   |> pivot(rowKey:["host"], columnKey: ["_field"], valueColumn: "_value")
-  |> keep(columns: ["host", "loc", "have_ipv4", "have_ipv6", "up_mbps", "down_mbps", "cpu", "kernel", "traffic_quota_gb"])
+  |> keep(columns: ["host", "loc", "have_ipv4", "have_ipv6", "up_mbps", "down_mbps", "cpu", "kernel", "traffic_quota_gb", "os"])
 `
       return await queryInflux(env, influxQl)
     } catch {

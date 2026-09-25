@@ -36,6 +36,7 @@
     },
     "details": {
       "load": "System Load(1/5/15min)",
+      "os": "OS",
       "kernel": "Kernel",
       "cpu": "CPU",
       "cpuUsage": "CPU Usage(System/User/Steal)",

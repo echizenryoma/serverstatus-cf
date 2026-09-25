@@ -35,6 +35,7 @@
       "pingV6": "IPv6"
     },
     "details": {
+      "os": "OS",
       "kernel": "カーネル",
       "load": "システム負荷（1/5/15分）",
       "cpu": "CPU",

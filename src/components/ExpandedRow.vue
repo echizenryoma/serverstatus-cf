@@ -4,6 +4,7 @@
       <v-card class="pa-3 rounded-xl" flat>
         <v-row>
           <v-col cols="4">
+            <div><strong>{{ $t('table.details.os') }}:</strong> {{ item.os }}</div>
             <div><strong>{{ $t('table.details.kernel') }}:</strong> {{ item.kernel }}</div>
             <div><strong>{{ $t('table.details.load') }}:</strong> {{ item.load_detail }}</div>
 
