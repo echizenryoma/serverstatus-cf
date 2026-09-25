@@ -2,7 +2,7 @@
   "app": {
     "title": "服务器状态",
     "footer": {
-      "poweredBy": "℗ 由{influxDb}、{cloudflarePage} 驱动",
+      "poweredBy": "℗ 由 {influxDb}、{cloudflarePage} 驱动",
       "copyright": "版权所有 © {year} 由{author}设计"
     }
   },
