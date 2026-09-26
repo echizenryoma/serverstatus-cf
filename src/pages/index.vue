@@ -676,7 +676,9 @@
     }
     view.memory = Math.round(mem.used / mem.total * 100) || 0
     view.memory_detail = `${formatSize(mem.used, { standard: 'iec' })} (${Math.round(mem.used / mem.total * 100)}%) / ${formatSize(mem.total, { standard: 'iec' })}`
-    view.swap_detail = `${formatSize((mem.swap_total - mem.swap_free), { standard: 'iec' })} (${Math.round((mem.swap_total - mem.swap_free) / mem.swap_total * 100)}%) / ${formatSize(mem.swap_total, { standard: 'iec' })}`
+    view.swap_detail = mem.swap_total > 0
+      ? `${formatSize((mem.swap_total - mem.swap_free), { standard: 'iec' })} (${Math.round((mem.swap_total - mem.swap_free) / mem.swap_total * 100)}%) / ${formatSize(mem.swap_total, { standard: 'iec' })}`
+      : '-'
   }
 
   function updateDiskView (disk, view) {
