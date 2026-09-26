@@ -142,7 +142,16 @@
       </template>
 
       <template #item.location="{ item }">
-        <span :class="'fi fi-' + getFlagCode(item.location)" />
+        <template v-if="item.location && item.location !== '-'">
+          <v-tooltip location="top">
+            {{ getRegionName(item.location) || item.location }}
+            <template #activator="{ props }">
+              <span v-bind="props" :class="'fi fi-' + getFlagCode(item.location)" />
+            </template>
+          </v-tooltip>
+        </template>
+
+        <span v-else class="text-medium-emphasis">-</span>
       </template>
 
       <template #item.ipv4="{ item }">
@@ -285,6 +294,7 @@
     formatSpeed,
     getFlagCode,
   } from '@/utils/format'
+  import { getRegionDisplayName } from '@/utils/geo'
   import {
     getCPUColor,
     getDiskColor,
@@ -307,6 +317,10 @@
   const { changeBackgroundImage } = setBackgroundImage()
   const theme = useTheme()
   const display = useDisplay()
+
+  function getRegionName (code) {
+    return getRegionDisplayName(code, locale.value || 'zhHans')
+  }
 
   const showGlobeDialog = ref(false)
   const darkMode = ref(typeof window !== 'undefined' && window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches)
@@ -389,6 +403,12 @@
     }
     const searchTerm = search.value.toLowerCase()
     return viewData.value.filter(item => {
+      if (item.location) {
+        const regionName = getRegionName(item.location).toLowerCase()
+        if (regionName.includes(searchTerm)) {
+          return true
+        }
+      }
       for (const key in item) {
         if (key.endsWith('_detail')) {
           continue
