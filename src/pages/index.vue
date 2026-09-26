@@ -1,5 +1,5 @@
 <template>
-  <v-container fluid style="max-width: 120em;">
+  <v-container fluid style="max-width: 125em;">
     <v-row class="frosted-glass mb-4 pa-2 align-center justify-space-between" no-gutters>
       <v-col class="d-flex align-center" cols="auto">
         <v-card-title class="text-headline-large text-left mr-2 font-weight-bold">{{ $t('app.title') }}</v-card-title>
@@ -106,6 +106,36 @@
       @click:row="toggleExpand"
     >
       <template #bottom />
+
+      <template #item.os="{ item }">
+        <template v-if="item.os && item.os !== '-'">
+          <v-tooltip location="top">
+            {{ item.os }}
+            <template #activator="{ props }">
+              <span v-bind="props" class="d-inline-flex align-center justify-center">
+                <svg
+                  v-if="getOSInfo(item.os).isSvg"
+                  class="v-icon v-icon--size-default"
+                  :style="{ color: getOSInfo(item.os).color, width: '22px', height: '22px' }"
+                  viewBox="0 0 24 24"
+                >
+                  <path :d="getOSInfo(item.os).svgPath" fill="currentColor" />
+                </svg>
+
+                <v-icon
+                  v-else
+                  :color="getOSInfo(item.os).color"
+                  size="default"
+                >
+                  {{ getOSInfo(item.os).icon }}
+                </v-icon>
+              </span>
+            </template>
+          </v-tooltip>
+        </template>
+
+        <span v-else class="text-medium-emphasis">-</span>
+      </template>
 
       <template #item.uptime="{ item }">
         {{ formatSeconds(item.uptime) }}
@@ -263,6 +293,7 @@
     getMemoryColor,
     getNetProtoColor,
     getNetProtoIcon,
+    getOSInfo,
   } from '@/utils/ui'
   import { languageOptions } from '../i18n'
   import 'flag-icons/css/flag-icons.min.css'
@@ -383,6 +414,7 @@
 
   const headers = computed(() => [
     { title: t('table.title.node'), key: 'host', align: 'center', minWidth: '8em', fixed: true, headerProps: { style: 'font-weight: bold;' } },
+    { title: t('table.title.os'), key: 'os', align: 'center', minWidth: '4em', headerProps: { style: 'font-weight: bold;' } },
     { title: t('table.title.uptime'), key: 'uptime', align: 'center', minWidth: '6em', headerProps: { style: 'font-weight: bold;' } },
     {
       title: t('table.title.networkStack'),
@@ -653,7 +685,7 @@
     view.location = (info.loc || hostLocation || view.location || 'un').toLowerCase()
     view.network_detail = `${formatSpeed(info.down_mbps / 8 * 1000 * 1000, speedUnit.value === 'bit')} / ${formatSpeed(info.up_mbps / 8 * 1000 * 1000, speedUnit.value === 'bit')}`
     view.cpu_module = info.cpu
-    view.os = info.os
+    view.os = info.os || view.os || '-'
     view.kernel = info.kernel
     view.traffic_quota = info.traffic_quota_gb * 1000 * 1000 * 1000
   }

@@ -9,6 +9,7 @@
   "table": {
     "title": {
       "node": "節點",
+      "os": "系統",
       "uptime": "運行",
       "location": "位置",
       "load": "負載",

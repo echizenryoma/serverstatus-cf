@@ -9,6 +9,7 @@
   "table": {
     "title": {
       "node": "ノード",
+      "os": "OS",
       "uptime": "稼働時間",
       "location": "場所",
       "load": "負荷",

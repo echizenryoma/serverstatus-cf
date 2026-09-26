@@ -9,6 +9,7 @@
   "table": {
     "title": {
       "node": "Node",
+      "os": "OS",
       "uptime": "Uptime",
       "location": "LOC",
       "load": "Load",
