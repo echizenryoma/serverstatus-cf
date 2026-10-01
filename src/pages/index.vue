@@ -99,7 +99,9 @@
     <v-data-table
       class="elevation-1 frosted-table rounded-xl"
       :expanded="expandedRows"
+      fixed-header
       :headers="headers"
+      height="calc(86vh)"
       item-value="host"
       :items="filteredViewData"
       :items-per-page="-1"
@@ -1155,6 +1157,18 @@
 .v-theme--dark .v-data-table thead,
 .v-theme--dark .v-data-table tbody tr {
   background-color: rgba(30, 30, 30, 0.64) !important;
+}
+
+.v-data-table.v-data-table--fixed-header thead th {
+  background-color: rgba(255, 255, 255, 0.92) !important;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+.v-theme--dark .v-data-table.v-data-table--fixed-header thead th {
+  background-color: rgba(30, 30, 30, 0.92) !important;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
 }
 
 @media (max-width: 768px) {
