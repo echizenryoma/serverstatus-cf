@@ -102,6 +102,7 @@
       fixed-header
       :headers="headers"
       height="calc(86vh)"
+      initial-sort-order="desc"
       item-value="host"
       :items="filteredViewData"
       :items-per-page="-1"
