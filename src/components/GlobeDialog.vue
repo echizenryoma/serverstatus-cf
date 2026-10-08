@@ -1,6 +1,6 @@
 <template>
   <v-dialog
-    max-width="840"
+    max-width="960"
     :model-value="modelValue"
     scrollable
     transition="dialog-bottom-transition"
@@ -245,7 +245,7 @@
 }
 
 .globe-stage {
-  min-height: 360px;
+  min-height: 420px;
 }
 
 .region-chips-wrapper {

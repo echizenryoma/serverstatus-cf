@@ -264,37 +264,99 @@
     }
   }
 
-  function getClusterStyle (coord) {
-    const [lat, lng] = coord
-    const lambda = lng * Math.PI / 180
-    const beta = lat * Math.PI / 180
-    const radius = Math.min(containerWidth.value || 360, containerHeight.value || 360) * 0.5
-    const center = radius
-    const rotated = lambda + phi.value + Math.PI / 2
-    const x = Math.cos(beta) * Math.sin(rotated)
-    const y = Math.sin(beta) * Math.cos(theta.value) - Math.cos(beta) * Math.cos(rotated) * Math.sin(theta.value)
-    const z = Math.sin(beta) * Math.sin(theta.value) + Math.cos(beta) * Math.cos(rotated) * Math.cos(theta.value)
-    const visible = z > -0.06
-    const nextX = (center + x * radius * 0.85).toFixed(1)
-    const nextY = (center - y * radius * 0.85).toFixed(1)
-
-    return {
-      transform: `translate3d(${nextX}px, ${nextY}px, 0) translate(-50%, -50%)`,
-      opacity: visible ? '1' : '0',
-      pointerEvents: visible ? 'auto' : 'none',
-      filter: visible ? 'blur(0)' : 'blur(8px)',
-    }
-  }
+  const MIN_COLLISION_X = 54
+  const MIN_COLLISION_Y = 26
+  const MAX_AVOID_OFFSET = 38
 
   function applyLabelStyles () {
+    const radius = Math.min(containerWidth.value || 360, containerHeight.value || 360) * 0.5
+    const center = radius
+    const visibleItems = []
+
     for (const cluster of regionClusters.value) {
       const el = labelElements.get(cluster.id)
       if (!el) continue
-      const style = getClusterStyle(cluster.coord)
-      el.style.transform = style.transform
-      el.style.opacity = style.opacity
-      el.style.pointerEvents = style.pointerEvents
-      el.style.filter = style.filter
+
+      const [lat, lng] = cluster.coord
+      const lambda = lng * Math.PI / 180
+      const beta = lat * Math.PI / 180
+      const rotated = lambda + phi.value + Math.PI / 2
+      const x = Math.cos(beta) * Math.sin(rotated)
+      const y = Math.sin(beta) * Math.cos(theta.value) - Math.cos(beta) * Math.cos(rotated) * Math.sin(theta.value)
+      const z = Math.sin(beta) * Math.sin(theta.value) + Math.cos(beta) * Math.cos(rotated) * Math.cos(theta.value)
+      const visible = z > -0.06
+
+      if (!visible) {
+        el.style.opacity = '0'
+        el.style.pointerEvents = 'none'
+        el.style.filter = 'blur(8px)'
+      } else {
+        visibleItems.push({
+          id: cluster.id,
+          el,
+          x: center + x * radius * 0.85,
+          y: center - y * radius * 0.85,
+          ox: 0,
+          oy: 0,
+        })
+      }
+    }
+
+    // Force-directed collision avoidance relaxation
+    const count = visibleItems.length
+    for (let iter = 0; iter < 4; iter++) {
+      for (let i = 0; i < count; i++) {
+        const a = visibleItems[i]
+        for (let j = i + 1; j < count; j++) {
+          const b = visibleItems[j]
+          let dx = (b.x + b.ox) - (a.x + a.ox)
+          let dy = (b.y + b.oy) - (a.y + a.oy)
+
+          const nx = dx / MIN_COLLISION_X
+          const ny = dy / MIN_COLLISION_Y
+          let distSq = nx * nx + ny * ny
+
+          if (distSq < 1) {
+            if (distSq < 0.0001) {
+              dx = i < j ? -2 : 2
+              dy = i < j ? -2 : 2
+              distSq = (dx / MIN_COLLISION_X) ** 2 + (dy / MIN_COLLISION_Y) ** 2
+            }
+            const dist = Math.sqrt(distSq)
+            const overlap = (1 - dist) * 0.5
+            const pushX = (nx / dist) * overlap * MIN_COLLISION_X
+            const pushY = (ny / dist) * overlap * MIN_COLLISION_Y
+
+            a.ox -= pushX
+            a.oy -= pushY
+            b.ox += pushX
+            b.oy += pushY
+
+            const hypA = Math.hypot(a.ox, a.oy)
+            if (hypA > MAX_AVOID_OFFSET) {
+              const r = MAX_AVOID_OFFSET / hypA
+              a.ox *= r
+              a.oy *= r
+            }
+            const hypB = Math.hypot(b.ox, b.oy)
+            if (hypB > MAX_AVOID_OFFSET) {
+              const r = MAX_AVOID_OFFSET / hypB
+              b.ox *= r
+              b.oy *= r
+            }
+          }
+        }
+      }
+    }
+
+    for (let i = 0; i < count; i++) {
+      const item = visibleItems[i]
+      const px = (item.x + item.ox).toFixed(1)
+      const py = (item.y + item.oy).toFixed(1)
+      item.el.style.transform = `translate3d(${px}px, ${py}px, 0) translate(-50%, -50%)`
+      item.el.style.opacity = '1'
+      item.el.style.pointerEvents = 'auto'
+      item.el.style.filter = 'blur(0)'
     }
   }
 
@@ -468,15 +530,15 @@
 <style scoped>
 .globe-wrapper {
   width: 100%;
-  max-width: 500px;
+  max-width: 680px;
   margin: 0 auto;
 }
 
 .globe-container {
   width: 100%;
   aspect-ratio: 1 / 1;
-  max-width: 440px;
-  max-height: 440px;
+  max-width: 580px;
+  max-height: 580px;
 }
 
 .earth-globe-canvas {
@@ -501,6 +563,11 @@
   will-change: transform, opacity;
 }
 
+.globe-marker-label:hover,
+.globe-marker-label.is-active {
+  z-index: 25;
+}
+
 .marker-badge {
   background: color-mix(in srgb, rgb(var(--v-theme-surface)) 88%, transparent);
   backdrop-filter: blur(8px);
@@ -511,6 +578,8 @@
   color: rgb(var(--v-theme-on-surface));
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
   transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.2s ease, border-color 0.2s ease;
+  user-select: none;
+  white-space: nowrap;
 }
 
 .marker-badge:hover,
