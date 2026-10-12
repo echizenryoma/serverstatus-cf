@@ -286,11 +286,7 @@
       const z = Math.sin(beta) * Math.sin(theta.value) + Math.cos(beta) * Math.cos(rotated) * Math.cos(theta.value)
       const visible = z > -0.06
 
-      if (!visible) {
-        el.style.opacity = '0'
-        el.style.pointerEvents = 'none'
-        el.style.filter = 'blur(8px)'
-      } else {
+      if (visible) {
         visibleItems.push({
           id: cluster.id,
           el,
@@ -299,6 +295,10 @@
           ox: 0,
           oy: 0,
         })
+      } else {
+        el.style.opacity = '0'
+        el.style.pointerEvents = 'none'
+        el.style.filter = 'blur(8px)'
       }
     }
 
